@@ -1,4 +1,4 @@
-package com.appaccommodation
+package com.minhtam78945.AppAccommodation
 
 import android.app.Application
 import android.content.res.Configuration

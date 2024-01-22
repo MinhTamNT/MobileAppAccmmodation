@@ -1,4 +1,4 @@
-package com.appaccommodation
+package com.minhtam78945.AppAccommodation
 
 import android.os.Build
 import android.os.Bundle
