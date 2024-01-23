@@ -130,6 +130,19 @@ const SignUp = () => {
                 }
                 onChangeText={(lastName) => change("last_name", lastName)}
               />
+              <InputField
+                label={"Enter your email"}
+                icon={
+                  <Fontisto
+                    name="email"
+                    size={24}
+                    color="#697689"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+                onChangeText={(email) => change("email", email)}
+                keyboardType={"email-address"}
+              />
               <View style={style.btn_next}>
                 <TouchableOpacity style={style.btnAction} onPress={nextStep}>
                   <Text>Next</Text>
@@ -156,19 +169,7 @@ const SignUp = () => {
               }
               onChangeText={(username) => change("username", username)}
             />
-            <InputField
-              label={"Enter your email"}
-              icon={
-                <Fontisto
-                  name="email"
-                  size={24}
-                  color="#697689"
-                  style={{ marginRight: 5 }}
-                />
-              }
-              onChangeText={(email) => change("email", email)}
-              keyboardType={"email-address"}
-            />
+
             <InputField
               label={"Enter your Password"}
               icon={
@@ -190,7 +191,7 @@ const SignUp = () => {
             <View style={style.btn_next}>
               <TouchableOpacity style={style.btnAction} onPress={prevStep}>
                 <Previous size="32" color="#ff8a65" />
-                <Text>Previous</Text>
+                <Text>Back</Text>
               </TouchableOpacity>
               <TouchableOpacity style={style.btnAction} onPress={nextStep}>
                 <Text>Next</Text>
@@ -246,7 +247,7 @@ const SignUp = () => {
             <View style={style.btn_next}>
               <TouchableOpacity style={style.btnAction} onPress={prevStep}>
                 <Previous size="32" color="#ff8a65" />
-                <Text>Previous</Text>
+                <Text>Back</Text>
               </TouchableOpacity>
               <TouchableOpacity style={style.btnAction} onPress={nextStep}>
                 <Text>Next</Text>
@@ -268,7 +269,11 @@ const SignUp = () => {
             <View style={[style.content_image, { position: "relative" }]}>
               <TouchableOpacity onPress={pickImage}>
                 <Image
-                  source={{ uri: user.avatar?.uri }}
+                  source={
+                    user.avatar?.uri
+                      ? { uri: user.avatar.uri }
+                      : require("../../../assets/image/avatardefault.jpg")
+                  }
                   style={style.imageAva}
                 />
               </TouchableOpacity>
@@ -283,7 +288,7 @@ const SignUp = () => {
               <AntDesign name="arrowleft" size={24} />
               <Text>Back Step</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={style.btn_next} onPress={register}>
+            <TouchableOpacity style={style.btn_login} onPress={register}>
               <Text style={style.login_text}>Create an account</Text>
             </TouchableOpacity>
           </>

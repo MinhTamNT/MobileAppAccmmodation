@@ -35,7 +35,7 @@ export const style = StyleSheet.create({
     width: 150,
     height: 150,
     borderColor: COLOR.gray,
-    borderWidth: 3,
+    borderWidth: 2,
   },
   imageRegister: {
     width: "100%",
@@ -45,7 +45,7 @@ export const style = StyleSheet.create({
     backgroundColor: COLOR.PRIMARY,
     padding: 20,
     borderRadius: 16,
-    marginBottom: 40,
+    marginVertical: 20,
   },
   login_text: {
     color: COLOR.offWhite,
@@ -92,11 +92,18 @@ export const style = StyleSheet.create({
     alignItems: "center",
     gap: 20,
   },
+  errorText: {
+    paddingHorizontal: 27,
+    position: "absolute",
+    left: 10,
+    top: 30,
+  },
   btnAction: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 5,
     padding: 5,
+    borderRadius: 10,
   },
   btnEdit: {
     position: "absolute",
