@@ -4,8 +4,9 @@ import { StyleSheet, Text, View } from "react-native";
 import WelcomeApp from "./src/components/WelcomeApp/WelcomeApp";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import SignInAndUp from "./src/components/Screen/SignInAndUp/SignInAndUp";
 import { useFonts } from "expo-font";
+import SignIn from "./src/components/Screen/SignInAndUp/SignIn";
+import SignUp from "./src/components/Screen/SignInAndUp/SignUp";
 const Stack = createStackNavigator();
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -22,9 +23,13 @@ export default function App() {
   }, [fontsLoaded, fontError]);
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName="WelcomeApp"
+      >
         <Stack.Screen name="WelcomeApp" component={WelcomeApp} />
-        <Stack.Screen name="LoginAndRegister" component={SignInAndUp} />
+        <Stack.Screen name="LoginAndRegister" component={SignIn} />
+        <Stack.Screen name="Register" component={SignUp} />
       </Stack.Navigator>
     </NavigationContainer>
   );
