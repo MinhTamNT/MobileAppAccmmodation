@@ -5,8 +5,9 @@ import WelcomeApp from "./src/components/WelcomeApp/WelcomeApp";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import SignIn from "./src/components/Screen/SignInAndUp/SignIn";
 import SignUp from "./src/components/Screen/SignInAndUp/SignUp";
+import SignIn from "./src/components/Screen/SignInAndUp/Signin.js";
+
 const Stack = createStackNavigator();
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -34,12 +35,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

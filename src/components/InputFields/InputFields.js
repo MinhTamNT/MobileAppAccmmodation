@@ -1,72 +1,36 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import React from "react";
+import { View, Text, TextInput } from "react-native";
+import PropTypes from "prop-types";
+import { styleFields } from "./InputFieldStyle";
 
-export default function InputField({
+const InputField = ({
   label,
-  icon,
-  inputType,
-  keyboardType,
-  fieldButtonLabel,
-  fieldButtonFunction,
+  placeholder,
+  error,
   onChangeText,
-  error, // Add error prop
-}) {
-  const [value, setValue] = useState("");
+  secureEntry,
+  style,
+}) => (
+  <View>
+    <Text style={styleFields.labelText}>{label}</Text>
+    <TextInput
+      placeholder={placeholder}
+      style={[styleFields.inputForm, error && styleFields.errorInput]}
+      onChangeText={onChangeText}
+      secureTextEntry={secureEntry}
+      placeholderTextColor="#333"
+    />
+    {error && <Text style={styleFields.errorText}>{error}</Text>}
+  </View>
+);
 
-  // Define dynamic styles based on the presence of an error
-  const inputStyle = {
-    flex: 1,
-    paddingVertical: 0,
-    borderBottomColor: error ? "red" : "#ccc",
-    borderBottomWidth: 1,
-    marginBottom: 25,
-  };
+InputField.propTypes = {
+  label: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  error: PropTypes.string,
+  onChangeText: PropTypes.func.isRequired,
+  secureEntry: PropTypes.bool, // Add a prop for secure entry
+  style: PropTypes.object,
+};
 
-  const validateInput = () => {
-    if (!value.trim()) {
-      error("This field is required");
-      return false;
-    }
-
-    error(""); // Clear error if validation passes
-    return true;
-  };
-
-  return (
-    <View style={{ flexDirection: "row" }}>
-      {icon}
-      {inputType == "password" ? (
-        <TextInput
-          placeholder={label}
-          keyboardType={keyboardType}
-          style={inputStyle}
-          secureTextEntry={true}
-          placeholderTextColor="#333"
-          onChangeText={(text) => {
-            setValue(text);
-            onChangeText(text);
-          }}
-          onBlur={validateInput}
-        />
-      ) : (
-        <TextInput
-          placeholder={label}
-          keyboardType={keyboardType}
-          style={inputStyle}
-          placeholderTextColor="#333"
-          onChangeText={(text) => {
-            setValue(text);
-            onChangeText(text);
-          }}
-          onBlur={validateInput}
-        />
-      )}
-
-      <TouchableOpacity onPress={fieldButtonFunction}>
-        <Text style={{ color: "#AD40AF", fontWeight: "700" }}>
-          {fieldButtonLabel}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
+export default InputField;

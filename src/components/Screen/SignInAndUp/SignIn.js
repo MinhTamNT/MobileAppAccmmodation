@@ -1,89 +1,97 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  SafeAreaView,
-  Text,
   View,
+  Text,
   Image,
+  ScrollView,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
-import { User, Lock } from "iconsax-react-native";
-import InputField from "../../InputFields/InputFields";
-import { style } from "./SignInAndUpStyle";
 import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { COLOR, SHADOWS } from "../../../contants";
+import InputField from "../../InputFields/InputFields";
 import { FacebookLogo, GoogleLogo } from "../../../assets/image/image";
-import { loginSchema } from "../../Validate/Validate";
-
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { style } from "./SignInStyle";
 const SignIn = () => {
   const navigation = useNavigation();
 
-  // State variables for username and password
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const validateLogin = async () => {
-    if (!username.trim() || !password.trim()) {
-      setError("Please enter both username and password");
-      return;
-    }
-
+  const handleLogin = async (values, { setSubmitting, setFieldError }) => {
     try {
-      setLoading(true);
-      await loginSchema.validate({ username, password }, { abortEarly: false });
-      setLoading(false);
+      // Your login logic here
       alert("Login successful!");
-    } catch (validationError) {
-      setError("Invalid username or password");
+    } catch (error) {
+      setFieldError("general", "Invalid username or password");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
-  };
-
-  const handlerNavigate = () => {
-    navigation.navigate("Register");
   };
 
   return (
-    <SafeAreaView style={style.contain}>
-      <View style={style.content}>
-        <View style={style.content_image}>
-          <Image
-            source={require("../../../assets/image/Login.png")}
-            style={style.image}
-          />
-        </View>
-        <Text style={style.text_login}>Login</Text>
-        <View style={style.content_field}>
-          <View>
-            <InputField
-              label={"Enter your username"}
-              icon={
-                <User size="32" color="#697689" style={{ marginRight: 5 }} />
-              }
-              onChangeText={(text) => setUsername(text)}
-              error={(errorMessage) => setError(errorMessage)} // Pass error prop
+    <View style={style.container}>
+      <KeyboardAwareScrollView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <SafeAreaView style={style.container_content}>
+          <View style={style.content_image}>
+            <Image
+              source={require("../../../assets/image/home.jpg")}
+              style={style.image}
             />
-            {error ? <Text style={style.errorText}>{error}</Text> : null}
           </View>
-          <View>
-            <InputField
-              label={"Enter your password"}
-              icon={
-                <Lock size="32" color="#697689" style={{ marginRight: 5 }} />
-              }
-              inputType="password"
-              onChangeText={(text) => setPassword(text)}
-              error={(errorMessage) => setError(errorMessage)} // Pass error prop
-            />
-            {error ? <Text style={style.errorText}>{error}</Text> : null}
-          </View>
-          <TouchableOpacity style={style.btn_login} onPress={validateLogin}>
-            <Text style={style.login_text}>Login</Text>
-          </TouchableOpacity>
-
-          <Text style={style.or}>Or, Login With</Text>
-          <View style={style.login_other}>
+        </SafeAreaView>
+        <View
+          style={[style.formLogin, SHADOWS.medium]}
+          keyboardDismissMode="on-drag"
+        >
+          <Formik
+            initialValues={{ username: "", password: "" }}
+            validationSchema={Yup.object().shape({
+              username: Yup.string().required("Username is required"),
+              password: Yup.string().required("Password is required"),
+            })}
+            onSubmit={handleLogin}
+          >
+            {({
+              values,
+              handleChange,
+              handleSubmit,
+              errors,
+              touched,
+              isSubmitting,
+            }) => (
+              <View style={{ marginLeft: 8 }}>
+                <InputField
+                  label="Username"
+                  placeholder="Enter your username"
+                  onChangeText={handleChange("username")}
+                  error={touched.username && errors.username}
+                />
+                <InputField
+                  label="Password"
+                  placeholder="Enter your password"
+                  secureEntry={true}
+                  onChangeText={handleChange("password")}
+                  error={touched.password && errors.password}
+                />
+                <TouchableOpacity
+                  style={style.btnLogin}
+                  onPress={handleSubmit}
+                  disabled={isSubmitting}
+                >
+                  <Text style={style.textLogin}>Login</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </Formik>
+          <Text style={style.OrLogin}>OR</Text>
+          <View style={style.loginOther}>
             <TouchableOpacity style={style.btnLoginOther}>
               <GoogleLogo />
             </TouchableOpacity>
@@ -91,15 +99,22 @@ const SignIn = () => {
               <FacebookLogo />
             </TouchableOpacity>
           </View>
-          <View style={style.register}>
-            <Text style={style.text}>New to the app?</Text>
-            <TouchableOpacity onPress={handlerNavigate}>
-              <Text style={style.registerText}>Register</Text>
+          <View style={style.account}>
+            <Text style={style.account_text}>Already have an account ?</Text>
+            <TouchableOpacity>
+              <Text
+                style={[
+                  style.account_text,
+                  { color: COLOR.bg_color_blue_200, marginLeft: 2 },
+                ]}
+              >
+                Login in
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </KeyboardAwareScrollView>
+    </View>
   );
 };
 

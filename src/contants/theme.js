@@ -10,10 +10,11 @@ const COLOR = {
   bg_color_blue_200: "#2ba8fb",
   bg_color_blue_300: "#039be5",
   bg_color_modal: "rgba(0, 0, 0, 0.5)",
-  gray: "#83829A",
+  gray: "rgb(55 65 81)",
   red: "#e81e4d",
   green: "#46d160",
   offWhite: "#F3F4F8",
+  gray_100: "#f3f4f6",
 };
 const SHADOWS = {
   small: {
@@ -22,8 +23,8 @@ const SHADOWS = {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25, // Corrected the typo here
-    shadowRadius: 3.84,
+    shadowOpacity: 0.7,
+    shadowRadius: 3, // Adjust radius
     elevation: 2,
   },
   medium: {
