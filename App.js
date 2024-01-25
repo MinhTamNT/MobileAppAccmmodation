@@ -7,6 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import SignUp from "./src/components/Screen/SignInAndUp/SignUp/SignUp.js";
 import SignIn from "./src/components/Screen/SignInAndUp/Signin.js";
+import Home from "./src/components/Screen/Home/Home.js";
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -26,11 +27,12 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="WelcomeApp"
+        initialRouteName="Home"
       >
         <Stack.Screen name="WelcomeApp" component={WelcomeApp} />
         <Stack.Screen name="LoginAndRegister" component={SignIn} />
         <Stack.Screen name="Register" component={SignUp} />
+        <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
     </NavigationContainer>
   );
