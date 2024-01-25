@@ -5,7 +5,7 @@ import WelcomeApp from "./src/components/WelcomeApp/WelcomeApp";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import SignUp from "./src/components/Screen/SignInAndUp/SignUp";
+import SignUp from "./src/components/Screen/SignInAndUp/SignUp/SignUp.js";
 import SignIn from "./src/components/Screen/SignInAndUp/Signin.js";
 
 const Stack = createStackNavigator();

@@ -10,7 +10,7 @@ export const styleFields = StyleSheet.create({
     backgroundColor: COLOR.color_white,
     color: COLOR.gray,
     borderRadius: 10,
-    marginBottom: 6,
+    marginBottom: 10,
   },
   errorInput: {
     borderColor: COLOR.PRIMARY,

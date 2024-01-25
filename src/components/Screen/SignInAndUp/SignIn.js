@@ -22,7 +22,6 @@ const SignIn = () => {
 
   const handleLogin = async (values, { setSubmitting, setFieldError }) => {
     try {
-      // Your login logic here
       alert("Login successful!");
     } catch (error) {
       setFieldError("general", "Invalid username or password");
@@ -72,6 +71,7 @@ const SignIn = () => {
                   placeholder="Enter your username"
                   onChangeText={handleChange("username")}
                   error={touched.username && errors.username}
+                  value={values.username}
                 />
                 <InputField
                   label="Password"
@@ -79,6 +79,7 @@ const SignIn = () => {
                   secureEntry={true}
                   onChangeText={handleChange("password")}
                   error={touched.password && errors.password}
+                  value={values.password}
                 />
                 <TouchableOpacity
                   style={style.btnLogin}
@@ -101,7 +102,7 @@ const SignIn = () => {
           </View>
           <View style={style.account}>
             <Text style={style.account_text}>Already have an account ?</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("Register")}>
               <Text
                 style={[
                   style.account_text,

@@ -10,6 +10,8 @@ const InputField = ({
   onChangeText,
   secureEntry,
   style,
+  keyboardType,
+  value,
 }) => (
   <View>
     <Text style={styleFields.labelText}>{label}</Text>
@@ -19,6 +21,8 @@ const InputField = ({
       onChangeText={onChangeText}
       secureTextEntry={secureEntry}
       placeholderTextColor="#333"
+      keyboardType={keyboardType}
+      value={value}
     />
     {error && <Text style={styleFields.errorText}>{error}</Text>}
   </View>
