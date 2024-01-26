@@ -15,8 +15,17 @@
       }
     },
     "plugins": [
-      "expo-font"
+      "expo-font",{
+        "fonts":[
+          "./src/assets/fonts/Poppins-Medium.ttf",
+          "./src/assets/fonts/Poppins-Bold.ttf",
+          "./src/assets/fonts/Poppins-Italic.ttf",
+          "./src/assets/fonts/Poppins-Regular.ttf",
+          "./src/assets/fonts/Poppins-ExtraBold.ttf"
+        ]
+      }
     ]
   },
   "name": "AppAccommodation"
 }
+
