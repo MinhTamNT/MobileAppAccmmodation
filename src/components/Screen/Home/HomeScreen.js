@@ -11,8 +11,10 @@ const HomeScreen = () => {
     <SafeAreaView style={style.container}>
       <View style={style.content_header}>
         <View style={style.header_title}>
-          <Text style={style.text_title}>Welcome back</Text>
-          <Text style={style.text_title}>{user.name}</Text>
+          <View style={style.title_hello}>
+            <Text style={style.text_title}>Welcome back</Text>
+            <Text style={style.text_title}>{user.name}</Text>
+          </View>
         </View>
         <View style={style.header_action}></View>
       </View>

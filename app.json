@@ -3,9 +3,7 @@
     "name": "AppAccommodation",
     "slug": "AppAccommodation",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "com.minhtam78945.AppAccommodation"
     },
@@ -15,17 +13,17 @@
       }
     },
     "plugins": [
-      "expo-font",{
-        "fonts":[
-          "./src/assets/fonts/Poppins-Medium.ttf",
+      [
+        "expo-font",
+        {
+          "fonts": [ "./src/assets/fonts/Poppins-Medium.ttf",
           "./src/assets/fonts/Poppins-Bold.ttf",
           "./src/assets/fonts/Poppins-Italic.ttf",
           "./src/assets/fonts/Poppins-Regular.ttf",
-          "./src/assets/fonts/Poppins-ExtraBold.ttf"
-        ]
-      }
+          "./src/assets/fonts/Poppins-ExtraBold.ttf"]
+        }
+      ]
     ]
   },
   "name": "AppAccommodation"
 }
-

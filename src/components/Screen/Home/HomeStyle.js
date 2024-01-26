@@ -11,14 +11,14 @@ export const style = StyleSheet.create({
     alignItems: "center",
   },
   header_title: {
-    flexDirection: "row",
-    alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 16,
-    gap: 2,
+  },
+  title_hello: {
+    flexDirection: "row",
   },
   text_title: {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: "Poppins-Medium",
   },
 });
