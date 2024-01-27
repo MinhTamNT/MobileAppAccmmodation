@@ -7,9 +7,9 @@ import { COLOR } from "../../../contants";
 import { Notification } from "iconsax-react-native";
 import Carousel from "../../Carousel/Carousel";
 import InputField from "../../InputFields/InputFields";
-import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { NotiStyle } from "../Notification/NotificationStyle";
+import { useFocusEffect } from "@react-navigation/native";
 
 const HomeScreen = ({ route, navigation }) => {
   const user = {
@@ -17,17 +17,11 @@ const HomeScreen = ({ route, navigation }) => {
     profile: require("../../../assets/image/avatardefault.jpg"),
     address: "Q.12 TP.Hồ Chí Minh",
   };
-  const { notificationCount } = route.params;
-
-  useEffect(() => {
-    if (notificationCount !== undefined) {
-      return;
-    }
-  }, [notificationCount]);
 
   const handlerNavigationNotifi = () => {
-    navigation.navigate("Notification", { notificationCount });
+    navigation.navigate("Notification");
   };
+  const notificationCount = route?.params?.notificationCount;
 
   return (
     <SafeAreaView style={style.container}>
@@ -46,14 +40,14 @@ const HomeScreen = ({ route, navigation }) => {
           <View style={{ position: "relative" }}>
             <TouchableOpacity onPress={handlerNavigationNotifi}>
               <Notification size="24" color="#697689" />
+              {notificationCount > 0 && (
+                <View style={NotiStyle.notificationBadge}>
+                  <Text style={NotiStyle.notificationText}>
+                    {notificationCount}
+                  </Text>
+                </View>
+              )}
             </TouchableOpacity>
-            {notificationCount > 0 && (
-              <View style={NotiStyle.notificationBadge}>
-                <Text style={NotiStyle.notificationText}>
-                  {notificationCount}
-                </Text>
-              </View>
-            )}
           </View>
           <Image
             source={require("../../../assets/image/avatardefault.jpg")}

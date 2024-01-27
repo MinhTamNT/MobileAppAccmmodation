@@ -1,40 +1,34 @@
-import {
-  View,
-  Text,
-  Image,
-  Touchable,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { NotiStyle } from "./NotificationStyle";
 import { AntDesign } from "@expo/vector-icons";
 import { AlignBottom } from "iconsax-react-native";
-import { useNavigation } from "@react-navigation/native";
 
-const Notification = ({ navigation }) => {
-  const [notification, setNotifaction] = useState([]);
-  useEffect(() => {
-    const Notifications = async () => {
-      try {
-        const dumyData = [
-          { id: 1, message: "Notification 1" },
-          { id: 2, message: "Notification 2" },
-          { id: 3, message: "Notification 3" },
-        ];
-        setNotifaction(dumyData);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    Notifications();
-  }, []);
+const Notification = ({ route, navigation }) => {
+  const [notification, setNotification] = useState([
+    { id: 1, message: "Notification 1" },
+    { id: 2, message: "Notification 2" },
+    { id: 3, message: "Notification 3" },
+    { id: 4, message: "Notification 4" },
+  ]);
+  
+
   return (
     <SafeAreaView style={StyleDefault.container}>
       <View style={NotiStyle.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate({
+              name: "HomeScreen",
+              params: {
+                notificationCount: notification.length, // Change 'count' to 'notificationCount
+              },
+              merge: true,
+            })
+          }
+        >
           <AntDesign name="left" size={24} color="black" />
         </TouchableOpacity>
         <Text style={NotiStyle.header_title}>Notification</Text>
