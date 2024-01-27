@@ -1,5 +1,5 @@
 import { View, Text, Image, ScrollView } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { style } from "./HomeStyle";
 import { Feather } from "@expo/vector-icons";
@@ -7,12 +7,28 @@ import { COLOR } from "../../../contants";
 import { Notification } from "iconsax-react-native";
 import Carousel from "../../Carousel/Carousel";
 import InputField from "../../InputFields/InputFields";
-const HomeScreen = () => {
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { NotiStyle } from "../Notification/NotificationStyle";
+
+const HomeScreen = ({ route, navigation }) => {
   const user = {
     name: "Nguyễn Sinh Hùng",
     profile: require("../../../assets/image/avatardefault.jpg"),
     address: "Q.12 TP.Hồ Chí Minh",
   };
+  const { notificationCount } = route.params;
+
+  useEffect(() => {
+    if (notificationCount !== undefined) {
+      return;
+    }
+  }, [notificationCount]);
+
+  const handlerNavigationNotifi = () => {
+    navigation.navigate("Notification", { notificationCount });
+  };
+
   return (
     <SafeAreaView style={style.container}>
       <View style={style.content_header}>
@@ -27,7 +43,18 @@ const HomeScreen = () => {
           </View>
         </View>
         <View style={style.header_action}>
-          <Notification size="24" color="#697689" />
+          <View style={{ position: "relative" }}>
+            <TouchableOpacity onPress={handlerNavigationNotifi}>
+              <Notification size="24" color="#697689" />
+            </TouchableOpacity>
+            {notificationCount > 0 && (
+              <View style={NotiStyle.notificationBadge}>
+                <Text style={NotiStyle.notificationText}>
+                  {notificationCount}
+                </Text>
+              </View>
+            )}
+          </View>
           <Image
             source={require("../../../assets/image/avatardefault.jpg")}
             style={style.image}

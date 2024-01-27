@@ -8,6 +8,7 @@ import { useFonts } from "expo-font";
 import SignUp from "./src/components/Screen/SignInAndUp/SignUp/SignUp.js";
 import SignIn from "./src/components/Screen/SignInAndUp/Signin.js";
 import Home from "./src/components/Screen/Home/Home.js";
+import Notification from "./src/components/Screen/Notification/Notification.js";
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
         <Stack.Screen name="LoginAndRegister" component={SignIn} />
         <Stack.Screen name="Register" component={SignUp} />
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Notification" component={Notification} />
       </Stack.Navigator>
     </NavigationContainer>
   );
