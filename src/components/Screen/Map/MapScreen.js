@@ -1,13 +1,107 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-
-const MapScreen = () => {
+import React, { useRef, useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  Animated,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import { MapStyle } from "./MapStyle";
+import { marker } from "./MapData";
+import { TextInput } from "react-native-gesture-handler";
+import { Moneys, SearchNormal, Profile2User } from "iconsax-react-native";
+export default () => {
+  const actions = [
+    {
+      name: "According to price",
+      icon: <Moneys size="18" color="#697689" style={MapStyle.chipsIcon} />,
+    },
+    {
+      name: "Number of residents",
+      icon: (
+        <Profile2User size="18" color="#697689" style={MapStyle.chipsIcon} />
+      ),
+    },
+  ];
+  const mapRef = useRef(null);
+  const [markersToShow, setMarkersToShow] = useState(marker);
   return (
-    <SafeAreaView>
-      <Text>MapScreen</Text>
-    </SafeAreaView>
+    <View style={MapStyle.container}>
+      <MapView
+        style={MapStyle.map}
+        region={{
+          latitude: 10.843293090549775,
+          longitude: 106.62583326454542,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+        ref={mapRef} // Added the ref attribute
+      >
+        {markersToShow.map((map, index) => (
+          <Marker key={index} coordinate={map.coordinate}>
+            <Animated.View style={[MapStyle.markerWrap]}>
+              <Animated.Image
+                source={require("../../../assets/image/map_marker.png")}
+                style={[MapStyle.marker]}
+                resizeMode="cover"
+              />
+            </Animated.View>
+          </Marker>
+        ))}
+      </MapView>
+      <View style={MapStyle.searchBox}>
+        <TextInput
+          placeholder="Search here"
+          placeholderTextColor="#333"
+          autoCapitalize="none"
+          style={{ flex: 1, padding: 4 }}
+        />
+        <SearchNormal size="32" color="#FF8A65" />
+      </View>
+      <ScrollView
+        horizontal
+        scrollEventThrottle={1}
+        showsVerticalScrollIndicator={false}
+        style={MapStyle.chipsScrollView}
+      >
+        {actions.map((action, index) => (
+          <TouchableOpacity key={index} style={MapStyle.chipsItem}>
+            {action.icon}
+            <Text>{action.name}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+      <ScrollView
+        horizontal
+        scrollEventThrottle={1}
+        showsVerticalScrollIndicator={false}
+        style={MapStyle.scrollView}
+      >
+        {markersToShow.map((marker, index) => (
+          <View style={MapStyle.card} key={index}>
+            <Image
+              source={marker.image}
+              style={MapStyle.cardImage}
+              resizeMode="cover"
+            />
+            <View style={MapStyle.textContent}>
+              <Text numberOfLines={1} style={MapStyle.cardtitle}>
+                {marker.title}
+              </Text>
+              <Text numberOfLines={1} style={MapStyle.cardDescription}>
+                {marker.description}
+              </Text>
+              <View style={MapStyle.button}>
+                <TouchableOpacity>
+                  <Text>Contact now</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+    </View>
   );
 };
-
-export default MapScreen;
