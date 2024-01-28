@@ -1,4 +1,5 @@
 import { Dimensions, Platform, StyleSheet } from "react-native";
+import { COLOR } from "../../../contants";
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = width * 0.8;
@@ -97,7 +98,6 @@ export const MapStyle = StyleSheet.create({
     paddingRight: width - CARD_WIDTH,
   },
   card: {
-    // padding: 10,
     elevation: 2,
     backgroundColor: "#FFF",
     borderTopLeftRadius: 5,
@@ -112,23 +112,27 @@ export const MapStyle = StyleSheet.create({
     overflow: "hidden",
   },
   cardImage: {
-    flex: 3,
+    flex: 2,
     width: "100%",
     height: "100%",
     alignSelf: "center",
   },
   textContent: {
-    flex: 2,
+    flex: 1,
     padding: 10,
   },
   cardtitle: {
     fontSize: 12,
-    // marginTop: 5,
     fontWeight: "bold",
   },
   cardDescription: {
     fontSize: 12,
     color: "#444",
+  },
+  cardPrice: {
+    fontSize: 20,
+    fontWeight: "500",
+    color: COLOR.bg_color_blue_300,
   },
   markerWrap: {
     alignItems: "center",
@@ -143,6 +147,10 @@ export const MapStyle = StyleSheet.create({
   button: {
     alignItems: "center",
     marginTop: 5,
+    backgroundColor: COLOR.bg_color_blue_300,
+
+    padding: 10,
+    borderRadius: 10,
   },
   signIn: {
     width: "100%",
@@ -154,5 +162,16 @@ export const MapStyle = StyleSheet.create({
   textSign: {
     fontSize: 14,
     fontWeight: "bold",
+  },
+
+  thumbStyle: {
+    width: 20,
+    height: 20,
+    backgroundColor: "#FF8A65",
+    borderRadius: 10,
+  },
+  trackStyle: {
+    height: 5,
+    backgroundColor: COLOR.offWhite,
   },
 });

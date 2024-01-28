@@ -21,7 +21,8 @@ export const marker = [
     title: "Nhà cấp 4 cho thuê",
     description: "Full Noi That",
     image: Images[0].image,
-    reviews: 99,
+    price: "4.5m",
+
   },
   {
     coordinate: {
@@ -31,8 +32,7 @@ export const marker = [
     title: "Phòng trọ sinh viên có gác",
     description: "Ưu đãi cho sinh viên học sinh",
     image: Images[1].image,
-    rating: 5,
-    reviews: 102,
+    price: "4.5m",
   },
   {
     coordinate: {
@@ -42,8 +42,7 @@ export const marker = [
     title: "Phong trọ cho sinh viên",
     description: "Có chỗ giữ xe ",
     image: Images[2].image,
-    rating: 3,
-    reviews: 220,
+    price: "4.5m",
   },
   {
     coordinate: {
@@ -53,7 +52,6 @@ export const marker = [
     title: "Phòng trọ cho thuê",
     description: "Phòng 12m vuông,thoáng mát",
     image: Images[3].image,
-    rating: 4,
-    reviews: 48,
+    price: "4.5m",
   },
 ];

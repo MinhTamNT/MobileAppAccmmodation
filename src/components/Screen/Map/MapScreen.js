@@ -6,17 +6,24 @@ import {
   Animated,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { MapStyle } from "./MapStyle";
 import { marker } from "./MapData";
 import { TextInput } from "react-native-gesture-handler";
 import { Moneys, SearchNormal, Profile2User } from "iconsax-react-native";
+import { COLOR } from "../../../contants";
+import InputField from "../../InputFields/InputFields";
+import { styleFields } from "../../InputFields/InputFieldStyle";
+import Slider from "@react-native-community/slider";
+import ModalPrice from "../../Modal/ModalPrice";
 export default () => {
   const actions = [
     {
       name: "According to price",
       icon: <Moneys size="18" color="#697689" style={MapStyle.chipsIcon} />,
+      handler: () => setModalVisible(true),
     },
     {
       name: "Number of residents",
@@ -25,8 +32,10 @@ export default () => {
       ),
     },
   ];
+
   const mapRef = useRef(null);
   const [markersToShow, setMarkersToShow] = useState(marker);
+  const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={MapStyle.container}>
       <MapView
@@ -67,12 +76,20 @@ export default () => {
         style={MapStyle.chipsScrollView}
       >
         {actions.map((action, index) => (
-          <TouchableOpacity key={index} style={MapStyle.chipsItem}>
+          <TouchableOpacity
+            key={index}
+            style={MapStyle.chipsItem}
+            onPress={action.handler}
+          >
             {action.icon}
             <Text>{action.name}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
+      <ModalPrice
+        setModalVisible={setModalVisible}
+        modalVisible={modalVisible}
+      />
       <ScrollView
         horizontal
         scrollEventThrottle={1}
@@ -93,9 +110,15 @@ export default () => {
               <Text numberOfLines={1} style={MapStyle.cardDescription}>
                 {marker.description}
               </Text>
-              <View style={MapStyle.button}>
-                <TouchableOpacity>
-                  <Text>Contact now</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={MapStyle.cardPrice}>{marker.price}</Text>
+                <TouchableOpacity style={MapStyle.button}>
+                  <Text style={{ color: COLOR.offWhite }}>See details</Text>
                 </TouchableOpacity>
               </View>
             </View>

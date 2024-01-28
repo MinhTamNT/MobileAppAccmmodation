@@ -19,4 +19,8 @@ export const styleFields = StyleSheet.create({
     paddingHorizontal: 10,
     color: COLOR.PRIMARY,
   },
+  PriceFields: {
+    width: 180,
+    backgroundColor: COLOR.offWhite,
+  },
 });
