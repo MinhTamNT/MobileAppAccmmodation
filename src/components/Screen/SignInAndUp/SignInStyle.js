@@ -35,11 +35,9 @@ export const style = StyleSheet.create({
     borderRadius: 10,
   },
   textDefautlt: {
-    fontFamily: "Poppins-Regular",
     fontSize: 12,
   },
   textLogin: {
-    fontFamily: "Poppins-Regular",
     fontSize: 16,
     color: COLOR.offWhite,
     textAlign: "center",
