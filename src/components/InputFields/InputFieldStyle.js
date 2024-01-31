@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native";
 import { COLOR } from "../../contants";
 export const styleFields = StyleSheet.create({
   labelText: {
-    fontFamily: "Poppins-Medium",
     marginLeft: 4,
   },
   inputForm: {
@@ -22,5 +21,8 @@ export const styleFields = StyleSheet.create({
   PriceFields: {
     width: 180,
     backgroundColor: COLOR.offWhite,
+  },
+  searchScreen: {
+    width: "100%",
   },
 });

@@ -33,13 +33,4 @@ const InputField = ({
   );
 };
 
-InputField.propTypes = {
-  label: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  error: PropTypes.string,
-  onChangeText: PropTypes.func.isRequired,
-  secureEntry: PropTypes.bool,
-  style: PropTypes.object, // Kiểu dáng mới từ phần JSX
-};
-
 export default InputField;

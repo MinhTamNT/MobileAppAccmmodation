@@ -21,7 +21,6 @@ export const style = StyleSheet.create({
   },
   text_title: {
     fontSize: 14,
-    fontFamily: "Poppins-Regular",
     fontWeight: "500",
   },
   address: {

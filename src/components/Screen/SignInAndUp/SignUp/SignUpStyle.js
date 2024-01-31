@@ -14,7 +14,6 @@ export const style = StyleSheet.create({
     borderTopRightRadius: 50,
   },
   Step: {
-    fontFamily: "Poppins-Medium",
     marginBottom: 10,
   },
   btnAction: {

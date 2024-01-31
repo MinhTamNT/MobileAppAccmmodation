@@ -165,7 +165,7 @@ const SignIn = () => {
             <Text
               style={{
                 marginVertical: 10,
-                fontFamily: "Poppins-Medium",
+
                 fontSize: 20,
               }}
             >
