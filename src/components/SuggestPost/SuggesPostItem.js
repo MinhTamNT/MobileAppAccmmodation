@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Dimensions,
-  Image,
-  ScrollView,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { COLOR } from "../../contants/theme.js";
+import { View, Text, TouchableOpacity } from "react-native";
 import { postStyle } from "./PostStyle";
 import { postData } from "./SuggestPostData.js";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult.js";
@@ -17,7 +7,6 @@ import { Item } from "./Item.js";
 import { SearchStyles } from "../Screen/Search/SearchStyle.js";
 import ModalPrice from "../Modal/ModalPrice.js";
 import { AntDesign } from "@expo/vector-icons";
-import { EvilIcons } from "@expo/vector-icons";
 import { Sort } from "iconsax-react-native";
 const SuggesPostItem = () => {
   const [isVissble, setVissable] = useState(false);
@@ -48,11 +37,9 @@ const SuggesPostItem = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView>
-        {postData.map((item, index) => (
-          <Item item={item} key={index} />
-        ))}
-      </ScrollView>
+      {postData.map((item, index) => (
+        <Item item={item} key={index} />
+      ))}
     </View>
   );
 };
