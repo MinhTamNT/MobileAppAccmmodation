@@ -27,4 +27,14 @@ export const ModalStyle = StyleSheet.create({
     color: COLOR.PRIMARY,
     fontSize: 16,
   },
+  searchStyle: {
+    width: "100%",
+    borderWidth: 1,
+    height: 50,
+    borderRadius: 10,
+    borderColor: COLOR.input_default,
+    marginVertical: 10,
+    paddingLeft: 34,
+  },
+  actionFindProvince: { position: "absolute", top: 22, left: 2 },
 });

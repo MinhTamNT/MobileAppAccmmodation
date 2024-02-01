@@ -23,6 +23,7 @@ export const postStyle = StyleSheet.create({
     backgroundColor: "#ddd",
   },
   posItem: {
+    marginTop: 10,
     width: 380,
     backgroundColor: "#fff",
     borderRadius: 10,
@@ -32,10 +33,10 @@ export const postStyle = StyleSheet.create({
         shadowColor: "#ccc",
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.5,
-        shadowRadius: 5,
+        shadowRadius: 2,
       },
       android: {
-        elevation: 10,
+        elevation: 2,
       },
     }),
     marginBottom: 20,
@@ -47,7 +48,7 @@ export const postStyle = StyleSheet.create({
   },
   descripitonItem: {
     paddingVertical: 16,
-    paddingHorizontal: 2,
+    paddingHorizontal: 10,
   },
   detail: {
     width: "100%",

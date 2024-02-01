@@ -6,7 +6,7 @@ export const StyleDefault = StyleSheet.create({
     backgroundColor: "white",
   },
   fontSizeDeault: {
-    fontSize: 16,
+    fontSize: 14,
   },
   flexBoxRow: {
     flexDirection: "row",
@@ -22,6 +22,6 @@ export const StyleDefault = StyleSheet.create({
     fontSize: 32,
   },
   FontSizeMedium: {
-    fontSize: 20,
+    fontSize: 16,
   },
 });

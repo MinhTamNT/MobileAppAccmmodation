@@ -23,13 +23,13 @@ export const SearchStyles = StyleSheet.create({
     marginBottom: 5,
   },
   InpuStyle: {
-    backgroundColor: COLOR.offWhite,
     borderRadius: 10,
     paddingLeft: 12,
     height: 40,
     paddingVertical: 4,
     borderWidth: 1,
     width: "70%",
+    borderColor: "gray",
   },
   header_action: {
     flexDirection: "row",
@@ -40,14 +40,13 @@ export const SearchStyles = StyleSheet.create({
     padding: 5,
     borderWidth: 1,
     height: 40,
-    borderColor: COLOR.text_weak_color,
+    borderColor: "gray",
   },
   actionProvince: {
     flexDirection: "row",
     alignItems: "center",
     borderRightWidth: 0.5,
     borderColor: COLOR.text_weak_color,
-    width: "45%",
   },
   actionDistrict: {
     flexDirection: "row",
