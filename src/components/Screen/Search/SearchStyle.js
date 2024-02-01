@@ -58,7 +58,6 @@ export const SearchStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 20,
-    marginTop: 2,
   },
   fakePost: {
     height: 250,

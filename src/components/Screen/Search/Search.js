@@ -12,21 +12,16 @@ import { SearchStyles } from "./SearchStyle";
 import { AntDesign } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { COLOR } from "../../../contants";
-import { TouchableWithoutFeedback } from "react-native";
-import InputField from "../../InputFields/InputFields";
-import ModalPrice from "../../Modal/ModalPrice";
+
+import SuggestPost from "../../SuggestPost/SuggestPost";
 const Search = () => {
   const scrollX = new Animated.Value(0);
-  const [isVissble, setVissable] = useState(false);
-  const handlerModal = () => {
-    alert("Xin chao");
-  };
 
   const diffClampScrollY = Animated.diffClamp(scrollX, 0, 50);
 
   const headerHeight = diffClampScrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [100, 0],
+    inputRange: [0, 70],
+    outputRange: [70, 0],
     extrapolate: "clamp",
   });
 
@@ -90,22 +85,6 @@ const Search = () => {
             <Text>Select district</Text>
           </TouchableOpacity>
         </View>
-        <View style={SearchStyles.headerAction_Select}>
-          <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center", gap: 2 }}
-            onPress={() => setVissable(!false)}
-          >
-            <Text style={{ fontSize: 16 }}>Price</Text>
-            <AntDesign name="down" />
-          </TouchableOpacity>
-          <ModalPrice modalVisible={isVissble} setModalVisible={setVissable} />
-          <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center", gap: 2 }}
-          >
-            <Text style={{ fontSize: 16 }}>Number people</Text>
-            <AntDesign name="down" />
-          </TouchableOpacity>
-        </View>
       </Animated.View>
       <Animated.ScrollView
         style={SearchStyles.scrollView}
@@ -116,14 +95,7 @@ const Search = () => {
           { useNativeDriver: false }
         )}
       >
-        <View style={SearchStyles.fakePost}></View>
-        <View style={SearchStyles.fakePost}></View>
-        <View style={SearchStyles.fakePost}></View>
-        <View style={SearchStyles.fakePost}></View>
-        <View style={SearchStyles.fakePost}></View>
-        <View style={SearchStyles.fakePost}></View>
-        <View style={SearchStyles.fakePost}></View>
-        <View style={SearchStyles.fakePost}></View>
+        <SuggestPost />
       </Animated.ScrollView>
     </SafeAreaView>
   );
