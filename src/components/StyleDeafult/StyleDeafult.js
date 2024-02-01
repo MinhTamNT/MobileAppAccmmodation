@@ -5,4 +5,23 @@ export const StyleDefault = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
+  fontSizeDeault: {
+    fontSize: 16,
+  },
+  flexBoxRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
+  },
+  flexBoxCol: {
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 2,
+  },
+  FontSizeLarge: {
+    fontSize: 32,
+  },
+  FontSizeMedium: {
+    fontSize: 20,
+  },
 });
