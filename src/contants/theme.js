@@ -1,11 +1,10 @@
 import { Dimensions } from "react-native";
 
-const { height, width } = Dimensions.get("window");
 const COLOR = {
   PRIMARY: "#fe2c55",
   secondary: "#0F1A1C",
   color_white: "#ffff",
-  input_default: "#576F76",
+  input_default: "#cccdc6",
   text_weak_color: "#576F76",
   bg_color_blue_200: "#2ba8fb",
   bg_color_blue_300: "#039be5",
@@ -24,7 +23,7 @@ const SHADOWS = {
       height: 2,
     },
     shadowOpacity: 0.7,
-    shadowRadius: 3, // Adjust radius
+    shadowRadius: 3, 
     elevation: 2,
   },
   medium: {
@@ -33,7 +32,7 @@ const SHADOWS = {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25, // Corrected the typo here
+    shadowOpacity: 0.25, 
     shadowRadius: 5.84,
     elevation: 5,
   },

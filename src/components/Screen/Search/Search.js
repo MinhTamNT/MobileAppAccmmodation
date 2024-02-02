@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Animated,
   StatusBar,
+  Platform,
+  ToastAndroid,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SearchStyles } from "./SearchStyle";
@@ -14,13 +16,20 @@ import { EvilIcons } from "@expo/vector-icons";
 import { COLOR } from "../../../contants";
 import SuggestPost from "../../SuggestPost/SuggestPost";
 import { ProvinceModal } from "../../Modal/ModalProvince";
-import { fetchGetProvinces } from "../../../Services/Province/ProvinceServices";
+import {
+  fetchGetDistrict,
+  fetchGetProvinces,
+} from "../../../Services/Province/ProvinceServices";
+import DistrictModal from "../../Modal/ModalDistrict";
 const Search = () => {
   const scrollX = new Animated.Value(0);
   const [provinces, setProvinces] = useState([]);
+  const [district, setDistrict] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(null);
+  const [selectDistrict, setSelectDistric] = useState(null);
   const diffClampScrollY = Animated.diffClamp(scrollX, 0, 50);
   const [isProvinceModalVisible, setProvinceModalVisible] = useState(false);
+  const [isDistrictModalVisible, setDistrictModalVisible] = useState(false);
 
   const handleSelectProvince = async () => {
     try {
@@ -35,10 +44,36 @@ const Search = () => {
   const handleCloseProvinceModal = () => {
     setProvinceModalVisible(false);
   };
-
+  const handleSelectDistrict = async (district) => {
+    if (!selectedProvince || !selectedProvince.province_id) {
+      Platform.OS === "ios"
+        ? alert("Please select a province first")
+        : ToastAndroid.show(
+            "Please select a province first",
+            ToastAndroid.SHORT
+          );
+      return;
+    }
+    try {
+      const fetchedDistricts = await fetchGetDistrict(
+        selectedProvince.province_id
+      );
+      setDistrict(fetchedDistricts);
+      setDistrictModalVisible(true);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  const handleCloseDistrictModal = () => {
+    setDistrictModalVisible(false);
+  };
   const handleSelectProvinceItem = (province) => {
     setSelectedProvince(province);
     setProvinceModalVisible(false);
+  };
+  const handleSelectDistrictItem = (district) => {
+    setSelectDistric(district);
+    setDistrictModalVisible(false);
   };
   const headerHeight = diffClampScrollY.interpolate({
     inputRange: [0, 70],
@@ -103,11 +138,13 @@ const Search = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={SearchStyles.actionDistrict}
-              onPress={() => {
-                alert("Choose District");
-              }}
+              onPress={handleSelectDistrict}
             >
-              <Text>Select district</Text>
+              <Text>
+                {selectDistrict
+                  ? selectDistrict.district_name
+                  : "Select District"}
+              </Text>
             </TouchableOpacity>
           </View>
         </Animated.View>
@@ -128,6 +165,12 @@ const Search = () => {
         onClose={handleCloseProvinceModal}
         onSelectProvince={handleSelectProvinceItem}
         provinces={provinces}
+      />
+      <DistrictModal
+        visible={isDistrictModalVisible}
+        onClose={handleCloseDistrictModal}
+        onSelectDistrict={handleSelectDistrictItem}
+        districts={district} // Pass your list of districts here
       />
     </>
   );

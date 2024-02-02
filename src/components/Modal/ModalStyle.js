@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { COLOR } from "../../contants";
 export const ModalStyle = StyleSheet.create({
   content_modal: {
@@ -37,4 +37,24 @@ export const ModalStyle = StyleSheet.create({
     paddingLeft: 34,
   },
   actionFindProvince: { position: "absolute", top: 22, left: 2 },
+  selectDistrictItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: "white", // Set your desired background color
+    marginVertical: 10,
+    borderRadius: 5,
+    ...Platform.select({
+      ios: {
+        shadowColor: "black",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 1,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
 });
