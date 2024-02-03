@@ -2,8 +2,10 @@ export const postData = [
   {
     id: 1,
     title: "Căn hộ Quang Trung Gò Vấp",
-    price: "200 ",
+    price: 200,
     address: "123 Quang Trung, Gò Vấp",
+    province: "Thành Phố Chí Minh",
+    district: "Quận 1",
     people: 3,
     images: [
       {
@@ -20,7 +22,9 @@ export const postData = [
   {
     id: 2,
     title: "Luxury Apartment District 1",
-    price: "300 ",
+    district: "Quận 1",
+    province: "Thành Phố Chí Minh",
+    price: 300,
     people: 4,
     address: "789 Binh Thanh",
     images: [
@@ -38,7 +42,7 @@ export const postData = [
   {
     id: 3,
     title: "Beautiful Studio in Binh Thanh",
-    price: "150 ",
+    price: 150,
     people: 2,
     address: "456 District 1",
     images: [
@@ -56,10 +60,9 @@ export const postData = [
   {
     id: 4,
     title: "Modern Apartment near the Beach",
-    price: "250 ",
+    price: 250,
     people: 3,
     address: "101 Near the Beach",
-    address: "777 Panoramic Views",
     images: [
       {
         uri: "https://xaydungnhattrung.net/uploads/ckfinder/userfiles/images/bang-gia/gia-xay-dung-phong-tro-2.jpg.webp",

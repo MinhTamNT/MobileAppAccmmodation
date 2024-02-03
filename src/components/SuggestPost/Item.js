@@ -52,7 +52,11 @@ export const Item = ({ item }) => {
         </View>
       </View>
       <View style={postStyle.descripitonItem}>
-        <Text style={StyleDefault.FontSizeMedium}>{item.address}</Text>
+        <View style={StyleDefault.flexBoxRow}>
+          <Text style={StyleDefault.fontSizeSmail}>{item.address}</Text>
+          <Text style={StyleDefault.fontSizeSmail}>{item.province}</Text>
+          <Text style={StyleDefault.fontSizeSmail}>{item.district}</Text>
+        </View>
         <View
           style={[StyleDefault.flexBoxRow, { justifyContent: "space-between" }]}
         >

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,8 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SearchStyles } from "./SearchStyle";
-import { AntDesign } from "@expo/vector-icons";
-import { EvilIcons } from "@expo/vector-icons";
+import { AntDesign, EvilIcons } from "@expo/vector-icons";
 import { COLOR } from "../../../contants";
 import SuggestPost from "../../SuggestPost/SuggestPost";
 import { ProvinceModal } from "../../Modal/ModalProvince";
@@ -21,77 +20,100 @@ import {
   fetchGetProvinces,
 } from "../../../Services/Province/ProvinceServices";
 import DistrictModal from "../../Modal/ModalDistrict";
+
 const Search = () => {
   const scrollX = new Animated.Value(0);
   const [provinces, setProvinces] = useState([]);
   const [district, setDistrict] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(null);
-  const [selectDistrict, setSelectDistric] = useState(null);
-  const diffClampScrollY = Animated.diffClamp(scrollX, 0, 50);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [isProvinceModalVisible, setProvinceModalVisible] = useState(false);
   const [isDistrictModalVisible, setDistrictModalVisible] = useState(false);
 
-  const handleSelectProvince = async () => {
-    try {
-      const fetchedProvinces = await fetchGetProvinces();
-      setProvinces(fetchedProvinces);
-      setProvinceModalVisible(true);
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      try {
+        const fetchedProvinces = await fetchGetProvinces();
+        setProvinces(fetchedProvinces);
+      } catch (error) {
+        console.log("Error fetching provinces:", error.message);
+      }
+    };
+
+    fetchProvinces();
+  }, []);
+  useEffect(() => {
+    const fetchDistricts = async () => {
+      try {
+        const res = await fetchGetDistrict(selectedProvince.province_id);
+        setDistrict(res);
+        if (res.status === 200) {
+        }
+      } catch (error) {
+        console.log("Error fetching districts:", error.message);
+      }
+    };
+
+    if (selectedProvince) {
+      fetchDistricts();
     }
-  };
+  }, [selectedProvince]);
 
   const handleCloseProvinceModal = () => {
     setProvinceModalVisible(false);
   };
-  const handleSelectDistrict = async (district) => {
-    if (!selectedProvince || !selectedProvince.province_id) {
+
+  const handleSelectDistrict = () => {
+    if (!selectedProvince?.province_id) {
+      const message =
+        Platform.OS === "ios"
+          ? "Please select a province first"
+          : "Please select a province first";
       Platform.OS === "ios"
-        ? alert("Please select a province first")
-        : ToastAndroid.show(
-            "Please select a province first",
-            ToastAndroid.SHORT
-          );
+        ? alert(message)
+        : ToastAndroid.show(message, ToastAndroid.SHORT);
       return;
     }
-    try {
-      const fetchedDistricts = await fetchGetDistrict(
-        selectedProvince.province_id
-      );
-      setDistrict(fetchedDistricts);
-      setDistrictModalVisible(true);
-    } catch (error) {
-      console.log(error.message);
-    }
+
+    setDistrictModalVisible(true);
   };
+
   const handleCloseDistrictModal = () => {
     setDistrictModalVisible(false);
   };
+
   const handleSelectProvinceItem = (province) => {
     setSelectedProvince(province);
     setProvinceModalVisible(false);
   };
+
   const handleSelectDistrictItem = (district) => {
-    setSelectDistric(district);
+    setSelectedDistrict(district);
     setDistrictModalVisible(false);
   };
-  const headerHeight = diffClampScrollY.interpolate({
+
+  const headerHeight = Animated.diffClamp(scrollX, 0, 50).interpolate({
     inputRange: [0, 70],
     outputRange: [70, 0],
     extrapolate: "clamp",
   });
 
-  const headerHeight_translateY = diffClampScrollY.interpolate({
+  const headerHeight_translateY = Animated.diffClamp(
+    scrollX,
+    0,
+    50
+  ).interpolate({
     inputRange: [0, 70],
     outputRange: [0, -70],
     extrapolate: "clamp",
   });
 
-  const headerOpacity = diffClampScrollY.interpolate({
+  const headerOpacity = Animated.diffClamp(scrollX, 0, 50).interpolate({
     inputRange: [0, 1],
     outputRange: [1, 0],
     extrapolate: "clamp",
   });
+
   return (
     <>
       <SafeAreaView style={SearchStyles.safeAreaView}>
@@ -120,10 +142,7 @@ const Search = () => {
           <View style={SearchStyles.header_action}>
             <TouchableOpacity
               style={SearchStyles.actionProvince}
-              onPress={() => {
-                handleSelectProvince();
-                setProvinceModalVisible(!false);
-              }}
+              onPress={() => setProvinceModalVisible(true)}
             >
               <EvilIcons
                 name="location"
@@ -141,8 +160,8 @@ const Search = () => {
               onPress={handleSelectDistrict}
             >
               <Text>
-                {selectDistrict
-                  ? selectDistrict.district_name
+                {selectedDistrict
+                  ? selectedDistrict.district_name
                   : "Select District"}
               </Text>
             </TouchableOpacity>
@@ -157,7 +176,10 @@ const Search = () => {
             { useNativeDriver: false }
           )}
         >
-          <SuggestPost />
+          <SuggestPost
+            selectedProvince={selectedProvince}
+            selectedDistrict={selectedDistrict}
+          />
         </Animated.ScrollView>
       </SafeAreaView>
       <ProvinceModal
@@ -170,7 +192,7 @@ const Search = () => {
         visible={isDistrictModalVisible}
         onClose={handleCloseDistrictModal}
         onSelectDistrict={handleSelectDistrictItem}
-        districts={district} // Pass your list of districts here
+        districts={district}
       />
     </>
   );

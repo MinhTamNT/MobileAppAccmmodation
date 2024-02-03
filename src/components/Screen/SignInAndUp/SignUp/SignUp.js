@@ -177,8 +177,8 @@ const SignIn = () => {
                 handleChange("role", itemValue)
               }
             >
-              <Picker.Item label="Host" value="Host" />
               <Picker.Item label="Tenant" value="Tenant" />
+              <Picker.Item label="Host" value="Host" />
             </Picker>
             {errors.role && (
               <Text style={style.errorMessgae}>{errors.role}</Text>

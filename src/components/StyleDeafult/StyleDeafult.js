@@ -24,4 +24,7 @@ export const StyleDefault = StyleSheet.create({
   FontSizeMedium: {
     fontSize: 16,
   },
+  fontSizeSmail: {
+    fontSize: 14,
+  },
 });
