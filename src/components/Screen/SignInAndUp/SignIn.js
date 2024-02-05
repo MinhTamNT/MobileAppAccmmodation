@@ -17,12 +17,24 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { style } from "./SignInStyle";
+import { LoginUser } from "../../../Redux/Slice/AutheSlice/authrequest";
+import { useDispatch } from "react-redux";
+import { CLIENT_ID, CLIENT_SECRET } from "@env";
 const SignIn = () => {
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const handleLogin = async (values, { setSubmitting, setFieldError }) => {
     try {
-      alert("Login successful!");
+      const newUser = {
+        username: values.username,
+        password: values.password,
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        grant_type: "password",
+      };
+      console.log("New user :", newUser);
+      const res = await LoginUser(newUser, dispatch);
+      console.log(res);
     } catch (error) {
       setFieldError("general", "Invalid username or password");
     } finally {

@@ -10,6 +10,7 @@ import InputField from "../../InputFields/InputFields";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { NotiStyle } from "../Notification/NotificationStyle";
 import { useFocusEffect } from "@react-navigation/native";
+import axios from "axios";
 
 const HomeScreen = ({ route, navigation }) => {
   const user = {
@@ -22,7 +23,14 @@ const HomeScreen = ({ route, navigation }) => {
     navigation.navigate("Notification");
   };
   const notificationCount = route?.params?.notificationCount;
-
+  const handlerres = async () => {
+    try {
+      const res = await axios.get("http://10.0.2.2:8000/users/1/profile");
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <SafeAreaView style={style.container}>
       <View style={style.content_header}>
@@ -57,6 +65,9 @@ const HomeScreen = ({ route, navigation }) => {
       </View>
       <ScrollView>
         <Carousel />
+        <TouchableOpacity onPress={handlerres}>
+          <Text>asda</Text>
+        </TouchableOpacity>
         <View style={style.action_search}>
           <InputField
             label="Find rooms quickly"
