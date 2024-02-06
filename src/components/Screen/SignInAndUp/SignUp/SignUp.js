@@ -9,11 +9,13 @@ import { style as styleForm } from "../SignInStyle";
 import InputField from "../../../InputFields/InputFields";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
-import axios from "axios";
 import { useDispatch } from "react-redux";
+import { registerUser } from "../../../../Redux/Slice/AutheSlice/authrequest";
+import { useNavigation } from "@react-navigation/native";
 
 const SignUp = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const navigation = useNavigation();
   const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
   const [formValues, setFormValues] = useState({
     first_name: "",
@@ -26,9 +28,7 @@ const SignUp = () => {
     role: "",
   });
   const [formErrors, setFormErrors] = useState({});
-
   const dispatch = useDispatch();
-
   const handleNext = () => setCurrentStep(currentStep + 1);
   const handlePrev = () => setCurrentStep(currentStep - 1);
 
@@ -41,9 +41,11 @@ const SignUp = () => {
         alert("Permission Denied");
       } else {
         const result = await ImagePicker.launchImageLibraryAsync();
+        console.log(result);
         if (!result.canceled) {
           const avatar_user = result.assets[0];
-          if (avatar_user && avatar_user.uri) {
+          console.log(avatar_user);
+          if (avatar_user.uri) {
             setFormValues({ ...formValues, avatar_user });
           } else {
             console.log("Invalid avatar_user data:", avatar_user);
@@ -69,20 +71,9 @@ const SignUp = () => {
           form.append(key, formValues[key]);
         }
       }
-      console.log("Form Data:", form);
-      let res = await axios.post("http://10.0.2.2:8000/users/register/", form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.info(res.data);
+      await registerUser(form, dispatch, navigation);
     } catch (error) {
       console.error("Full Axios Error:", error);
-      if (error.isAxiosError) {
-        console.error("Axios Error:", error.response);
-      } else {
-        console.error("Error:", error.message);
-      }
     }
   };
 
@@ -184,6 +175,7 @@ const SignUp = () => {
               selectedValue={formValues.role}
               onValueChange={(itemValue) => handleChange("role", itemValue)}
             >
+              <Picker.Item label="Select Role" value="" />
               <Picker.Item label="Tenant" value="Tenant" />
               <Picker.Item label="Host" value="Host" />
             </Picker>
@@ -199,7 +191,7 @@ const SignUp = () => {
             <TouchableOpacity style={style.choosenFile} onPress={pickerImage}>
               <Image
                 source={
-                  formValues.avatar_user && formValues.avatar_user.uri
+                  formValues.avatar_user.uri
                     ? { uri: formValues.avatar_user.uri }
                     : require("../../../../assets/image/avatardefault.jpg")
                 }
@@ -243,26 +235,22 @@ const SignUp = () => {
               </TouchableOpacity>
 
               {currentStep === steps.length - 1 ? (
-                <>
-                  <TouchableOpacity onPress={handleRegister}>
-                    <Text>Create an account</Text>
-                  </TouchableOpacity>
-                </>
+                <TouchableOpacity onPress={handleRegister}>
+                  <Text>Create an account</Text>
+                </TouchableOpacity>
               ) : (
-                <>
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (validateForm()) {
-                        handleNext();
-                      }
-                    }}
-                    style={style.btnAction_content}
-                  >
-                    <Text style={{ color: "white" }}>
-                      {currentStep === steps.length - 1 ? "Save" : "Next"}
-                    </Text>
-                  </TouchableOpacity>
-                </>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (validateForm()) {
+                      handleNext();
+                    }
+                  }}
+                  style={style.btnAction_content}
+                >
+                  <Text style={{ color: "white" }}>
+                    {currentStep === steps.length - 1 ? "Save" : "Next"}
+                  </Text>
+                </TouchableOpacity>
               )}
             </View>
           </View>

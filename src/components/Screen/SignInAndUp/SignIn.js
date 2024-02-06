@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLOR, SHADOWS } from "../../../contants";
@@ -32,10 +24,15 @@ const SignIn = () => {
         client_secret: CLIENT_SECRET,
         grant_type: "password",
       };
-      console.log("New user :", newUser);
-      const res = await LoginUser(newUser, dispatch);
-      console.log(res);
+      await LoginUser(newUser, dispatch, navigation);
     } catch (error) {
+      console.log("Error:", error.message);
+      if (error.response) {
+        console.log("Response Data:", error.response.data);
+        console.log("Response Status:", error.response.status);
+        console.log("Response Headers:", error.response.headers);
+      }
+
       setFieldError("general", "Invalid username or password");
     } finally {
       setSubmitting(false);

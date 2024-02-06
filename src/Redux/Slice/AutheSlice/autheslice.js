@@ -2,46 +2,52 @@ import { createSlice } from "@reduxjs/toolkit";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    regitser: { isFetching: false, error: false, success: false },
-    login: {
-      currentUser: null,
+    accessToken: null,
+    currentUser: null,
+    loading: false,
+    error: null,
+    registration: {
       isFetching: false,
-      error: false,
+      success: false,
+      error: null,
     },
   },
   reducers: {
-    loginStarts: (state) => {
-      state.login.isFetching = true;
+    loginStart: (state) => {
+      state.loading = true;
+      state.error = false;
     },
     loginSuccess: (state, action) => {
-      state.login.isFetching = false;
-      state.login.currentUser = action.payload;
-      state.login.error = false;
+      state.loading = false;
+      state.accessToken = action.payload.access_token;
+      state.currentUser = action.payload.user;
+      state.error = false;
     },
-    loginFail: (state) => {
-      state.login.isFetching = false;
-      state.login.error = true;
+    loginFail: (state, action) => {
+      state.loading = false;
+      state.error = true;
     },
     registerStart: (state) => {
-      state.regitser.isFetching = true;
+      state.registration.isFetching = true;
+      state.registration.error = null;
     },
-    registerSuccess: (state, action) => {
-      state.regitser.isFetching = false;
-      state.regitser.success = action.payload;
-      state.regitser.error = false;
+    registerSuccess: (state) => {
+      state.registration.isFetching = false;
+      state.registration.success = true;
     },
-    registerFail: (state) => {
-      state.regitser.isFetching = false;
-      state.regitser.error = true;
+    registerFail: (state, action) => {
+      state.registration.isFetching = false;
+      state.registration.error = action.payload;
     },
   },
 });
+
 export const {
+  loginStart,
+  loginSuccess,
+  loginFail,
   registerStart,
   registerSuccess,
   registerFail,
-  loginStarts,
-  loginFail,
-  loginSuccess,
 } = authSlice.actions;
 export default authSlice.reducer;

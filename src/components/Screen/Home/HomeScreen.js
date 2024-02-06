@@ -1,5 +1,5 @@
 import { View, Text, Image, ScrollView } from "react-native";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { style } from "./HomeStyle";
 import { Feather } from "@expo/vector-icons";
@@ -9,39 +9,28 @@ import Carousel from "../../Carousel/Carousel";
 import InputField from "../../InputFields/InputFields";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { NotiStyle } from "../Notification/NotificationStyle";
-import { useFocusEffect } from "@react-navigation/native";
-import axios from "axios";
-
+import { useSelector } from "react-redux";
 const HomeScreen = ({ route, navigation }) => {
-  const user = {
-    name: "Nguyễn Sinh Hùng",
-    profile: require("../../../assets/image/avatardefault.jpg"),
-    address: "Q.12 TP.Hồ Chí Minh",
-  };
+  const currentUser = useSelector((state) => state?.auth?.currentUser);
 
   const handlerNavigationNotifi = () => {
     navigation.navigate("Notification");
   };
   const notificationCount = route?.params?.notificationCount;
-  const handlerres = async () => {
-    try {
-      const res = await axios.get("http://10.0.2.2:8000/users/1/profile");
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   return (
     <SafeAreaView style={style.container}>
       <View style={style.content_header}>
         <View style={style.header_title}>
           <View style={style.title_hello}>
             <Text style={style.text_title}>Welcome back</Text>
-            <Text style={style.text_title}>{user.name}</Text>
+            <Text style={style.text_title}>
+              {currentUser.last_name} {currentUser.first_name}
+            </Text>
           </View>
           <View style={style.address}>
             <Feather name="map-pin" size={12} color={COLOR.text_weak_color} />
-            <Text style={{ color: COLOR.text_weak_color }}>{user.address}</Text>
+            <Text style={{ color: COLOR.text_weak_color }}>Quận 12</Text>
           </View>
         </View>
         <View style={style.header_action}>
@@ -58,16 +47,14 @@ const HomeScreen = ({ route, navigation }) => {
             </TouchableOpacity>
           </View>
           <Image
-            source={require("../../../assets/image/avatardefault.jpg")}
+            source={{ uri: currentUser.avatar_user }}
             style={style.image}
           />
         </View>
       </View>
       <ScrollView>
         <Carousel />
-        <TouchableOpacity onPress={handlerres}>
-          <Text>asda</Text>
-        </TouchableOpacity>
+
         <View style={style.action_search}>
           <InputField
             label="Find rooms quickly"
