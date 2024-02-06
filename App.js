@@ -1,42 +1,44 @@
-import React, { useCallback } from "react";
+import React from "react";
 import WelcomeApp from "./src/components/WelcomeApp/WelcomeApp";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { useFonts } from "expo-font";
 import SignUp from "./src/components/Screen/SignInAndUp/SignUp/SignUp.js";
 import SignIn from "./src/components/Screen/SignInAndUp/Signin.js";
 import Home from "./src/components/Screen/Home/Home.js";
 import Notification from "./src/components/Screen/Notification/Notification.js";
 import Search from "./src/components/Screen/Search/Search.js";
 import { store } from "./src/Redux/store.js";
-import { Provider, useSelector } from "react-redux";
-const Stack = createStackNavigator();
-export default function App() {
-  const [fontsLoaded, fontError] = useFonts({
-    "Poppins-Regular": require("./src/assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-ExtraBold": require("./src/assets/fonts/Poppins-ExtraBold.ttf"),
-    "Poppins-Italic": require("./src/assets/fonts/Poppins-Italic.ttf"),
-    "Poppins-Medium": require("./src/assets/fonts/Poppins-Medium.ttf"),
-  });
+import { Provider } from "react-redux";
+import { RequireAuth } from "./src/components/RequireAuth/RequireAuth.js";
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded || fontError) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
+const Stack = createStackNavigator();
+
+export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{ headerShown: false }}
-          initialRouteName="LoginAndRegister"
+          initialRouteName="WelcomeApp"
         >
           <Stack.Screen name="WelcomeApp" component={WelcomeApp} />
           <Stack.Screen name="Login" component={SignIn} />
           <Stack.Screen name="Register" component={SignUp} />
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Notification" component={Notification} />
-          <Stack.Screen name="Search" component={Search} />
+          <Stack.Screen name="Home">
+            {({ navigation }) => (
+              <RequireAuth navigation={navigation} Component={Home} />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="Notification">
+            {({ navigation }) => (
+              <RequireAuth navigation={navigation} Component={Notification} />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="Search">
+            {({ navigation }) => (
+              <RequireAuth navigation={navigation} Component={Search} />
+            )}
+          </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { HOST_API } from "@env";
 export const endpoint = {
   register: "/users/register/",
   login: "/o/token/",
@@ -7,9 +8,9 @@ export const endpoint = {
 
 export const authApi = (accessToken) =>
   axios.create({
-    baseURL: "http://10.0.2.2:8000",
+    baseURL: HOST_API,
     headers: { Authorization: `bearer ${accessToken}` },
   });
 export default axios.create({
-  baseURL: "http://10.0.2.2:8000",
+  baseURL: HOST_API,
 });
