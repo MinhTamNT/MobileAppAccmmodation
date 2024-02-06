@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { postStyle } from "./PostStyle";
 import { Item } from "./Item";
 import { postData } from "./SuggestPostData";
@@ -84,9 +84,19 @@ const SuggestPost = (props) => {
           setModal={setModalVisible}
           onSort={sortData}
         />
-        {sortedData.map((item, index) => (
-          <Item item={item} key={index} />
-        ))}
+        {sortedData.length > 0 ? (
+          sortedData.map((item, index) => <Item item={item} key={index} />)
+        ) : (
+          <View style={[StyleDefault.flexBoxCol, { justifyContent: "center" }]}>
+            <Image
+              source={require("../../assets/image/notFind.gif")}
+              style={{ width: 300, height: 300 }}
+            />
+            <Text style={[StyleDefault.FontSizeMedium, { fontWeight: "700" }]}>
+              Results not found
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );

@@ -1,11 +1,19 @@
 import { initializeApp } from "firebase/app";
+import {
+  API_KEY,
+  AUTH_DOMAIN,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+  API_ID,
+} from "@env";
 const firebaseConfig = {
-  apiKey: "AIzaSyDcEqQ-dFpGi_dijsybleioWmLGWGiLjFs",
-  authDomain: "chatappreactnative-a858f.firebaseapp.com",
-  projectId: "chatappreactnative-a858f",
-  storageBucket: "chatappreactnative-a858f.appspot.com",
-  messagingSenderId: "660928246404",
-  appId: "1:660928246404:web:cba79c38d87873282648d1",
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: API_ID,
 };
 
 // Initialize Firebase

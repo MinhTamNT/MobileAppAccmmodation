@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLOR, SHADOWS } from "../../../contants";
@@ -17,13 +9,30 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { style } from "./SignInStyle";
+import { LoginUser } from "../../../Redux/Slice/AutheSlice/authrequest";
+import { useDispatch } from "react-redux";
+import { CLIENT_ID, CLIENT_SECRET } from "@env";
 const SignIn = () => {
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const handleLogin = async (values, { setSubmitting, setFieldError }) => {
     try {
-      alert("Login successful!");
+      const newUser = {
+        username: values.username,
+        password: values.password,
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        grant_type: "password",
+      };
+      await LoginUser(newUser, dispatch, navigation);
     } catch (error) {
+      console.log("Error:", error.message);
+      if (error.response) {
+        console.log("Response Data:", error.response.data);
+        console.log("Response Status:", error.response.status);
+        console.log("Response Headers:", error.response.headers);
+      }
+
       setFieldError("general", "Invalid username or password");
     } finally {
       setSubmitting(false);
