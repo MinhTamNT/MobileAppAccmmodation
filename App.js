@@ -13,12 +13,13 @@ import { RequireAuth } from "./src/components/RequireAuth/RequireAuth.js";
 import { PersistGate } from "redux-persist/integration/react";
 import { Text } from "react-native";
 import UserDeatil from "./src/components/Screen/Profle/UserDeatil.js";
+import LoadingPage from "./src/components/LoadingPage/LoadingPage.js";
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <Provider store={store}>
-      <PersistGate loading={<Text>Loading....</Text>} persistor={persistor}>
+      <PersistGate loading={<LoadingPage />} persistor={persistor}>
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{ headerShown: false }}

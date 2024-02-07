@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styleProfile } from "./StyleProfile";
@@ -14,15 +14,48 @@ const UserDeatil = () => {
   return (
     <SafeAreaView style={StyleDefault.container}>
       <View style={styleProfile.HeaderDeatil}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <ArrowLeft2 color="#697689" />
-        </TouchableOpacity>
-        <Text style={[StyleDefault.FontSizeMedium, { fontWeight: 500 }]}>
-          {user.last_name}
-        </Text>
-        <TouchableOpacity>
-          <Edit2 color="#697689" />
-        </TouchableOpacity>
+        <View
+          style={[StyleDefault.flexBoxRow, { justifyContent: "space-between" }]}
+        >
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ArrowLeft2 color="#fff" />
+          </TouchableOpacity>
+        </View>
+        <View>
+          <View
+            style={[
+              StyleDefault.flexBoxRow,
+              { justifyContent: "space-between" },
+            ]}
+          >
+            <Image
+              source={{ uri: user.avatar_user }}
+              width={100}
+              height={100}
+              resizeMode="cover"
+              style={[styleProfile.ImageUser, { marginTop: 20 }]}
+            />
+            <TouchableOpacity
+              style={[StyleDefault.flexBoxRow, styleProfile.headerEdit]}
+            >
+              <Text
+                style={[styleProfile.headerText, StyleDefault.FontSizeMedium]}
+              >
+                Edit
+              </Text>
+              <Edit2 color="#fff" />
+            </TouchableOpacity>
+          </View>
+          <Text
+            style={[
+              StyleDefault.FontSizeMedium,
+              styleProfile.headerText,
+              { fontWeight: 500 },
+            ]}
+          >
+            {user.last_name} {user.first_name}
+          </Text>
+        </View>
       </View>
     </SafeAreaView>
   );
