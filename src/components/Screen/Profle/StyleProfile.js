@@ -8,15 +8,21 @@ export const styleProfile = StyleSheet.create({
   },
   ImageUser: {
     marginTop: 10,
+    borderRadius: 50,
   },
   content: {
     padding: 16,
   },
   HeaderDeatil: {
-    padding: 5,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    padding: 10,
+    width: "100%",
+    height: 230,
+    backgroundColor: "#AF0C6E",
+    shadowColor: "#000",
+    borderBottomRightRadius: 5,
+    borderBottomLeftRadius: 5,
   },
+
   listItem: {
     flexDirection: "row",
     marginTop: 10,
@@ -41,5 +47,17 @@ export const styleProfile = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     fontWeight: "500",
+  },
+
+  //Detail
+  headerText: {
+    color: "#fff",
+  },
+  headerEdit: {
+    marginTop: 30,
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 10,
+    borderColor: "#fff",
   },
 });
