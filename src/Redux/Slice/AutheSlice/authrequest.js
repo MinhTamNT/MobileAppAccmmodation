@@ -34,6 +34,10 @@ export const LoginUser = async (users, dispatch, navigation) => {
     const getUser = await authApi(response.data.access_token).get(
       endpoint["current_user"]
     );
+    console.log(
+      "AsyncStorage Data:",
+      await AsyncStorage.getItem("access-token")
+    );
     dispatch(
       loginSuccess({
         access_token: response.data.access_token,

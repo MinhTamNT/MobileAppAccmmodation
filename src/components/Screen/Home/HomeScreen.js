@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { style } from "./HomeStyle";
@@ -7,12 +7,10 @@ import { COLOR } from "../../../contants";
 import { Notification } from "iconsax-react-native";
 import Carousel from "../../Carousel/Carousel";
 import InputField from "../../InputFields/InputFields";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { NotiStyle } from "../Notification/NotificationStyle";
 import { useSelector } from "react-redux";
 const HomeScreen = ({ route, navigation }) => {
   const currentUser = useSelector((state) => state?.auth?.currentUser);
-
   const handlerNavigationNotifi = () => {
     navigation.navigate("Notification");
   };
@@ -46,10 +44,12 @@ const HomeScreen = ({ route, navigation }) => {
               )}
             </TouchableOpacity>
           </View>
-          <Image
-            source={{ uri: currentUser.avatar_user }}
-            style={style.image}
-          />
+          <TouchableOpacity onPress={() => navigation.navigate("UserDeatil")}>
+            <Image
+              source={{ uri: currentUser.avatar_user }}
+              style={style.image}
+            />
+          </TouchableOpacity>
         </View>
       </View>
       <ScrollView>

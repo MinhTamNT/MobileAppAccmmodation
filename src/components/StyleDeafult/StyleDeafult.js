@@ -11,7 +11,7 @@ export const StyleDefault = StyleSheet.create({
   flexBoxRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 2,
+    gap: 5,
   },
   flexBoxCol: {
     flexDirection: "column",
@@ -19,7 +19,7 @@ export const StyleDefault = StyleSheet.create({
     gap: 2,
   },
   FontSizeLarge: {
-    fontSize: 32,
+    fontSize: 24,
   },
   FontSizeMedium: {
     fontSize: 16,
