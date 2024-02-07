@@ -1,4 +1,4 @@
-import { View, Text, Animated, useWindowDimensions } from "react-native";
+import { View, Animated, useWindowDimensions } from "react-native";
 import React from "react";
 import { style } from "./WelcomeAppStyle";
 const Pagations = ({ data, scrollX }) => {

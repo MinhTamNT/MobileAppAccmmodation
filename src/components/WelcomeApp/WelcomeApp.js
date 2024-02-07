@@ -20,7 +20,7 @@ const WelcomeApp = () => {
     if (currentState < data.length - 1) {
       sildeRef.current.scrollToIndex({ index: currentState + 1 });
     } else {
-      navigation.navigate("LoginAndRegister");
+      navigation.navigate("Login");
     }
   };
   return (
