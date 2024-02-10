@@ -2,7 +2,6 @@ import React from "react";
 import { View, Modal, Text, TouchableOpacity, FlatList } from "react-native";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
 import { ModalStyle } from "./ModalStyle";
-import { COLOR } from "../../contants";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const DistrictModal = ({ visible, onClose, onSelectDistrict, districts }) => {

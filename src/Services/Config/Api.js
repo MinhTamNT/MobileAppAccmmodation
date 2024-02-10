@@ -4,6 +4,8 @@ export const endpoint = {
   register: "/users/register/",
   login: "/o/token/",
   current_user: "/users/current_user/",
+  logout: "/users/logout/",
+  update_user: (userID) => `/users/${userID}/update_user/`,
 };
 
 export const authApi = (accessToken) =>

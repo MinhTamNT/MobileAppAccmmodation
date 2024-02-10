@@ -10,8 +10,8 @@ import InputField from "../../../InputFields/InputFields";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch } from "react-redux";
-import { registerUser } from "../../../../Redux/Slice/AutheSlice/authrequest";
 import { useNavigation } from "@react-navigation/native";
+import { registerUser } from "../../../../Redux/apiRequest";
 
 const SignUp = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -41,10 +41,8 @@ const SignUp = () => {
         alert("Permission Denied");
       } else {
         const result = await ImagePicker.launchImageLibraryAsync();
-        console.log(result);
         if (!result.canceled) {
           const avatar_user = result.assets[0];
-          console.log(avatar_user);
           if (avatar_user.uri) {
             setFormValues({ ...formValues, avatar_user });
           } else {
