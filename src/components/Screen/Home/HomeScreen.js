@@ -10,7 +10,14 @@ import InputField from "../../InputFields/InputFields";
 import { NotiStyle } from "../Notification/NotificationStyle";
 import { useSelector } from "react-redux";
 const HomeScreen = ({ route, navigation }) => {
-  const currentUser = useSelector((state) => state?.auth?.currentUser);
+  const currentUser = useSelector((state) => state?.user.user.currentUser);
+  if (!currentUser) {
+    return (
+      <SafeAreaView style={style.container}>
+        <Text>Loading...</Text>
+      </SafeAreaView>
+    );
+  }
   const handlerNavigationNotifi = () => {
     navigation.navigate("Notification");
   };

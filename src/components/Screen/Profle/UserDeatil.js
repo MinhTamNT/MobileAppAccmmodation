@@ -1,16 +1,22 @@
-import { StyleSheet, Text, View, Image } from "react-native";
-import React from "react";
+import { Text, View, Image } from "react-native";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styleProfile } from "./StyleProfile";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { ArrowLeft2, Edit2 } from "iconsax-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-
+import TabViewBottom from "./TabViewProfile/TabViewBottom";
+import ModalEdit from "../../Modal/ModalEdit";
 const UserDeatil = () => {
   const navigation = useNavigation();
-  const user = useSelector((state) => state.auth?.currentUser);
+  const user = useSelector((state) => state?.user?.user.currentUser);
+  const [isVissable, setVissable] = useState(false);
+  const handlerEdit = () => {
+    setVissable(!isVissable);
+  };
+
   return (
     <SafeAreaView style={StyleDefault.container}>
       <View style={styleProfile.HeaderDeatil}>
@@ -18,7 +24,7 @@ const UserDeatil = () => {
           style={[StyleDefault.flexBoxRow, { justifyContent: "space-between" }]}
         >
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <ArrowLeft2 color="#fff" />
+            <ArrowLeft2 color="#333" />
           </TouchableOpacity>
         </View>
         <View>
@@ -37,13 +43,14 @@ const UserDeatil = () => {
             />
             <TouchableOpacity
               style={[StyleDefault.flexBoxRow, styleProfile.headerEdit]}
+              onPress={handlerEdit}
             >
               <Text
                 style={[styleProfile.headerText, StyleDefault.FontSizeMedium]}
               >
                 Edit
               </Text>
-              <Edit2 color="#fff" />
+              <Edit2 color="#333" />
             </TouchableOpacity>
           </View>
           <Text
@@ -55,12 +62,14 @@ const UserDeatil = () => {
           >
             {user.last_name} {user.first_name}
           </Text>
+          <Text style={styleProfile.headerText}>Role : {user.role}</Text>
+          <Text style={styleProfile.headerText}>Followers : 20</Text>
         </View>
       </View>
+      <TabViewBottom />
+      {isVissable && <ModalEdit setVissable={setVissable} />}
     </SafeAreaView>
   );
 };
 
 export default UserDeatil;
-
-const styles = StyleSheet.create({});

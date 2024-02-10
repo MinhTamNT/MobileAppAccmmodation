@@ -2,6 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import BottomNavigation from "../../Navigation/BottomNavigation";
 const Stack = createStackNavigator();
+
 const Home = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

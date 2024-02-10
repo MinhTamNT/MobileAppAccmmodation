@@ -27,4 +27,7 @@ export const StyleDefault = StyleSheet.create({
   fontSizeSmail: {
     fontSize: 14,
   },
+  textCenter: {
+    textAlign: "center",
+  },
 });

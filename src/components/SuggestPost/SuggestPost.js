@@ -12,7 +12,6 @@ import ModalSort from "../Modal/ModalSort/ModalSort";
 
 const SuggestPost = (props) => {
   const { selectedProvince, selectedDistrict } = props;
-  const [isVissble, setVissable] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [sortOption, setSortOption] = useState(null);
   const [sortedData, setSortedData] = useState(postData);

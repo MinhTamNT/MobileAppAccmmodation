@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import PropTypes from "prop-types";
 import { styleFields } from "./InputFieldStyle";
 
 const InputField = ({
@@ -13,7 +12,6 @@ const InputField = ({
   keyboardType,
   value,
 }) => {
-  // Kết hợp kiểu dáng mặc định và kiểu dáng mới từ props
   const combinedStyle = StyleSheet.compose(styleFields.inputForm, style);
 
   return (

@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { styleProfile } from "./StyleProfile";
 import {
   ArrowLeft,
@@ -17,12 +17,19 @@ import {
 } from "iconsax-react-native";
 import { COLOR } from "../../../contants";
 import { FacebookLogo, GoogleLogo } from "../../../assets/image/image";
+import { LogoutUser } from "../../../Redux/apiRequest";
 
 const Profile = ({ navigation }) => {
-  const current_user = useSelector((state) => state.auth?.currentUser);
+  const current_user = useSelector((state) => state?.user?.user.currentUser);
+  const token = useSelector((state) => state?.auth?.login.accessToken);
+  const dispatch = useDispatch();
+  const handlerLogout = async () => {
+    await LogoutUser(dispatch, navigation, token);
+  };
   const handlerNavigate = () => {
     navigation.navigate("UserDeatil");
   };
+
   const data = [
     {
       id: 1,
@@ -123,7 +130,10 @@ const Profile = ({ navigation }) => {
             </View>
           </View>
           <View>
-            <TouchableOpacity style={styleProfile.btnAction}>
+            <TouchableOpacity
+              style={styleProfile.btnAction}
+              onPress={handlerLogout}
+            >
               <Logout color="#f47373" size={24} />
               <Text
                 style={[StyleDefault.FontSizeMedium, { color: COLOR.PRIMARY }]}

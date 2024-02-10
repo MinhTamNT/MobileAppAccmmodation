@@ -12,12 +12,17 @@ export const ModalStyle = StyleSheet.create({
     backgroundColor: COLOR.bg_color_blue_200,
     padding: 10,
     borderRadius: 20,
+    width: 200,
+    marginBottom: 10,
+    color: "white",
   },
   btnActionCancel: {
     borderWidth: 1,
     padding: 10,
     borderRadius: 20,
     borderColor: COLOR.PRIMARY,
+    width: 200,
+    marginBottom: 10,
   },
   textApply: {
     color: COLOR.offWhite,
@@ -56,5 +61,18 @@ export const ModalStyle = StyleSheet.create({
         elevation: 2,
       },
     }),
+  },
+
+  //ModalEdit
+  headerEdit: {
+    alignItems: "center",
+    padding: 10,
+  },
+  wrapperEdit: {
+    padding: 10,
+  },
+  actionEdit: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
