@@ -3,6 +3,7 @@ import { COLOR } from "../../contants";
 export const styleFields = StyleSheet.create({
   labelText: {
     marginLeft: 4,
+    marginBottom: 10,
   },
   inputForm: {
     padding: 16,
@@ -24,5 +25,8 @@ export const styleFields = StyleSheet.create({
   },
   searchScreen: {
     width: "100%",
+  },
+  formEdit: {
+    backgroundColor: COLOR.offWhite,
   },
 });

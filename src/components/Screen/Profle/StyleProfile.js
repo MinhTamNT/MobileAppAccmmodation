@@ -17,10 +17,7 @@ export const styleProfile = StyleSheet.create({
     padding: 10,
     width: "100%",
     height: 230,
-    backgroundColor: "#AF0C6E",
-    shadowColor: "#000",
-    borderBottomRightRadius: 5,
-    borderBottomLeftRadius: 5,
+    borderRadius: 6,
   },
 
   listItem: {
@@ -51,13 +48,11 @@ export const styleProfile = StyleSheet.create({
 
   //Detail
   headerText: {
-    color: "#fff",
+    color: "#333",
   },
   headerEdit: {
     marginTop: 30,
-    borderWidth: 1,
     padding: 5,
     borderRadius: 10,
-    borderColor: "#fff",
   },
 });

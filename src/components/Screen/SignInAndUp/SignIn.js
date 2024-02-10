@@ -9,9 +9,9 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { style } from "./SignInStyle";
-import { LoginUser } from "../../../Redux/Slice/AutheSlice/authrequest";
 import { useDispatch } from "react-redux";
 import { CLIENT_ID, CLIENT_SECRET } from "@env";
+import { LoginUser } from "../../../Redux/apiRequest";
 const SignIn = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const SignIn = () => {
         client_secret: CLIENT_SECRET,
         grant_type: "password",
       };
-      await LoginUser(newUser, dispatch, navigation);
+      await LoginUser(newUser, dispatch,navigation);
     } catch (error) {
       console.log("Error:", error.message);
       if (error.response) {
