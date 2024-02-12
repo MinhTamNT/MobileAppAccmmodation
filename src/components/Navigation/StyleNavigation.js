@@ -4,9 +4,7 @@ export const style = StyleSheet.create({
   styleNavigation: {
     height: 70,
     position: "absolute",
-    bottom: 25,
-    marginHorizontal: 16,
-    borderRadius: 16,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 0.5,
