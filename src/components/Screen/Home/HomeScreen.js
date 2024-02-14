@@ -4,17 +4,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { style } from "./HomeStyle";
 import { Feather } from "@expo/vector-icons";
 import { COLOR } from "../../../contants";
-import { Notification } from "iconsax-react-native";
 import Carousel from "../../Carousel/Carousel";
 import InputField from "../../InputFields/InputFields";
-import { NotiStyle } from "../Notification/NotificationStyle";
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
-const HomeScreen = ({ route, navigation }) => {
+import { useNavigation } from "@react-navigation/native";
+const HomeScreen = ({ route }) => {
   const currentUser = useSelector((state) => state?.user.user.currentUser);
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState(null);
-
+  const navigation = useNavigation();
   useEffect(() => {
     const getPermission = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -27,9 +26,7 @@ const HomeScreen = ({ route, navigation }) => {
         maximumAge: 10000,
       });
       setLocation(currentLocation);
-      console.log("Location:");
-      console.log(currentLocation);
-      console.log(JSON.stringify(currentLocation));
+
       geocode(
         currentLocation.coords.latitude,
         currentLocation.coords.longitude
@@ -59,10 +56,6 @@ const HomeScreen = ({ route, navigation }) => {
       </SafeAreaView>
     );
   }
-  const handlerNavigationNotifi = () => {
-    navigation.navigate("Notification");
-  };
-  const notificationCount = route?.params?.notificationCount;
 
   return (
     <SafeAreaView style={style.container}>
@@ -84,18 +77,6 @@ const HomeScreen = ({ route, navigation }) => {
           </View>
         </View>
         <View style={style.header_action}>
-          <View style={{ position: "relative" }}>
-            <TouchableOpacity onPress={handlerNavigationNotifi}>
-              <Notification size="24" color="#697689" />
-              {notificationCount > 0 && (
-                <View style={NotiStyle.notificationBadge}>
-                  <Text style={NotiStyle.notificationText}>
-                    {notificationCount}
-                  </Text>
-                </View>
-              )}
-            </TouchableOpacity>
-          </View>
           <TouchableOpacity onPress={() => navigation.navigate("UserDeatil")}>
             <Image
               source={{ uri: currentUser.avatar_user }}
@@ -112,6 +93,9 @@ const HomeScreen = ({ route, navigation }) => {
             label="Find rooms quickly"
             style={style.inputSearch}
             placeholder="Enter your keyword"
+            onPressIn={() =>
+              navigation.navigate("Search", { locationUser: location })
+            }
           />
         </View>
       </ScrollView>

@@ -20,11 +20,13 @@ const SignIn = () => {
       const newUser = {
         username: values.username,
         password: values.password,
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
+        client_id: "HnTuIZxBbhywnLG4kPc2JwyGzWwQzw1DvgAJj20m",
+        client_secret:
+          "2FLKIgJPmTjni42aEeBl4oLS7YhD8FFnksJ9AztvoysJBMvbQlOmk0ZjXePVVAVHFiSA5d2iQiIGPeT3cw3STWpw0OIXKRfSE6PLOarxFq9wScBh9B9HJJvmpjxcqn8e",
         grant_type: "password",
       };
-      await LoginUser(newUser, dispatch,navigation);
+      console.log(newUser);
+      await LoginUser(newUser, dispatch, navigation);
     } catch (error) {
       console.log("Error:", error.message);
       if (error.response) {

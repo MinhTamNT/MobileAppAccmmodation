@@ -89,7 +89,7 @@ export const MapStyle = StyleSheet.create({
   },
   scrollView: {
     position: "absolute",
-    bottom: 100,
+    bottom: 10,
     left: 0,
     right: 0,
     paddingVertical: 10,
@@ -112,7 +112,7 @@ export const MapStyle = StyleSheet.create({
     overflow: "hidden",
   },
   cardImage: {
-    flex: 2,
+    flex: 1.5,
     width: "100%",
     height: "100%",
     alignSelf: "center",
@@ -148,7 +148,6 @@ export const MapStyle = StyleSheet.create({
     alignItems: "center",
     marginTop: 5,
     backgroundColor: COLOR.bg_color_blue_300,
-
     padding: 10,
     borderRadius: 10,
   },

@@ -6,7 +6,6 @@ import {
   Animated,
   ScrollView,
   TouchableOpacity,
-  Modal,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { MapStyle } from "./MapStyle";
@@ -14,11 +13,9 @@ import { marker } from "./MapData";
 import { TextInput } from "react-native-gesture-handler";
 import { Moneys, SearchNormal, Profile2User } from "iconsax-react-native";
 import { COLOR } from "../../../contants";
-import InputField from "../../InputFields/InputFields";
-import { styleFields } from "../../InputFields/InputFieldStyle";
-import Slider from "@react-native-community/slider";
-import ModalPrice from "../../Modal/ModalPrice";
-export default () => {
+export default ({ route }) => {
+  const locationUser = route?.params?.locationUser;
+  console.log("MapScreen", locationUser);
   const actions = [
     {
       name: "According to price",
@@ -41,12 +38,12 @@ export default () => {
       <MapView
         style={MapStyle.map}
         region={{
-          latitude: 10.843293090549775,
-          longitude: 106.62583326454542,
+          latitude: 1,
+          longitude: 1,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        ref={mapRef} // Added the ref attribute
+        ref={mapRef}
       >
         {markersToShow.map((map, index) => (
           <Marker key={index} coordinate={map.coordinate}>
@@ -86,10 +83,7 @@ export default () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-      <ModalPrice
-        setModalVisible={setModalVisible}
-        modalVisible={modalVisible}
-      />
+
       <ScrollView
         horizontal
         scrollEventThrottle={1}

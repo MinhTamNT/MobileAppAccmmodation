@@ -11,6 +11,8 @@ import { Provider } from "react-redux";
 import UserDeatil from "./src/components/Screen/Profle/UserDeatil.js";
 import { RequireUsers } from "./src/components/RequireAuth/RequireUser.js";
 import SignIn from "./src/components/Screen/SignInAndUp/SignIn.js";
+import MapScreen from "./src/components/Screen/Map/MapScreen.js";
+import PostDetail from "./src/components/SuggestPost/PostDeatil.js";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -25,23 +27,45 @@ export default function App() {
           <Stack.Screen name="Login" component={SignIn} />
           <Stack.Screen name="Register" component={SignUp} />
           <Stack.Screen name="Home">
-            {({ navigation }) => (
-              <RequireUsers navigation={navigation} Component={Home} />
+            {({ navigation, route }) => (
+              <RequireUsers navigation={navigation} route={route}>
+                <Home />
+              </RequireUsers>
             )}
           </Stack.Screen>
           <Stack.Screen name="Notification">
-            {({ navigation }) => (
-              <RequireUsers navigation={navigation} Component={Notification} />
+            {({ navigation, route }) => (
+              <RequireUsers navigation={navigation} route={route}>
+                <Notification />
+              </RequireUsers>
             )}
           </Stack.Screen>
           <Stack.Screen name="Search">
-            {({ navigation }) => (
-              <RequireUsers navigation={navigation} Component={Search} />
+            {({ navigation, route }) => (
+              <RequireUsers navigation={navigation} route={route}>
+                <Search />
+              </RequireUsers>
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="MapScreen">
+            {({ navigation, route }) => (
+              <RequireUsers navigation={navigation} route={route}>
+                <MapScreen />
+              </RequireUsers>
             )}
           </Stack.Screen>
           <Stack.Screen name="UserDeatil">
-            {({ navigation }) => (
-              <RequireUsers navigation={navigation} Component={UserDeatil} />
+            {({ navigation, route }) => (
+              <RequireUsers navigation={navigation} route={route}>
+                <UserDeatil />
+              </RequireUsers>
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="PostDeatil">
+            {({ navigation, route }) => (
+              <RequireUsers navigation={navigation} route={route}>
+                <PostDetail />
+              </RequireUsers>
             )}
           </Stack.Screen>
         </Stack.Navigator>

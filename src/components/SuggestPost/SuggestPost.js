@@ -4,24 +4,22 @@ import { postStyle } from "./PostStyle";
 import { Item } from "./Item";
 import { postData } from "./SuggestPostData";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
-import ModalPrice from "../Modal/ModalPrice";
 import { AntDesign } from "@expo/vector-icons";
 import { Sort } from "iconsax-react-native";
 import { SearchStyles } from "../Screen/Search/SearchStyle";
 import ModalSort from "../Modal/ModalSort/ModalSort";
+import { useNavigation } from "@react-navigation/native";
 
-const SuggestPost = (props) => {
-  const { selectedProvince, selectedDistrict } = props;
+const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [sortOption, setSortOption] = useState(null);
   const [sortedData, setSortedData] = useState(postData);
+  const navigation = useNavigation();
 
   const sortData = (op) => {
-    let sortedResult = [...postData];
-
-    if (op === "low") sortedResult.sort((a, b) => a.price - b.price);
-    else if (op === "high") sortedResult.sort((a, b) => b.price - a.price);
-
+    const sortedResult = [...postData].sort((a, b) =>
+      op === "low" ? a.price - b.price : b.price - a.price
+    );
     setSortOption(op);
     setSortedData(sortedResult);
   };
@@ -38,31 +36,40 @@ const SuggestPost = (props) => {
       );
     }
 
-    if (sortOption === "low") filteredData.sort((a, b) => a.price - b.price);
-    else if (sortOption === "high")
-      filteredData.sort((a, b) => b.price - a.price);
+    if (sortOption) {
+      filteredData.sort((a, b) => (sortOption === "low" ? a.price - b.price : b.price - a.price));
+    }
 
     setSortedData(filteredData);
   }, [selectedDistrict, sortOption]);
+
+  const navigateToPostDetail = (item) => {
+    navigation.navigate("PostDeatil", { itemPost: item });
+  };
+
+  const renderSortOption = (text, option) => (
+    <TouchableOpacity
+      key={option}
+      style={{ flexDirection: "row", alignItems: "center", gap: 2 }}
+      onPress={() => sortData(option)}
+    >
+      <Text style={{ fontSize: 16 }}>{text}</Text>
+      <AntDesign name="down" />
+    </TouchableOpacity>
+  );
+
+  const renderPostItem = (item, index) => (
+    <TouchableOpacity key={index} onPress={() => navigateToPostDetail(item)}>
+      <Item item={item} />
+    </TouchableOpacity>
+  );
 
   return (
     <View style={postStyle.wrapper}>
       <View style={postStyle.wrapperItem}>
         <View style={SearchStyles.headerAction_Select}>
-          <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center", gap: 2 }}
-            onPress={() => setVissable(!isVissble)}
-          >
-            <Text style={{ fontSize: 16 }}>Price</Text>
-            <AntDesign name="down" />
-          </TouchableOpacity>
-          <ModalPrice modalVisible={isVissble} setModalVisible={setVissable} />
-          <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center", gap: 2 }}
-          >
-            <Text style={{ fontSize: 16 }}>Number people</Text>
-            <AntDesign name="down" />
-          </TouchableOpacity>
+          {renderSortOption("Price", "low")}
+          {renderSortOption("Number people", "high")}
         </View>
         <View style={postStyle.headerItem}>
           <View style={postStyle.headerItem_content}>
@@ -84,7 +91,7 @@ const SuggestPost = (props) => {
           onSort={sortData}
         />
         {sortedData.length > 0 ? (
-          sortedData.map((item, index) => <Item item={item} key={index} />)
+          sortedData.map(renderPostItem)
         ) : (
           <View style={[StyleDefault.flexBoxCol, { justifyContent: "center" }]}>
             <Image

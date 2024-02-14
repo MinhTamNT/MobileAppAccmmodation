@@ -2,7 +2,7 @@ import HomeScreen from "../Screen/Home/HomeScreen";
 import MapScreen from "../Screen/Map/MapScreen";
 import MessageScreen from "../Screen/MessgaeScreen/MessageScreen";
 import Profile from "../Screen/Profle/Profile";
-
+import Notification from "../Screen/Notification/Notification";
 export const tabs = [
   {
     id: 1,
@@ -14,11 +14,11 @@ export const tabs = [
   },
   {
     id: 2,
-    title: "Map",
-    name: "MapScreen",
-    icon: "map-marker-radius-outline",
-    screen: "MapScreen",
-    Component: MapScreen,
+    title: "Notification",
+    name: "Notification",
+    icon: "bell",
+    screen: "Notification",
+    Component: Notification,
   },
   {
     id: 3,

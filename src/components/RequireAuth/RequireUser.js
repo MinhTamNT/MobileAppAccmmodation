@@ -2,10 +2,14 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../Redux/apiRequest";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-export const RequireUsers = ({ navigation, Component }) => {
+import { useNavigation } from "@react-navigation/native";
+
+export const RequireUsers = ({ children, route }) => {
   const auth = useSelector((state) => state.auth?.login.currentUser);
   const accessToken = auth?.access_token;
+  const navigation = useNavigation();
   const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchUser = async () => {
       if (accessToken) {
@@ -18,5 +22,5 @@ export const RequireUsers = ({ navigation, Component }) => {
     fetchUser();
   }, [accessToken, dispatch, navigation]);
 
-  return accessToken ? <Component /> : null;
+  return accessToken ? React.cloneElement(children, { route }) : null;
 };

@@ -1,4 +1,4 @@
-import { Dimensions, Platform, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { COLOR } from "../../../contants";
 
 const { width, height } = Dimensions.get("window");
@@ -15,6 +15,17 @@ export const SearchStyles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 10,
+  },
+  actionMap: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: 32,
+    right: 32,
+    backgroundColor: COLOR.offWhite,
   },
   header_content: {
     flexDirection: "row",

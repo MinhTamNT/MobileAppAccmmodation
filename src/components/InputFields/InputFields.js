@@ -11,6 +11,7 @@ const InputField = ({
   style,
   keyboardType,
   value,
+  onPressIn,
 }) => {
   const combinedStyle = StyleSheet.compose(styleFields.inputForm, style);
 
@@ -25,6 +26,7 @@ const InputField = ({
         placeholderTextColor="#333"
         keyboardType={keyboardType}
         value={value}
+        onPressIn={onPressIn}
       />
       {error && <Text style={styleFields.errorText}>{error}</Text>}
     </View>

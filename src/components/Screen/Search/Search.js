@@ -8,6 +8,7 @@ import {
   StatusBar,
   Platform,
   ToastAndroid,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SearchStyles } from "./SearchStyle";
@@ -20,9 +21,14 @@ import {
   fetchGetProvinces,
 } from "../../../Services/Province/ProvinceServices";
 import DistrictModal from "../../Modal/ModalDistrict";
+import { useNavigation } from "@react-navigation/native";
 
-const Search = () => {
+const Search = ({ route }) => {
+  console.log(route);
+  const locationUser = route?.params?.locationUser || {};
+  console.log("SearchMapp", locationUser);
   const scrollX = new Animated.Value(0);
+  const navigation = useNavigation();
   const [provinces, setProvinces] = useState([]);
   const [district, setDistrict] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(null);
@@ -30,33 +36,32 @@ const Search = () => {
   const [isProvinceModalVisible, setProvinceModalVisible] = useState(false);
   const [isDistrictModalVisible, setDistrictModalVisible] = useState(false);
 
-  useEffect(() => {
-    const fetchProvinces = async () => {
-      try {
-        const fetchedProvinces = await fetchGetProvinces();
-        setProvinces(fetchedProvinces);
-      } catch (error) {
-        console.log("Error fetching provinces:", error.message);
-      }
-    };
+  const fetchProvinces = async () => {
+    try {
+      const fetchedProvinces = await fetchGetProvinces();
+      setProvinces(fetchedProvinces);
+    } catch (error) {
+      console.log("Error fetching provinces:", error.message);
+    }
+  };
 
-    fetchProvinces();
-  }, []);
-  useEffect(() => {
-    const fetchDistricts = async () => {
-      try {
+  const fetchDistricts = async () => {
+    try {
+      if (selectedProvince) {
         const res = await fetchGetDistrict(selectedProvince.province_id);
         setDistrict(res);
-        if (res.status === 200) {
-        }
-      } catch (error) {
-        console.log("Error fetching districts:", error.message);
       }
-    };
-
-    if (selectedProvince) {
-      fetchDistricts();
+    } catch (error) {
+      console.log("Error fetching districts:", error.message);
     }
+  };
+
+  useEffect(() => {
+    fetchProvinces();
+  }, []);
+
+  useEffect(() => {
+    fetchDistricts();
   }, [selectedProvince]);
 
   const handleCloseProvinceModal = () => {
@@ -76,6 +81,7 @@ const Search = () => {
     }
 
     setDistrictModalVisible(true);
+    fetchDistricts();
   };
 
   const handleCloseDistrictModal = () => {
@@ -129,7 +135,7 @@ const Search = () => {
           ]}
         >
           <View style={SearchStyles.header_content}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
               <AntDesign name="left" size={24} color={COLOR.gray} />
             </TouchableOpacity>
             <TextInput
@@ -194,6 +200,18 @@ const Search = () => {
         onSelectDistrict={handleSelectDistrictItem}
         districts={district}
       />
+      <View>
+        <TouchableOpacity
+          style={SearchStyles.actionMap}
+          onPress={() => navigation.navigate("MapScreen", { locationUser })}
+        >
+          <Image
+            source={require("../../../assets/image/map.png")}
+            style={{ width: 30, height: 30 }}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+      </View>
     </>
   );
 };
