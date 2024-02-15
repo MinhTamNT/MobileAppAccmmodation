@@ -25,10 +25,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
   try {
-    const response = await axios.post(
-      `${HOST_API_CA}${endpoint.register}`,
-      form
-    );
+    const response = await Api.post(endpoint["register"], form);
     dispatch(registerSuccess(response.data));
     navigation.navigate("Login");
   } catch (error) {

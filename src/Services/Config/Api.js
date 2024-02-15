@@ -10,9 +10,9 @@ export const endpoint = {
 
 export const authApi = (accessToken) =>
   axios.create({
-    baseURL: "http://10.0.2.2:8000",
+    baseURL: "http://192.168.0.104:8000",
     headers: { Authorization: `bearer ${accessToken}` },
   });
 export default axios.create({
-  baseURL: "http://10.0.2.2:8000",
+  baseURL: "http://192.168.0.104:8000",
 });

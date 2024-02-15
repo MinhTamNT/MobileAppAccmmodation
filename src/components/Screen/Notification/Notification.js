@@ -10,12 +10,7 @@ import { useNavigation } from "@react-navigation/native"; // Import the hook
 const Notification = ({ route }) => {
   const navigation = useNavigation(); // Use the hook to get the navigation object
 
-  const [notification, setNotification] = useState([
-    { id: 1, message: "Notification 1" },
-    { id: 2, message: "Notification 2" },
-    { id: 3, message: "Notification 3" },
-    { id: 4, message: "Notification 4" },
-  ]);
+  const [notification, setNotification] = useState([]);
 
   return (
     <SafeAreaView style={StyleDefault.container}>

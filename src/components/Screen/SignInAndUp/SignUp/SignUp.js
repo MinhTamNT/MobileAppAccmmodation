@@ -69,6 +69,7 @@ const SignUp = () => {
           form.append(key, formValues[key]);
         }
       }
+      console.log(form);
       await registerUser(form, dispatch, navigation);
     } catch (error) {
       console.error("Full Axios Error:", error);
