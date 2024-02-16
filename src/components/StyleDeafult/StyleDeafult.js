@@ -30,4 +30,7 @@ export const StyleDefault = StyleSheet.create({
   textCenter: {
     textAlign: "center",
   },
+  bold700: {
+    fontWeight: "700",
+  },
 });

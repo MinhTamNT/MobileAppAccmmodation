@@ -7,7 +7,6 @@ import { styleProfile } from "./StyleProfile";
 import {
   ArrowLeft,
   Building,
-  Edit2,
   ArrowRight2,
   User,
   Security,
@@ -84,11 +83,7 @@ const Profile = ({ navigation }) => {
               resizeMode="cover"
               style={{ borderRadius: 50 }}
             />
-            <TouchableOpacity
-              style={{ position: "absolute", left: 80, bottom: 0 }}
-            >
-              <Edit2 color="#697689" />
-            </TouchableOpacity>
+
             <View style={styleProfile.inforUser}>
               <Text style={[StyleDefault.FontSizeLarge, { fontWeight: "700" }]}>
                 {current_user.first_name} {current_user.last_name}

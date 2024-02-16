@@ -6,12 +6,12 @@ import * as Yup from "yup";
 import { SHADOWS } from "../../../../contants";
 import { style } from "./SignUpStyle";
 import { style as styleForm } from "../SignInStyle";
-import InputField from "../../../InputFields/InputFields";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { registerUser } from "../../../../Redux/apiRequest";
+import InputField from "../../../InputFields/InputField";
 
 const SignUp = () => {
   const [currentStep, setCurrentStep] = useState(0);
