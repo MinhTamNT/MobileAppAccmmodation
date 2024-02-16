@@ -70,6 +70,7 @@ export const ModalStyle = StyleSheet.create({
   },
   wrapperEdit: {
     padding: 10,
+    marginTop: Platform.OS === "ios" ? 50 : 0,
   },
   actionEdit: {
     flexDirection: "row",

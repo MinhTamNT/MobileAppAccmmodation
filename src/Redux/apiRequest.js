@@ -19,7 +19,7 @@ import {
   updateSuccess,
 } from "./userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { MAP_KEY } from "@env";
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
   try {
@@ -82,5 +82,32 @@ export const getUser = async (dispatch, token) => {
     console.log(error);
     dispatch(getUserFailed());
     dispatch(updateFail());
+  }
+};
+
+export const SearchGoogleMap = async (query) => {
+  try {
+    const response = await fetch(
+      `https://dev.virtualearth.net/REST/v1/Autosuggest?query=${query}&key=&{MAP_KEY}`
+    );
+    const data = await response.json();
+    if (
+      data &&
+      data.resourceSets &&
+      data.resourceSets.length > 0 &&
+      data.resourceSets[0].resources
+    ) {
+      const suggestions = data.resourceSets[0].resources.map((resource) => ({
+        description: resource.address.formattedAddress,
+      }));
+
+      // Update the UI with the suggestions
+      console.log("Suggestions:", suggestions);
+      // You can store suggestions in state and render them in your UI
+    }
+  } catch (error) {
+    console.log("====================================");
+    console.log(error);
+    console.log("====================================");
   }
 };
