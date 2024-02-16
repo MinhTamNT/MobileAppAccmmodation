@@ -4,11 +4,10 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  Image,
   TouchableOpacity,
 } from "react-native";
 import { styleFields } from "./InputFieldStyle";
-import { Feather } from "@expo/vector-icons"; // Import icon từ thư viện react-native-vector-icons
+import { Feather } from "@expo/vector-icons"; 
 
 const InputField = ({
   label,

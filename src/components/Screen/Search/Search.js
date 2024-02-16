@@ -26,7 +26,6 @@ import { useNavigation } from "@react-navigation/native";
 const Search = ({ route }) => {
   console.log(route);
   const locationUser = route?.params?.locationUser || {};
-  console.log("SearchMapp", locationUser);
   const scrollX = new Animated.Value(0);
   const navigation = useNavigation();
   const [provinces, setProvinces] = useState([]);
@@ -203,7 +202,9 @@ const Search = ({ route }) => {
       <View>
         <TouchableOpacity
           style={SearchStyles.actionMap}
-          onPress={() => navigation.navigate("MapScreen", { locationUser })}
+          onPress={() =>
+            navigation.navigate("MapScreen", { locationPresent: locationUser })
+          }
         >
           <Image
             source={require("../../../assets/image/map.png")}

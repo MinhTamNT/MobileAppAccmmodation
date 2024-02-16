@@ -120,7 +120,7 @@ const SignIn = () => {
                   { color: COLOR.bg_color_blue_200, marginLeft: 2 },
                 ]}
               >
-                Login in
+                Create here
               </Text>
             </TouchableOpacity>
           </View>

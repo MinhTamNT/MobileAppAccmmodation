@@ -18,12 +18,18 @@ export const style = StyleSheet.create({
   },
   btnAction: {
     paddingTop: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: "column",
+    justifyContent: "center",
   },
   btnAction_content: {
-    padding: 12,
-    backgroundColor: COLOR.bg_color_modal,
+    paddingVertical: 10,
+    backgroundColor: COLOR.PRIMARY,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  btnRegister_action: {
+    paddingVertical: 10,
+    backgroundColor: "#ccc",
     borderRadius: 10,
   },
   choosenFile: {
@@ -42,4 +48,5 @@ export const style = StyleSheet.create({
     color: "red",
     fontSize: 15,
   },
+  textContent: { color: "white", textAlign: "center", fontSize: 14 },
 });
