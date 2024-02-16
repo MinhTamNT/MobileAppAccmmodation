@@ -2,7 +2,7 @@ import { Text, View, Image } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styleProfile } from "./StyleProfile";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { ArrowLeft2, Edit2 } from "iconsax-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";

@@ -37,15 +37,13 @@ const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
     }
 
     if (sortOption) {
-      filteredData.sort((a, b) => (sortOption === "low" ? a.price - b.price : b.price - a.price));
+      filteredData.sort((a, b) =>
+        sortOption === "low" ? a.price - b.price : b.price - a.price
+      );
     }
 
     setSortedData(filteredData);
   }, [selectedDistrict, sortOption]);
-
-  const navigateToPostDetail = (item) => {
-    navigation.navigate("PostDeatil", { itemPost: item });
-  };
 
   const renderSortOption = (text, option) => (
     <TouchableOpacity
@@ -58,19 +56,11 @@ const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
     </TouchableOpacity>
   );
 
-  const renderPostItem = (item, index) => (
-    <TouchableOpacity key={index} onPress={() => navigateToPostDetail(item)}>
-      <Item item={item} />
-    </TouchableOpacity>
-  );
+  const renderPostItem = (item, index) => <Item item={item} />;
 
   return (
     <View style={postStyle.wrapper}>
       <View style={postStyle.wrapperItem}>
-        <View style={SearchStyles.headerAction_Select}>
-          {renderSortOption("Price", "low")}
-          {renderSortOption("Number people", "high")}
-        </View>
         <View style={postStyle.headerItem}>
           <View style={postStyle.headerItem_content}>
             <Text style={{ fontSize: 18 }}>
@@ -80,7 +70,7 @@ const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
               style={[StyleDefault.flexBoxRow]}
               onPress={() => setModalVisible(!modalVisible)}
             >
-              <Text>Sort</Text>
+              <Text>Filter</Text>
               <Sort size="32" color="#2ccce4" />
             </TouchableOpacity>
           </View>
@@ -93,7 +83,12 @@ const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
         {sortedData.length > 0 ? (
           sortedData.map(renderPostItem)
         ) : (
-          <View style={[StyleDefault.flexBoxCol, { justifyContent: "center" }]}>
+          <View
+            style={[
+              StyleDefault.flexBoxCol,
+              { justifyContent: "center", backgroundColor: "#fff" },
+            ]}
+          >
             <Image
               source={require("../../assets/image/notFind.gif")}
               style={{ width: 300, height: 300 }}

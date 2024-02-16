@@ -14,8 +14,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { Moneys, SearchNormal, Profile2User } from "iconsax-react-native";
 import { COLOR } from "../../../contants";
 export default ({ route }) => {
-  const locationUser = route?.params?.locationUser;
-  console.log("MapScreen", locationUser);
+  const { locationPresent } = route?.params;
   const actions = [
     {
       name: "According to price",
@@ -38,8 +37,8 @@ export default ({ route }) => {
       <MapView
         style={MapStyle.map}
         region={{
-          latitude: 1,
-          longitude: 1,
+          latitude: locationPresent.coords.latitude,
+          longitude: locationPresent.coords.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}

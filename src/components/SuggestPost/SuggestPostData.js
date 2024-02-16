@@ -3,10 +3,14 @@ export const postData = [
     id: 1,
     title: "Căn hộ Quang Trung Gò Vấp",
     price: 200,
+    description:
+      "Chào mừng bạn đến với căn hộ Quang Trung Gò Vấp - một không gian sống hiện đại và tiện nghi tại trung tâm Thành Phố Hồ Chí Minh. Căn hộ này được xây mới và được chăm sóc cẩn thận để đáp ứng mọi nhu cầu của bạn và gia đình. Với vị trí thuận lợi, căn hộ nằm gần trung tâm thành phố, giúp bạn dễ dàng di chuyển đến các khu vực lân cận và tận hưởng những tiện ích xung quanh. Bạn sẽ có cơ hội thưởng thức những điểm ẩm thực, mua sắm và giải trí chỉ trong khoảng cách ngắn. Với vị trí thuận lợi, và tận hưởng những tiện ích xung quanh. Bạn sẽ có cơ hội thưởng thức những điểm ẩm thực, mua sắm và giải trí chỉ trong khoảng cách ngắn Căn hộ được thiết kế theo phong cách hiện đại, với nội thất sang trọng và sự linh hoạt trong bố trí không gian. Phòng rộng rãi và thoáng đãng, tạo cảm giác ấm cúng và thoải mái. Nơi đây thực sự là một tổ ấm lý tưởng cho gia đình nhỏ hoặc nhóm bạn ",
+
     address: "123 Quang Trung, Gò Vấp",
     province: "Thành Phố Chí Minh",
     district: "Quận 1",
     people: 3,
+    phone: "0902748617",
     images: [
       {
         uri: "https://i-connect.com.vn/data/news/7046/anh-14-mau-phong-tro-thiet-ke-hien-dai.jpg",
@@ -19,6 +23,7 @@ export const postData = [
       },
     ],
   },
+
   {
     id: 2,
     title: "Luxury Apartment District 1",

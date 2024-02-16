@@ -10,8 +10,6 @@ import {
   logoutSuccess,
 } from "./autheslice";
 import Api, { authApi, endpoint } from "../Services/Config/Api";
-import axios from "axios";
-import { HOST_API_CA } from "@env";
 import {
   getUserFailed,
   getUserStart,

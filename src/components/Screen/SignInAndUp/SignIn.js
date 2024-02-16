@@ -3,7 +3,6 @@ import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLOR, SHADOWS } from "../../../contants";
-import InputField from "../../InputFields/InputFields";
 import { FacebookLogo, GoogleLogo } from "../../../assets/image/image";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -12,6 +11,7 @@ import { style } from "./SignInStyle";
 import { useDispatch } from "react-redux";
 import { CLIENT_ID, CLIENT_SECRET } from "@env";
 import { LoginUser } from "../../../Redux/apiRequest";
+import InputField from "../../InputFields/InputField";
 const SignIn = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -120,7 +120,7 @@ const SignIn = () => {
                   { color: COLOR.bg_color_blue_200, marginLeft: 2 },
                 ]}
               >
-                Login in
+                Create here
               </Text>
             </TouchableOpacity>
           </View>

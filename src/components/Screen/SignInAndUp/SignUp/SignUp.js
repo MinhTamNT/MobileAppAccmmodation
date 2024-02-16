@@ -1,18 +1,26 @@
-import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Platform,
+  ToastAndroid,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Yup from "yup";
 import { SHADOWS } from "../../../../contants";
 import { style } from "./SignUpStyle";
 import { style as styleForm } from "../SignInStyle";
-import InputField from "../../../InputFields/InputFields";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { registerUser } from "../../../../Redux/apiRequest";
-
+import InputField from "../../../InputFields/InputField";
+import { Ionicons } from "@expo/vector-icons";
+import Toast from "react-native-toast-message";
 const SignUp = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const navigation = useNavigation();
@@ -28,8 +36,23 @@ const SignUp = () => {
     role: "",
   });
   const [formErrors, setFormErrors] = useState({});
+  const [avatarRequired, setAvatarRequired] = useState(false);
   const dispatch = useDispatch();
-  const handleNext = () => setCurrentStep(currentStep + 1);
+
+  useEffect(() => {
+    if (formValues.role === "Tenant" || formValues.role === "Host") {
+      setAvatarRequired(true);
+    } else {
+      setAvatarRequired(false);
+    }
+  }, [formValues.role]);
+
+  const handleNext = () => {
+    if (validateForm()) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
   const handlePrev = () => setCurrentStep(currentStep - 1);
 
   const pickerImage = async () => {
@@ -56,23 +79,40 @@ const SignUp = () => {
   };
 
   const handleRegister = async () => {
-    try {
-      const form = new FormData();
-      for (let key in formValues) {
-        if (key === "avatar_user") {
-          form.append(key, {
-            uri: formValues[key].uri,
-            name: formValues[key].fileName,
-            type: formValues[key].type,
-          });
-        } else {
-          form.append(key, formValues[key]);
+    if (validateForm()) {
+      try {
+        const form = new FormData();
+        for (let key in formValues) {
+          if (key === "avatar_user") {
+            form.append(key, {
+              uri: formValues[key].uri,
+              name: formValues[key].fileName,
+              type: formValues[key].type,
+            });
+          } else {
+            form.append(key, formValues[key]);
+          }
         }
+        if (
+          (formValues.role === "Tenant" || formValues.role === "Host") &&
+          !formValues.avatar_user.uri
+        ) {
+          Platform.OS === "ios"
+            ? alert(`Role ${formValues.role} need avatar`)
+            : ToastAndroid.show(`Role ${formValues.role} need avatar`);
+          return;
+        }
+        await registerUser(form, dispatch, navigation);
+        Toast.show({
+          type: "success",
+          position: "bottom",
+          text1: "Registration Successful",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+      } catch (error) {
+        console.error("Full Axios Error:", error);
       }
-      console.log(form);
-      await registerUser(form, dispatch, navigation);
-    } catch (error) {
-      console.error("Full Axios Error:", error);
     }
   };
 
@@ -83,15 +123,46 @@ const SignUp = () => {
     }));
   };
 
-  const validateForm = () => {
-    const schema = Yup.object({
-      first_name: Yup.string().required("First Name is required"),
-      last_name: Yup.string().required("Last Name is required"),
-      email: Yup.string().email("Invalid email").required("Email is required"),
-    });
+  const validationSchemaStep1 = Yup.object({
+    first_name: Yup.string().required("First Name is required"),
+    last_name: Yup.string().required("Last Name is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+  });
 
+  const validationSchemaStep2 = Yup.object({
+    username: Yup.string().min(8, "Username must be at least 8 characters"),
+    password: Yup.string()
+      .matches(
+        /^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}$/,
+        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character"
+      )
+      .required("Password is required"),
+    phone: Yup.string()
+      .matches(/^\d+$/, "Phone must be a number")
+      .required("Phone is required"),
+  });
+
+  const validationSchemaStep3 = Yup.object({});
+
+  const validateForm = () => {
     try {
-      schema.validateSync(formValues, { abortEarly: false });
+      let validationSchema;
+
+      switch (currentStep) {
+        case 0:
+          validationSchema = validationSchemaStep1;
+          break;
+        case 1:
+          validationSchema = validationSchemaStep2;
+          break;
+        case 2:
+          validationSchema = validationSchemaStep3;
+          break;
+        default:
+          validationSchema = Yup.object({});
+      }
+
+      validationSchema.validateSync(formValues, { abortEarly: false });
       setFormErrors({});
       return true;
     } catch (errors) {
@@ -186,20 +257,27 @@ const SignUp = () => {
       case 3:
         return (
           <>
-            <Text>Choose your avatar</Text>
-            <TouchableOpacity style={style.choosenFile} onPress={pickerImage}>
-              <Image
-                source={
-                  formValues.avatar_user.uri
-                    ? { uri: formValues.avatar_user.uri }
-                    : require("../../../../assets/image/avatardefault.jpg")
-                }
-                style={style.ImageUser}
-              />
-              <Text style={{ fontSize: 20, fontWeight: "700" }}>
-                Upload avatar
-              </Text>
-            </TouchableOpacity>
+            {avatarRequired && (
+              <>
+                <Text>Choose your avatar</Text>
+                <TouchableOpacity
+                  style={style.choosenFile}
+                  onPress={pickerImage}
+                >
+                  <Image
+                    source={
+                      formValues.avatar_user.uri
+                        ? { uri: formValues.avatar_user.uri }
+                        : require("../../../../assets/image/avatardefault.jpg")
+                    }
+                    style={style.ImageUser}
+                  />
+                  <Text style={{ fontSize: 20, fontWeight: "700" }}>
+                    Upload avatar
+                  </Text>
+                </TouchableOpacity>
+              </>
+            )}
           </>
         );
     }
@@ -213,6 +291,12 @@ const SignUp = () => {
         contentContainerStyle={{ flexGrow: 1 }}
       >
         <SafeAreaView>
+          <TouchableOpacity
+            style={{ marginLeft: 12 }}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="chevron-back-circle" size={30} />
+          </TouchableOpacity>
           <View style={styleForm.content_image}>
             <Image
               source={require("../../../../assets/image/home.jpg")}
@@ -225,28 +309,31 @@ const SignUp = () => {
             <Text style={style.Step}>{steps[currentStep]}</Text>
             {renderFormFields()}
             <View style={style.btnAction}>
-              <TouchableOpacity
-                onPress={handlePrev}
-                disabled={currentStep === 0}
-                style={[style.btnAction_content]}
-              >
-                <Text style={{ color: "white" }}>Back</Text>
-              </TouchableOpacity>
+              {currentStep !== 0 && ( // Hiển thị nút "Back" nếu không phải ở Step 0
+                <TouchableOpacity
+                  onPress={handlePrev}
+                  disabled={currentStep === 0}
+                  style={[style.btnAction_content]}
+                >
+                  <Text style={style.textContent}>
+                    Back
+                  </Text>
+                </TouchableOpacity>
+              )}
 
               {currentStep === steps.length - 1 ? (
-                <TouchableOpacity onPress={handleRegister}>
+                <TouchableOpacity
+                  style={style.btnRegister_action}
+                  onPress={handleRegister}
+                >
                   <Text>Create an account</Text>
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  onPress={() => {
-                    if (validateForm()) {
-                      handleNext();
-                    }
-                  }}
+                  onPress={handleNext}
                   style={style.btnAction_content}
                 >
-                  <Text style={{ color: "white" }}>
+                  <Text style={style.textContent}>
                     {currentStep === steps.length - 1 ? "Save" : "Next"}
                   </Text>
                 </TouchableOpacity>

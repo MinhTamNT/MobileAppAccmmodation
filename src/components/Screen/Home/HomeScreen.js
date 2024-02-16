@@ -5,10 +5,10 @@ import { style } from "./HomeStyle";
 import { Feather } from "@expo/vector-icons";
 import { COLOR } from "../../../contants";
 import Carousel from "../../Carousel/Carousel";
-import InputField from "../../InputFields/InputFields";
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
+import InputField from "../../InputFields/InputField";
 const HomeScreen = ({ route }) => {
   const currentUser = useSelector((state) => state?.user.user.currentUser);
   const [location, setLocation] = useState(null);

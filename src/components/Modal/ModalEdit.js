@@ -11,12 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { ModalStyle } from "./ModalStyle";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
 import { Edit } from "iconsax-react-native";
-import InputField from "../InputFields/InputFields";
 import { styleFields } from "../InputFields/InputFieldStyle";
 import { AntDesign } from "@expo/vector-icons";
 import { updateUser } from "../../Redux/apiRequest";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import InputField from "../InputFields/InputField";
 const ModalEdit = (prop) => {
   const { setVissable } = prop;
   const user = useSelector((state) => state.user?.user.currentUser);
