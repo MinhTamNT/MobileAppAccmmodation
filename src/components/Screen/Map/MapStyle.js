@@ -8,7 +8,6 @@ export const MapStyle = StyleSheet.create({
   map: {
     height: "100%",
   },
-  // Callout bubble
   bubble: {
     flexDirection: "column",
     alignSelf: "flex-start",
@@ -35,7 +34,6 @@ export const MapStyle = StyleSheet.create({
     borderWidth: 16,
     alignSelf: "center",
     marginTop: -0.5,
-    // marginBottom: -15
   },
   // Character name
   name: {
@@ -55,7 +53,7 @@ export const MapStyle = StyleSheet.create({
     marginTop: Platform.OS === "ios" ? 40 : 20,
     flexDirection: "row",
     backgroundColor: "#fff",
-    width: "90%",
+    width: "80%",
     alignSelf: "center",
     borderRadius: 5,
     padding: 10,

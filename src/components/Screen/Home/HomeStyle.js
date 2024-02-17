@@ -15,12 +15,18 @@ export const style = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
   },
+
   title_hello: {
     flexDirection: "row",
     gap: 4,
   },
+
   text_title: {
     fontSize: 14,
+    fontWeight: "500",
+  },
+  text_titleAdmin: {
+    fontSize: 20,
     fontWeight: "500",
   },
   address: {

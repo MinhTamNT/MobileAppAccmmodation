@@ -6,7 +6,6 @@ import {
   Animated,
   ScrollView,
   TouchableOpacity,
-  Platform,
 } from "react-native";
 import MapView, { Circle, Marker } from "react-native-maps";
 import { MapStyle } from "./MapStyle";
@@ -17,6 +16,7 @@ import {
   SearchNormal,
   Profile2User,
   Clock,
+  ArrowLeft2,
 } from "iconsax-react-native";
 import { COLOR } from "../../../contants";
 
@@ -124,6 +124,7 @@ export default ({ route }) => {
           </Marker>
         ))}
       </MapView>
+
       <View style={MapStyle.searchBox}>
         <TextInput
           placeholder="Search here"
