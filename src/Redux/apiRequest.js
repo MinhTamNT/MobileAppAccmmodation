@@ -19,7 +19,6 @@ import {
   updateSuccess,
 } from "./userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
   try {
@@ -38,7 +37,6 @@ export const LoginUser = async (users, dispatch, navigation) => {
     let response = await Api.post(endpoint["login"], users);
     console.log(response.data.access_token);
     dispatch(loginSuccess(response.data));
-
     navigation.navigate("Home");
   } catch (error) {
     console.log(error.message);

@@ -8,7 +8,6 @@ export const MapStyle = StyleSheet.create({
   map: {
     height: "100%",
   },
-  // Callout bubble
   bubble: {
     flexDirection: "column",
     alignSelf: "flex-start",
@@ -35,7 +34,6 @@ export const MapStyle = StyleSheet.create({
     borderWidth: 16,
     alignSelf: "center",
     marginTop: -0.5,
-    // marginBottom: -15
   },
   // Character name
   name: {
@@ -55,7 +53,7 @@ export const MapStyle = StyleSheet.create({
     marginTop: Platform.OS === "ios" ? 40 : 20,
     flexDirection: "row",
     backgroundColor: "#fff",
-    width: "90%",
+    width: "80%",
     alignSelf: "center",
     borderRadius: 5,
     padding: 10,
@@ -64,6 +62,24 @@ export const MapStyle = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 10,
+  },
+  searchAction: {
+    position: "absolute",
+    backgroundColor: "#fff",
+    alignSelf: "center",
+    marginTop: Platform.OS === "ios" ? 95 : 20,
+    zIndex: 999,
+    flexDirection: "row",
+    width: 400,
+    borderRadius: 5,
+    padding: 4,
+    shadowColor: "#ccc",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10,
+    maxHeight: 750,
+    maxWidth: 500,
   },
   chipsScrollView: {
     position: "absolute",
@@ -172,5 +188,18 @@ export const MapStyle = StyleSheet.create({
   trackStyle: {
     height: 5,
     backgroundColor: COLOR.offWhite,
+  },
+  searchResults: {
+    paddingHorizontal: 12,
+  },
+
+  searchResultItem: {
+    fontSize: 16,
+    marginBottom: 12,
+    paddingVertical: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    borderBottomColor: COLOR.text_weak_color,
   },
 });

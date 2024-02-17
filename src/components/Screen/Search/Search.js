@@ -24,7 +24,6 @@ import DistrictModal from "../../Modal/ModalDistrict";
 import { useNavigation } from "@react-navigation/native";
 
 const Search = ({ route }) => {
-  console.log(route);
   const locationUser = route?.params?.locationUser || {};
   const scrollX = new Animated.Value(0);
   const navigation = useNavigation();
