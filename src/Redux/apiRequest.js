@@ -19,6 +19,7 @@ import {
   updateSuccess,
 } from "./userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
   try {
@@ -33,29 +34,30 @@ export const registerUser = async (form, dispatch, navigation) => {
 
 export const LoginUser = async (users, dispatch, navigation) => {
   dispatch(loginStart());
+  dispatch(updateStart());
   try {
     let response = await Api.post(endpoint["login"], users);
-    console.log(response.data.access_token);
     dispatch(loginSuccess(response.data));
+    dispatch(updateSuccess(response.data));
     navigation.navigate("Home");
   } catch (error) {
-    console.log(error.message);
-    dispatch(loginFail());
+    dispatch(loginFail(error.response.data.message));
+    dispatch(updateFail());
   }
 };
 
-export const LogoutUser = async (dispatch, navigation, token) => {
-  dispatch(logoutStart());
-  try {
-    await AsyncStorage.removeItem("access-token");
-    await authApi(token).post(endpoint["logout"]);
-    dispatch(logoutSuccess());
-    navigation.navigate("Login");
-  } catch (error) {
-    console.error("Logout Error:", error);
-    dispatch(logoutFailed());
-  }
-};
+// export const LogoutUser = async (dispatch, navigation, token) => {
+//   dispatch(logoutStart());
+//   try {
+//     await AsyncStorage.removeItem("access-token");
+//     await authApi(token).post(endpoint["logout"]);
+//     dispatch(logoutSuccess());
+//     navigation.navigate("Login");
+//   } catch (error) {
+//     console.error("Logout Error:", error);
+//     dispatch(logoutFailed());
+//   }
+// };
 
 export const updateUser = async (id, token, newUser, dispatch) => {
   dispatch(updateStart());

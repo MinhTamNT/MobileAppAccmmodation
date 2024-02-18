@@ -10,7 +10,8 @@ import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
 import InputField from "../../InputFields/InputField";
 const HomeScreen = ({ route }) => {
-  const currentUser = useSelector((state) => state?.user.user.currentUser);
+  const currentUser = useSelector((state) => state?.user.currentUser);
+  console.log(currentUser?.avatar_user);
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState(null);
   const navigation = useNavigation();
@@ -79,7 +80,12 @@ const HomeScreen = ({ route }) => {
         <View style={style.header_action}>
           <TouchableOpacity onPress={() => navigation.navigate("UserDeatil")}>
             <Image
-              source={{ uri: currentUser.avatar_user }}
+              source={{
+                uri:
+                  currentUser?.avatar_user === null
+                    ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&usqp=CAU"
+                    : currentUser?.avatar_user,
+              }}
               style={style.image}
             />
           </TouchableOpacity>

@@ -3,41 +3,36 @@ import { createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    user: {
-      currentUser: null,
-      pending: false,
-      error: false,
-    },
-    otherUser: {
-      otherUser: null,
-      loading: false,
-      error: false,
-    },
+    currentUser: null,
+    pending: false,
+    error: false,
+    otherUser: null,
+    loading: false,
   },
   reducers: {
     getUserStart: (state) => {
-      state.otherUser.loading = true;
+      state.loading = true;
     },
     getUserSuccess: (state, action) => {
-      state.otherUser.loading = false;
-      state.otherUser.otherUser = action.payload;
-      state.otherUser.error = false;
+      state.loading = false;
+      state.otherUser = action.payload;
+      state.error = false;
     },
     getUserFailed: (state) => {
-      state.otherUser.loading = false;
-      state.otherUser.error = true;
+      state.loading = false;
+      state.error = true;
     },
     updateStart: (state) => {
-      state.user.pending = true;
+      state.pending = true;
     },
     updateSuccess: (state, action) => {
-      state.user.pending = false;
-      state.user.currentUser = action.payload;
-      state.user.error = false;
+      state.pending = false;
+      state.currentUser = action.payload;
+      state.error = false;
     },
     updateFail: (state) => {
-      state.user.pending = false;
-      state.user.error = true;
+      state.pending = false;
+      state.error = true;
     },
   },
 });

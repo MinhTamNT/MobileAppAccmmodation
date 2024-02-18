@@ -1,62 +1,52 @@
 import { createSlice } from "@reduxjs/toolkit";
+const initialState = {
+  currentUser: null,
+  error: false,
+  isFetching: false,
+  success: false,
+  message: null,
+};
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    login: {
-      currentUser: null,
-      error: false,
-      isLoading: false,
-      success: false,
-      message: null,
-    },
-    registration: {
-      isLoading: false,
-      success: false,
-      error: null,
-    },
-    logout: {
-      error: false,
-      isLoading: false,
-      success: false,
-    },
-  },
+  initialState,
   reducers: {
     loginStart: (state) => {
-      state.login.isLoading = true;
-      state.login.error = false;
+      state.isFetching = true;
+      state.error = false;
     },
     loginSuccess: (state, action) => {
-      state.login.isLoading = false;
-      state.login.currentUser = action.payload;
-      state.login.error = false;
+      state.isFetching = false;
+      state.currentUser = action.payload;
+      state.error = false;
     },
     loginFail: (state) => {
-      state.login.isLoading = false;
-      state.login.error = true;
+      state.isFetching = false;
+      state.error = true;
+      state.message = action.payload;
     },
     registerStart: (state) => {
-      state.registration.isLoading = true;
-      state.registration.error = null;
+      state.isFetching = true;
+      state.error = null;
     },
     registerSuccess: (state) => {
-      state.registration.isLoading = false;
-      state.registration.success = true;
+      state.isFetching = false;
+      state.success = true;
     },
     registerFail: (state, action) => {
-      state.registration.isLoading = false;
-      state.registration.error = action.payload;
+      state.isFetching = false;
+      state.error = action.payload;
     },
     logoutStart: (state) => {
-      state.logout.isLoading = true;
+      state.isFetching = true;
     },
     logoutSuccess: (state) => {
-      state.logout.isLoading = false;
-      state.logout.success = true;
+      state.isFetching = false;
+      state.success = true;
     },
     logoutFailed: (state) => {
-      state.logout.isLoading = false;
-      state.logout.error = true;
-      state.logout.success = false;
+      state.isFetching = false;
+      state.error = true;
+      state.success = false;
     },
   },
 });

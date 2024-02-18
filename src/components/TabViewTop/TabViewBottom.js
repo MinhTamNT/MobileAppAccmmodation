@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useRef } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { useSelector } from "react-redux";
 import TabViewPost from "./TabViewUser/TabViewPost";
 import TabViewComment from "./TabViewUser/TabViewComment";
 import TabViewPostAccpet from "./ViewAdmin/TabViewPostAccpet";
 import TabViewPostAccepted from "./ViewAdmin/TabViewPostAccepted";
+import { Animated } from "react-native";
+const Tab = createMaterialTopTabNavigator();
+
 const TabViewBottom = () => {
-  const Tab = createMaterialTopTabNavigator();
-  const user = useSelector((state) => state.user.user.currentUser);
+  const user = useSelector((state) => state.user.currentUser);
 
   return (
     <Tab.Navigator
@@ -17,7 +19,7 @@ const TabViewBottom = () => {
     >
       {user.role === "ADMIN" ? (
         <>
-          <Tab.Screen name="Wattng" component={TabViewPostAccpet} />
+          <Tab.Screen name="Waiting" component={TabViewPostAccpet} />
           <Tab.Screen name="Accept" component={TabViewPostAccepted} />
         </>
       ) : (

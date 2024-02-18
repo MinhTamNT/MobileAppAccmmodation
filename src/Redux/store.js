@@ -1,10 +1,44 @@
-import { configureStore } from "@reduxjs/toolkit";
-import autheslice from "./autheslice";
-import userSlice from "./userSlice";
+import {
+  configureStore,
+  combineReducers,
+  createAsyncThunk,
+} from "@reduxjs/toolkit";
+import authReducer from "./autheslice";
+import userReducer from "./userSlice";
+import { persistReducer, persistStore } from "redux-persist";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const store = configureStore({
-  reducer: {
-    auth: autheslice,
-    user: userSlice,
-  },
+const combinedReducer = combineReducers({
+  auth: authReducer,
+  user: userReducer,
 });
+
+const reducerProxy = (state, action) => {
+  if (action.type === "logout/LOGOUT") {
+    return combinedReducer(undefined, action);
+  }
+  return combinedReducer(state, action);
+};
+
+const persistConfig = {
+  key: "root",
+  storage: AsyncStorage,
+};
+
+const persistedReducer = persistReducer(persistConfig, reducerProxy);
+
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async function (_payload, thunkAPI) {
+    thunkAPI.dispatch({ type: "logout/LOGOUT" });
+  }
+);
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
+
+export let persistor = persistStore(store);
