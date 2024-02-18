@@ -1,4 +1,11 @@
-import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { style } from "./HomeStyle";
@@ -9,11 +16,13 @@ import { useSelector } from "react-redux";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
 import InputField from "../../InputFields/InputField";
+import ModalRequire from "../../Modal/ModalRequire";
 const HomeScreen = ({ route }) => {
   const currentUser = useSelector((state) => state?.user.currentUser);
-  console.log(currentUser?.avatar_user);
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState(null);
+  const [modalVisible, setModalVisible] = useState(true);
+
   const navigation = useNavigation();
   useEffect(() => {
     const getPermission = async () => {
@@ -105,6 +114,9 @@ const HomeScreen = ({ route }) => {
           />
         </View>
       </ScrollView>
+      {modalVisible && (
+        <ModalRequire setModalVisible={setModalVisible} location={location} />
+      )}
     </SafeAreaView>
   );
 };

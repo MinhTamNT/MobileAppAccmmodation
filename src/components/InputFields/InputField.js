@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { styleFields } from "./InputFieldStyle";
-import { Feather } from "@expo/vector-icons"; 
+import { Feather } from "@expo/vector-icons";
 
 const InputField = ({
   label,

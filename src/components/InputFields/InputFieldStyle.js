@@ -30,12 +30,21 @@ export const styleFields = StyleSheet.create({
   },
   formEdit: {
     backgroundColor: COLOR.offWhite,
-    marginBottom: 2,
+    marginBottom: 10,
+  },
+  inputsmall: {
+    backgroundColor: COLOR.offWhite,
+    marginBottom: 10,
+    width: 170,
   },
   iconContainer: {
     position: "absolute",
     zIndex: 999,
     right: 12,
     top: 26,
+  },
+  formCaption: {
+    paddingHorizontal: 5,
+    fontSize: 25,
   },
 });
