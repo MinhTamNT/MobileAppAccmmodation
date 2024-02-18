@@ -1,4 +1,11 @@
-import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { style } from "./HomeStyle";
@@ -9,10 +16,13 @@ import { useSelector } from "react-redux";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
 import InputField from "../../InputFields/InputField";
+import ModalRequire from "../../Modal/ModalRequire";
 const HomeScreen = ({ route }) => {
-  const currentUser = useSelector((state) => state?.user.user.currentUser);
+  const currentUser = useSelector((state) => state?.user.currentUser);
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState(null);
+  const [modalVisible, setModalVisible] = useState(true);
+
   const navigation = useNavigation();
   useEffect(() => {
     const getPermission = async () => {
@@ -79,7 +89,12 @@ const HomeScreen = ({ route }) => {
         <View style={style.header_action}>
           <TouchableOpacity onPress={() => navigation.navigate("UserDeatil")}>
             <Image
-              source={{ uri: currentUser.avatar_user }}
+              source={{
+                uri:
+                  currentUser?.avatar_user === null
+                    ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&usqp=CAU"
+                    : currentUser?.avatar_user,
+              }}
               style={style.image}
             />
           </TouchableOpacity>
@@ -99,6 +114,9 @@ const HomeScreen = ({ route }) => {
           />
         </View>
       </ScrollView>
+      {modalVisible && (
+        <ModalRequire setModalVisible={setModalVisible} location={location} />
+      )}
     </SafeAreaView>
   );
 };

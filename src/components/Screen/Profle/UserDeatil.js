@@ -11,7 +11,7 @@ import TabViewBottom from "../../TabViewTop/TabViewBottom";
 import ModalEdit from "../../Modal/ModalEdit";
 const UserDeatil = () => {
   const navigation = useNavigation();
-  const user = useSelector((state) => state?.user?.user.currentUser);
+  const user = useSelector((state) => state?.user.currentUser);
   const [isVissable, setVissable] = useState(false);
   const handlerEdit = () => {
     setVissable(!isVissable);
@@ -35,7 +35,12 @@ const UserDeatil = () => {
             ]}
           >
             <Image
-              source={{ uri: user.avatar_user }}
+              source={{
+                uri:
+                  user.avatar_user === null
+                    ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&usqp=CAU"
+                    : user.avatar_user,
+              }}
               width={100}
               height={100}
               resizeMode="cover"

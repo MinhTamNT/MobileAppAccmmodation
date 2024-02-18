@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ToastAndroid,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ModalStyle } from "./ModalStyle";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
@@ -19,14 +19,15 @@ import * as FileSystem from "expo-file-system";
 import InputField from "../InputFields/InputField";
 const ModalEdit = (prop) => {
   const { setVissable } = prop;
-  const user = useSelector((state) => state.user?.user.currentUser);
+  const user = useSelector((state) => state.user?.currentUser);
   const [firtsName, setFirstName] = useState(user?.first_name);
   const [lastName, setLastName] = useState(user?.last_name);
   const [email, setEmail] = useState(user?.email);
   const [username, setUsername] = useState(user?.username);
   const [phone, setPhone] = useState(user?.phone);
   const [avatar_user, setAvatar] = useState(user?.avatar_user);
-  const auth = useSelector((state) => state.auth?.login.currentUser);
+  const auth = useSelector((state) => state.auth?.currentUser);
+
   const dispatch = useDispatch();
 
   const pickerImage = async () => {

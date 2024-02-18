@@ -5,9 +5,6 @@ import {
   loginStart,
   loginFail,
   loginSuccess,
-  logoutStart,
-  logoutFailed,
-  logoutSuccess,
 } from "./autheslice";
 import Api, { authApi, endpoint } from "../Services/Config/Api";
 import {
@@ -19,6 +16,12 @@ import {
   updateSuccess,
 } from "./userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  createAccommodationFailed,
+  createAccommodationStart,
+  createAccommodationSuccess,
+} from "./accommodation";
+import { err } from "react-native-svg";
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
   try {
@@ -33,27 +36,15 @@ export const registerUser = async (form, dispatch, navigation) => {
 
 export const LoginUser = async (users, dispatch, navigation) => {
   dispatch(loginStart());
+  dispatch(updateStart());
   try {
     let response = await Api.post(endpoint["login"], users);
-    console.log(response.data.access_token);
     dispatch(loginSuccess(response.data));
+    dispatch(updateSuccess(response.data));
     navigation.navigate("Home");
   } catch (error) {
-    console.log(error.message);
-    dispatch(loginFail());
-  }
-};
-
-export const LogoutUser = async (dispatch, navigation, token) => {
-  dispatch(logoutStart());
-  try {
-    await AsyncStorage.removeItem("access-token");
-    await authApi(token).post(endpoint["logout"]);
-    dispatch(logoutSuccess());
-    navigation.navigate("Login");
-  } catch (error) {
-    console.error("Logout Error:", error);
-    dispatch(logoutFailed());
+    dispatch(loginFail(error.response.data.message));
+    dispatch(updateFail());
   }
 };
 
@@ -80,5 +71,16 @@ export const getUser = async (dispatch, token) => {
     console.log(error);
     dispatch(getUserFailed());
     dispatch(updateFail());
+  }
+};
+export const createAccommodation = async (dispatch, accommodation, token) => {
+  console.log(token);
+  try {
+    dispatch(createAccommodationStart());
+    await authApi(token).post(endpoint["create_accomommdation"], accommodation);
+    dispatch(createAccommodationSuccess());
+  } catch (error) {
+    console.log(error);
+    dispatch(createAccommodationFailed());
   }
 };

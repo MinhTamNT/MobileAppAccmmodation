@@ -17,13 +17,16 @@ import {
 import { COLOR } from "../../../contants";
 import { FacebookLogo, GoogleLogo } from "../../../assets/image/image";
 import { LogoutUser } from "../../../Redux/apiRequest";
+import { logout } from "../../../Redux/store";
 
 const Profile = ({ navigation }) => {
-  const current_user = useSelector((state) => state?.user?.user.currentUser);
-  const token = useSelector((state) => state?.auth?.login.accessToken);
+  const current_user = useSelector((state) => state?.user?.currentUser);
+  const auth = useSelector((state) => state?.auth?.currentUser);
+  const token = auth?.access_token;
   const dispatch = useDispatch();
   const handlerLogout = async () => {
-    await LogoutUser(dispatch, navigation, token);
+    dispatch(logout());
+    navigation.navigate("Login");
   };
   const handlerNavigate = () => {
     navigation.navigate("UserDeatil");
@@ -77,7 +80,12 @@ const Profile = ({ navigation }) => {
         <View style={styleProfile.content}>
           <View style={[styleProfile.ImageUser, StyleDefault.flexBoxRow]}>
             <Image
-              source={{ uri: current_user.avatar_user }}
+              source={{
+                uri:
+                  current_user.avatar_user === null
+                    ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&usqp=CAU"
+                    : current_user.avatar_user,
+              }}
               width={100}
               height={100}
               resizeMode="cover"

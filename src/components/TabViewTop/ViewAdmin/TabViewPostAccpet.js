@@ -1,12 +1,20 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { ScrollView, StyleSheet } from "react-native";
+import PostApproved from "../../SuggestPost/PostApproved/PostApproved";
 
-const TabViewPostAccpet = () => {
+const TabViewPostAccept = () => {
   return (
-    <View>
-      <Text>TabViewPostAccpet</Text>
-    </View>
+    <ScrollView style={styles.container}>
+      <PostApproved />
+    </ScrollView>
   );
 };
 
-export default TabViewPostAccpet;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+});
+
+export default TabViewPostAccept;

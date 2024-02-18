@@ -5,6 +5,7 @@ export const endpoint = {
   current_user: "/users/current_user/",
   logout: "/users/logout/",
   update_user: (userID) => `/users/${userID}/update/`,
+  create_accomommdation: "/accommodation/create/",
 };
 
 export const authApi = (accessToken) =>

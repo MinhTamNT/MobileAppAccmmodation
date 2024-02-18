@@ -315,9 +315,7 @@ const SignUp = () => {
                   disabled={currentStep === 0}
                   style={[style.btnAction_content]}
                 >
-                  <Text style={style.textContent}>
-                    Back
-                  </Text>
+                  <Text style={style.textContent}>Back</Text>
                 </TouchableOpacity>
               )}
 

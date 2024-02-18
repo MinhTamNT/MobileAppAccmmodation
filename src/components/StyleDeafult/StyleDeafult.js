@@ -12,7 +12,7 @@ export const StyleDefault = StyleSheet.create({
   flexBoxRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 5,
+    gap: 10,
   },
   flexBoxCol: {
     flexDirection: "column",
@@ -33,5 +33,11 @@ export const StyleDefault = StyleSheet.create({
   },
   bold700: {
     fontWeight: "700",
+  },
+  imageUsers: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    resizeMode: "cover",
   },
 });

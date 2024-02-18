@@ -39,6 +39,12 @@ export const style = StyleSheet.create({
     alignItems: "center",
     gap: 10,
   },
+  headerAction: {
+    backgroundColor: COLOR.PRIMARY,
+    padding: 10,
+    marginHorizontal: 12,
+    borderRadius: 10,
+  },
   image: {
     width: 40,
     height: 40,

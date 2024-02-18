@@ -6,19 +6,18 @@ import {
   Animated,
   ScrollView,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import MapView, { Circle, Marker } from "react-native-maps";
 import { MapStyle } from "./MapStyle";
 import { marker } from "./MapData";
-import { TextInput } from "react-native-gesture-handler";
 import {
   Moneys,
   SearchNormal,
   Profile2User,
   Clock,
-  ArrowLeft2,
 } from "iconsax-react-native";
-import { COLOR } from "../../../contants";
+import { MAP_KEY } from "@env";
 
 export default ({ route }) => {
   const { locationPresent } = route?.params;
@@ -35,20 +34,29 @@ export default ({ route }) => {
       ),
     },
   ];
-
   const mapRef = useRef(null);
   const [markersToShow, setMarkersToShow] = useState(marker);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [formattedAddresses, setFormattedAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const [latitude, setLatitude] = useState(locationPresent.coords.latitude);
+  const [longitude, setLongitude] = useState(locationPresent.coords.longitude);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://dev.virtualearth.net/REST/v1/Autosuggest?query=${searchText}&key=AhKaL22nil7f0VevfVpYLr0hEEFmMQ_YaQ3dlIfTJYOfRv3Jbdufdyj0NSF6PVqr`
+          `https://dev.virtualearth.net/REST/v1/Autosuggest?query=${searchText}&key=${MAP_KEY}`
         );
-        const data = await response.json();
+
+        const responseBody = await response.text();
+
+        if (!responseBody.trim()) {
+          return;
+        }
+
+        const data = JSON.parse(responseBody);
 
         if (
           data.resourceSets &&
@@ -57,40 +65,63 @@ export default ({ route }) => {
         ) {
           const resources = data.resourceSets[0].resources;
 
-          const addresses = [];
-
-          resources.forEach((resource) => {
-            if (resource.value && resource.value.length > 0) {
-              resource.value.forEach((item) => {
-                const formattedAddress = item.address.formattedAddress;
-                addresses.push(formattedAddress);
-              });
-            }
-          });
+          const addresses = resources
+            .map((resource) =>
+              resource.value
+                ? resource.value.map((item) => item.address.formattedAddress)
+                : []
+            )
+            .flat();
 
           setFormattedAddresses(addresses);
-
-          console.log("Formatted Addresses:", formattedAddresses);
         }
       } catch (error) {
-        console.error("Error fetching suggestions:", error);
+        console.error("Error fetching suggestions:", error.message);
       }
     };
 
     fetchData();
   }, [searchText]);
 
-  useEffect(() => {
-    console.log("Formatted Addresses Updated:", formattedAddresses);
-  }, [formattedAddresses]);
+  const handleAddressSelect = async (selectedAddress) => {
+    try {
+      const response = await fetch(
+        `https://dev.virtualearth.net/REST/v1/Locations?query=${selectedAddress}&key=${MAP_KEY}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (
+        data.resourceSets &&
+        data.resourceSets.length > 0 &&
+        data.resourceSets[0].resources
+      ) {
+        const resources = data.resourceSets[0].resources;
+
+        resources.forEach((resource) => {
+          const latitude = resource.point.coordinates[0];
+          const longitude = resource.point.coordinates[1];
+          setLatitude(latitude);
+          setLongitude(longitude);
+        });
+      }
+
+      setSelectedAddress(selectedAddress);
+      setSearchText("");
+    } catch (error) {
+      console.error("Error fetching location coordinates:", error.message);
+    }
+  };
 
   return (
     <View style={MapStyle.container}>
       <MapView
         style={MapStyle.map}
         region={{
-          latitude: locationPresent.coords.latitude,
-          longitude: locationPresent.coords.longitude,
+          latitude: latitude,
+          longitude: longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -98,16 +129,14 @@ export default ({ route }) => {
       >
         <Marker
           coordinate={{
-            latitude: locationPresent.coords.latitude,
-            longitude: locationPresent.coords.longitude,
+            latitude: latitude,
+            longitude: longitude,
           }}
-          title="Your Location"
-          description="This is where you are currently located"
         />
         <Circle
           center={{
-            latitude: locationPresent.coords.latitude,
-            longitude: locationPresent.coords.longitude,
+            latitude: latitude,
+            longitude: longitude,
           }}
           radius={1000}
           fillColor="rgba(100, 100, 255, 0.5)"
@@ -131,9 +160,14 @@ export default ({ route }) => {
           placeholderTextColor="#333"
           autoCapitalize="none"
           style={{ flex: 1, padding: 4 }}
+          value={searchText}
           onChangeText={(text) => setSearchText(text)}
         />
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            handleAddressSelect(searchText);
+          }}
+        >
           <SearchNormal size="32" color="#FF8A65" />
         </TouchableOpacity>
       </View>
@@ -156,61 +190,34 @@ export default ({ route }) => {
         ))}
       </ScrollView>
 
-      <ScrollView
-        horizontal
-        scrollEventThrottle={1}
-        showsVerticalScrollIndicator={false}
-        style={MapStyle.scrollView}
-      >
-        {markersToShow.map((marker, index) => (
-          <View style={MapStyle.card} key={index}>
-            <Image
-              source={marker.image}
-              style={MapStyle.cardImage}
-              resizeMode="cover"
-            />
-            <View style={MapStyle.textContent}>
-              <Text numberOfLines={1} style={MapStyle.cardtitle}>
-                {marker.title}
-              </Text>
-              <Text numberOfLines={1} style={MapStyle.cardDescription}>
-                {marker.description}
-              </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={MapStyle.cardPrice}>{marker.price}</Text>
-                <TouchableOpacity style={MapStyle.button}>
-                  <Text style={{ color: COLOR.offWhite }}>See details</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
       {searchText.length > 0 && (
         <View style={MapStyle.searchAction}>
-          {searchText.length > 0 && (
-            <View style={MapStyle.searchResults}>
-              {formattedAddresses.map((address, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={MapStyle.searchResultItem}
-                  onPress={() => {
-                    console.log(`Selected address: ${address}`);
-                  }}
-                >
-                  <Clock size="15" color="#697689" />
-                  <Text style={{ fontSize: 12, borderBottomWidth: 1 }}>
-                    {address}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
+          <Text>{selectedAddress}</Text>
+        </View>
+      )}
+
+      {formattedAddresses.length > 0 && (
+        <View style={MapStyle.searchAction}>
+          <ScrollView
+            style={MapStyle.searchResults}
+            showsVerticalScrollIndicator={false}
+          >
+            {formattedAddresses.map((address, index) => (
+              <TouchableOpacity
+                key={index}
+                style={MapStyle.searchResultItem}
+                onPress={() => {
+                  console.log(`Selected address: ${address}`);
+                  handleAddressSelect(address);
+                }}
+              >
+                <Clock size="15" color="#697689" />
+                <Text style={{ fontSize: 12, borderBottomWidth: 1 }}>
+                  {address}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
       )}
     </View>
