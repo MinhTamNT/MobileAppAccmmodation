@@ -32,6 +32,10 @@ export const styleFields = StyleSheet.create({
     backgroundColor: COLOR.offWhite,
     marginBottom: 10,
   },
+  inputNoBackGround: {
+    marginBottom: 10,
+    padding: 5,
+  },
   inputsmall: {
     backgroundColor: COLOR.offWhite,
     marginBottom: 10,

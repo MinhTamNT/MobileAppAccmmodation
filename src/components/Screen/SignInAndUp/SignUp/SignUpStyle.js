@@ -29,7 +29,7 @@ export const style = StyleSheet.create({
   },
   btnRegister_action: {
     paddingVertical: 10,
-    backgroundColor: "#ccc",
+    backgroundColor: "#333",
     borderRadius: 10,
   },
   choosenFile: {

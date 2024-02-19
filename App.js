@@ -14,6 +14,7 @@ import SignIn from "./src/components/Screen/SignInAndUp/SignIn.js";
 import MapScreen from "./src/components/Screen/Map/MapScreen.js";
 import PostDetail from "./src/components/SuggestPost/PostDeatil.js";
 import { PersistGate } from "redux-persist/integration/react";
+import Toast from "react-native-toast-message";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -73,6 +74,7 @@ export default function App() {
           </Stack.Navigator>
         </NavigationContainer>
       </PersistGate>
+      <Toast />
     </Provider>
   );
 }

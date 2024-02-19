@@ -97,8 +97,8 @@ const Search = ({ route }) => {
   };
 
   const headerHeight = Animated.diffClamp(scrollX, 0, 50).interpolate({
-    inputRange: [0, 70],
-    outputRange: [70, 0],
+    inputRange: [0, 80],
+    outputRange: [80, 0],
     extrapolate: "clamp",
   });
 
@@ -107,8 +107,8 @@ const Search = ({ route }) => {
     0,
     50
   ).interpolate({
-    inputRange: [0, 70],
-    outputRange: [0, -70],
+    inputRange: [0, 80],
+    outputRange: [0, -80],
     extrapolate: "clamp",
   });
 
@@ -186,6 +186,7 @@ const Search = ({ route }) => {
           />
         </Animated.ScrollView>
       </SafeAreaView>
+
       <ProvinceModal
         visible={isProvinceModalVisible}
         onClose={handleCloseProvinceModal}

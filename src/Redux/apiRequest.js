@@ -15,17 +15,29 @@ import {
   updateStart,
   updateSuccess,
 } from "./userSlice";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   createAccommodationFailed,
   createAccommodationStart,
   createAccommodationSuccess,
 } from "./accommodation";
-import { err } from "react-native-svg";
+import {
+  createPostFailed,
+  createPostStart,
+  createPostSuccess,
+} from "./postSlices";
+import { FIREBASE_AUTH } from "../Services/firebaseConfig";
+import {
+  createUserWithEmailAndPassword,
+  signInAnonymously,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+const auth = FIREBASE_AUTH;
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
   try {
     const response = await Api.post(endpoint["register"], form);
+    console.log(form);
+    await createUserWithEmailAndPassword(auth, form.email, form.password);
     dispatch(registerSuccess(response.data));
     navigation.navigate("Login");
   } catch (error) {
@@ -37,10 +49,12 @@ export const registerUser = async (form, dispatch, navigation) => {
 export const LoginUser = async (users, dispatch, navigation) => {
   dispatch(loginStart());
   dispatch(updateStart());
+
   try {
     let response = await Api.post(endpoint["login"], users);
+    console.log("usersApi", users);
+    await signInAnonymously(auth);
     dispatch(loginSuccess(response.data));
-    dispatch(updateSuccess(response.data));
     navigation.navigate("Home");
   } catch (error) {
     dispatch(loginFail(error.response.data.message));
@@ -77,10 +91,32 @@ export const createAccommodation = async (dispatch, accommodation, token) => {
   console.log(token);
   try {
     dispatch(createAccommodationStart());
-    await authApi(token).post(endpoint["create_accomommdation"], accommodation);
-    dispatch(createAccommodationSuccess());
+    const res = await authApi(token).post(
+      endpoint["create_accomommdation"],
+      accommodation,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    dispatch(createAccommodationSuccess(res.data));
   } catch (error) {
     console.log(error);
     dispatch(createAccommodationFailed());
+  }
+};
+export const createPost = async (dispatch, newPost, token) => {
+  dispatch(createPostStart());
+  try {
+    await authApi(token).post(endpoint["creare_post"], newPost, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    dispatch(createPostSuccess());
+  } catch (error) {
+    console.log(error);
+    dispatch(createPostFailed());
   }
 };

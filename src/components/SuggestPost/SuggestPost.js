@@ -6,15 +6,14 @@ import { postData } from "./SuggestPostData";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
 import { AntDesign } from "@expo/vector-icons";
 import { Sort } from "iconsax-react-native";
-import { SearchStyles } from "../Screen/Search/SearchStyle";
 import ModalSort from "../Modal/ModalSort/ModalSort";
 import { useNavigation } from "@react-navigation/native";
-
+import { COLOR } from "../../contants";
+import ModalPirceRange from "../Modal/ModalPirceRange";
 const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [sortOption, setSortOption] = useState(null);
   const [sortedData, setSortedData] = useState(postData);
-  const navigation = useNavigation();
 
   const sortData = (op) => {
     const sortedResult = [...postData].sort((a, b) =>
@@ -61,6 +60,35 @@ const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
   return (
     <View style={postStyle.wrapper}>
       <View style={postStyle.wrapperItem}>
+        <View
+          style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
+        >
+          <TouchableOpacity
+            style={postStyle.headerAction}
+            onPress={() => setModalRangPrice(!modalRangePrice)}
+          >
+            <Text
+              style={[
+                StyleDefault.FontSizeMedium,
+                { color: COLOR.text_weak_color },
+              ]}
+            >
+              Price Range
+            </Text>
+            <AntDesign name="down" size={12} color={COLOR.text_weak_color} />
+          </TouchableOpacity>
+          <TouchableOpacity style={postStyle.headerAction}>
+            <Text
+              style={[
+                StyleDefault.FontSizeMedium,
+                { color: COLOR.text_weak_color },
+              ]}
+            >
+              Number People
+            </Text>
+            <AntDesign name="down" size={12} color={COLOR.text_weak_color} />
+          </TouchableOpacity>
+        </View>
         <View style={postStyle.headerItem}>
           <View style={postStyle.headerItem_content}>
             <Text style={{ fontSize: 18 }}>

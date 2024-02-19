@@ -105,9 +105,9 @@ const SignUp = () => {
         await registerUser(form, dispatch, navigation);
         Toast.show({
           type: "success",
-          position: "bottom",
-          text1: "Registration Successful",
-          visibilityTime: 3000,
+          position: "top",
+          text1: "Successful the new account",
+          visibilityTime: 2000,
           autoHide: true,
         });
       } catch (error) {
@@ -324,7 +324,7 @@ const SignUp = () => {
                   style={style.btnRegister_action}
                   onPress={handleRegister}
                 >
-                  <Text>Create an account</Text>
+                  <Text style={{ textAlign: "center",color:"white" }}>Create an account</Text>
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity

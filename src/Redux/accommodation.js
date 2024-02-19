@@ -4,6 +4,7 @@ export const accommodationSlice = createSlice({
   name: "accommodation",
   initialState: {
     createAccommodation: {
+      userAccommdation: null,
       error: null,
       pending: false,
     },
@@ -12,8 +13,9 @@ export const accommodationSlice = createSlice({
     createAccommodationStart: (state) => {
       state.createAccommodation.pending = true;
     },
-    createAccommodationSuccess: (state) => {
+    createAccommodationSuccess: (state, action) => {
       state.createAccommodation.pending = false;
+      state.createAccommodation.userAccommdation = action.payload;
       state.createAccommodation.error = false;
     },
     createAccommodationFailed: (state) => {

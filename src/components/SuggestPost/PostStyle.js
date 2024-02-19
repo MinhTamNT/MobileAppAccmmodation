@@ -4,7 +4,7 @@ const { width } = Dimensions.get("window");
 export const postStyle = StyleSheet.create({
   wrapper: {
     flexDirection: "column",
-    backgroundColor:COLOR.offWhite,
+    backgroundColor: "white",
     paddingHorizontal: 16,
     marginTop: 32,
   },
@@ -22,7 +22,11 @@ export const postStyle = StyleSheet.create({
     height: 250,
     width: 350,
     backgroundColor: "#ddd",
-    
+  },
+  headerAction: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
   },
   posItem: {
     marginTop: 10,

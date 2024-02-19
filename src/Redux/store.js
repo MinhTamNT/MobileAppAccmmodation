@@ -7,10 +7,16 @@ import authReducer from "./autheslice";
 import userReducer from "./userSlice";
 import { persistReducer, persistStore } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import accommodationReducer from "./accommodation";
+import postReducer from "./postSlices";
+import commentReducer from "./commentSlice";
 
 const combinedReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
+  accommodation: accommodationReducer,
+  post: postReducer,
+  comment: commentReducer,
 });
 
 const reducerProxy = (state, action) => {

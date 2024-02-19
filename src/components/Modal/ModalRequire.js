@@ -32,31 +32,34 @@ const ModalRequire = ({ setModalVisible, location }) => {
   const tokenUser = auth?.access_token;
   console.log(tokenUser);
   const [formValue, setFormValues] = useState({
-    user: user?.id,
     address: "",
     city: "",
+    district: "",
     number_of_people: "",
     rent_cost: 1000,
     latitude: "",
     longitude: "",
-    image: "",
+    image: [],
   });
   const handlerCreateAccommodation = async () => {
     try {
       if (user.role === "HOST" && selectedImages.length >= 3) {
         const form = new FormData();
+
         for (let key in formValue) {
-          form.append(key, formValue[key]);
+          if (key === "image") {
+            selectedImages.forEach((image, index) => {
+              form.append("image", {
+                uri: image.uri,
+                type: "image/jpeg",
+                name: `image_${index}.jpg`,
+              });
+            });
+          } else {
+            form.append(key, formValue[key]);
+          }
         }
-
-        selectedImages.forEach((image, index) => {
-          form.append(`image_${index}`, {
-            uri: image.uri,
-            type: "image/jpeg", 
-            name: `image_${index}.jpg`,
-          });
-        });
-
+        console.log(form);
         await createAccommodation(dispatch, form, tokenUser);
       } else {
         console.log("User is not a HOST or not enough images");
@@ -99,7 +102,6 @@ const ModalRequire = ({ setModalVisible, location }) => {
           id: asset.assetId,
           uri: asset.uri,
         }));
-
         setSelectedImages((prevImages) => [...prevImages, ...newImages]);
         change("image", newImages);
       }
@@ -107,7 +109,6 @@ const ModalRequire = ({ setModalVisible, location }) => {
       console.error("Error picking an image", error);
     }
   };
-  console.log(formValue.image);
 
   return (
     <Modal animationType="slide">
@@ -139,6 +140,13 @@ const ModalRequire = ({ setModalVisible, location }) => {
             placeholder={"City accommodation"}
             style={styleFields.formEdit}
             onChangeText={(t) => change("city", t)}
+          />
+          <InputField
+            label={"District"}
+            value={formValue.district}
+            placeholder={"District accommodation"}
+            style={styleFields.formEdit}
+            onChangeText={(t) => change("district", t)}
           />
           <View
             style={[
