@@ -19,6 +19,7 @@ import * as ImagePicker from "expo-image-picker";
 import { TextInput } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import { createAccommodation } from "../../Redux/apiRequest";
+import Toast from "react-native-toast-message";
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
   currency: "VND",
@@ -26,17 +27,15 @@ const VND = new Intl.NumberFormat("vi-VN", {
 const ModalRequire = ({ setModalVisible, location }) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const user = useSelector((state) => state?.user?.currentUser);
-  console.log(user.role);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state?.auth?.currentUser);
   const tokenUser = auth?.access_token;
-  console.log(tokenUser);
   const [formValue, setFormValues] = useState({
     address: "",
     city: "",
     district: "",
     number_of_people: "",
-    rent_cost: 1000,
+    rent_cost: VND.format(1000),
     latitude: "",
     longitude: "",
     image: [],
@@ -61,6 +60,17 @@ const ModalRequire = ({ setModalVisible, location }) => {
         }
         console.log(form);
         await createAccommodation(dispatch, form, tokenUser);
+        setModalVisible(false);
+        Platform.OS === "ios"
+        ? Toast.show({
+            type: "success",
+            visibilityTime: 2000,
+            autoHide: true,
+            text1: "Create Accommodation",
+            text2: "Create Accommodation Successfuly",
+          })
+        : ToastAndroid.show("Update successfully", ToastAndroid.SHORT);
+
       } else {
         console.log("User is not a HOST or not enough images");
       }
@@ -167,7 +177,7 @@ const ModalRequire = ({ setModalVisible, location }) => {
                 style={style.customCost}
                 placeholder="Price"
                 placeholderTextColor={"#333"}
-                value={VND.format(formValue.rent_cost)} // Sử dụng VND.format trực tiếp trên giá trị
+                value={formValue.rent_cost} // Display the formatted value
                 onChangeText={(t) => change("rent_cost", t)}
                 keyboardType="numeric"
               />
@@ -263,8 +273,8 @@ const style = StyleSheet.create({
     alignItems: "center",
   },
   uploadedImage: {
-    width: 250,
-    height: 250,
+    width: 200,
+    height: 200,
     marginVertical: 5,
     marginHorizontal: 12,
     borderRadius: 10,

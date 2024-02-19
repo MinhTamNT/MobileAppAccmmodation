@@ -19,6 +19,9 @@ import {
   createAccommodationFailed,
   createAccommodationStart,
   createAccommodationSuccess,
+  getAllAccommodationFail,
+  getAllAccommodationStart,
+  getAllAccommodationSuccess,
 } from "./accommodation";
 import {
   createPostFailed,
@@ -118,5 +121,15 @@ export const createPost = async (dispatch, newPost, token) => {
   } catch (error) {
     console.log(error);
     dispatch(createPostFailed());
+  }
+};
+export const getAllAccommodation = async (dispatch) => {
+  dispatch(getAllAccommodationStart());
+  try {
+    const res = await Api.get(endpoint["all_accommodation"]);
+    dispatch(getAllAccommodationSuccess(res.data));
+  } catch (error) {
+    console.log(error);
+    dispatch(getAllAccommodationFail());
   }
 };

@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   ToastAndroid,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +18,7 @@ import { updateUser } from "../../Redux/apiRequest";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import InputField from "../InputFields/InputField";
+import Toast from "react-native-toast-message";
 const ModalEdit = (prop) => {
   const { setVissable } = prop;
   const user = useSelector((state) => state.user?.currentUser);
@@ -74,12 +76,27 @@ const ModalEdit = (prop) => {
     console.log(newUser);
     updateUser(user?.id, auth?.access_token, newUser, dispatch);
     setVissable(false);
-    ToastAndroid.show("Update successfully", ToastAndroid.SHORT);
+    Platform.OS === "ios"
+      ? Toast.show({
+          type: "success",
+          visibilityTime: 2000,
+          autoHide: true,
+          text1: "Update",
+          text2: "Update User Successfuly",
+        })
+      : ToastAndroid.show("Update successfully", ToastAndroid.SHORT);
   };
 
   const handlerCloseEdit = () => {
     setVissable(false);
-    ToastAndroid.show("Cancel Update", ToastAndroid.SHORT);
+    Platform.OS === "ios"
+      ? Toast.show({
+          type: "info",
+          text1: "Update user cancel",
+          visibilityTime: 2000,
+          autoHide: true,
+        })
+      : ToastAndroid.show("Update cancel", ToastAndroid.SHORT);
   };
 
   return (

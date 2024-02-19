@@ -40,7 +40,7 @@ const SignUp = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (formValues.role === "Tenant" || formValues.role === "Host") {
+    if (formValues.role === "TENANT" || formValues.role === "HOST") {
       setAvatarRequired(true);
     } else {
       setAvatarRequired(false);
@@ -94,7 +94,7 @@ const SignUp = () => {
           }
         }
         if (
-          (formValues.role === "Tenant" || formValues.role === "Host") &&
+          (formValues.role === "TENANT" || formValues.role === "HOST") &&
           !formValues.avatar_user.uri
         ) {
           Platform.OS === "ios"
@@ -246,8 +246,8 @@ const SignUp = () => {
               onValueChange={(itemValue) => handleChange("role", itemValue)}
             >
               <Picker.Item label="Select Role" value="" />
-              <Picker.Item label="Tenant" value="Tenant" />
-              <Picker.Item label="Host" value="Host" />
+              <Picker.Item label="TENANT" value="TENANT" />
+              <Picker.Item label="HOST" value="HOST" />
             </Picker>
             {formErrors.role && (
               <Text style={style.errorMessgae}>{formErrors.role}</Text>

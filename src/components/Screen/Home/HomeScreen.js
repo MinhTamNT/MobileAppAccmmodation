@@ -19,9 +19,6 @@ import InputField from "../../InputFields/InputField";
 import ModalRequire from "../../Modal/ModalRequire";
 const HomeScreen = ({ route }) => {
   const currentUser = useSelector((state) => state?.user.currentUser);
-  const accommodation = useSelector(
-    (state) => state.accommodation.createAccommodation.userAccommdation
-  );
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState(null);
   const [modalVisible, setModalVisible] = useState(true);

@@ -18,9 +18,10 @@ import {
   Clock,
 } from "iconsax-react-native";
 import { MAP_KEY } from "@env";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllAccommodation } from "../../../Redux/apiRequest";
 
 export default ({ route }) => {
-  const { locationPresent } = route?.params;
   const actions = [
     {
       name: "According to price",
@@ -35,6 +36,10 @@ export default ({ route }) => {
     },
   ];
   const mapRef = useRef(null);
+  const { locationPresent } = route?.params;
+  const allAccomoda = useSelector(
+    (state) => state?.accommodation?.allAccommodation?.accommodations
+  );
   const [markersToShow, setMarkersToShow] = useState(marker);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -42,6 +47,7 @@ export default ({ route }) => {
   const [selectedAddress, setSelectedAddress] = useState("");
   const [latitude, setLatitude] = useState(locationPresent.coords.latitude);
   const [longitude, setLongitude] = useState(locationPresent.coords.longitude);
+  console.log(allAccomoda);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,8 +147,14 @@ export default ({ route }) => {
           radius={1000}
           fillColor="rgba(100, 100, 255, 0.5)"
         />
-        {markersToShow.map((map, index) => (
-          <Marker key={index} coordinate={map.coordinate}>
+        {allAccomoda.map((accommodation, index) => (
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: accommodation.latitude,
+              longitude: accommodation.longitude,
+            }}
+          >
             <Animated.View style={[MapStyle.markerWrap]}>
               <Animated.Image
                 source={require("../../../assets/image/map_marker.png")}
@@ -196,7 +208,7 @@ export default ({ route }) => {
         </View>
       )}
 
-      {formattedAddresses.length > 0 && (
+      {searchText.length > 0 && (
         <View style={MapStyle.searchAction}>
           <ScrollView
             style={MapStyle.searchResults}

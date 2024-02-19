@@ -8,6 +8,16 @@ export const accommodationSlice = createSlice({
       error: null,
       pending: false,
     },
+    allAccommodation: {
+      pending: false,
+      accommodations: [],
+      error: false,
+    },
+    oneAccmodation: {
+      pending: false,
+      accommodation: [],
+      error: false,
+    },
   },
   reducers: {
     createAccommodationStart: (state) => {
@@ -22,11 +32,30 @@ export const accommodationSlice = createSlice({
       state.createAccommodation.pending = false;
       state.createAccommodation.error = false;
     },
+    getAllAccommodationStart: (state) => {
+      state.allAccommodation.pending = true;
+    },
+    getAllAccommodationSuccess: (state, action) => {
+      state.allAccommodation.pending = false;
+      state.allAccommodation.accommodations = [
+        ...new Set([
+          ...state.allAccommodation.accommodations,
+          ...action.payload,
+        ]),
+      ];
+      state.allAccommodation.error = false;
+    },
+    getAllAccommodationFail: (state) => {
+      state.allAccommodation.error = true;
+    },
   },
 });
 export const {
   createAccommodationFailed,
   createAccommodationStart,
   createAccommodationSuccess,
+  getAllAccommodationFail,
+  getAllAccommodationSuccess,
+  getAllAccommodationStart,
 } = accommodationSlice.actions;
 export default accommodationSlice.reducer;
