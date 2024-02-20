@@ -31,5 +31,20 @@ export const styleTab = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
-  ownerPost: {},
+  addCommentContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 8,
+    paddingBottom: 16,
+    borderTopColor: "#ccc",
+  },
+  commentInput: {
+    flex: 1,
+    height: 40,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    paddingLeft: 10,
+  },
 });

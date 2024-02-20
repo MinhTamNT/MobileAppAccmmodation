@@ -55,7 +55,7 @@ const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
     </TouchableOpacity>
   );
 
-  const renderPostItem = (item, index) => <Item item={item} />;
+  const renderPostItem = (item, index) => <Item key={index} item={item} />;
 
   return (
     <View style={postStyle.wrapper}>

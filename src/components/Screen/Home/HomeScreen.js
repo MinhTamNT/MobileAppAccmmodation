@@ -17,12 +17,27 @@ import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
 import InputField from "../../InputFields/InputField";
 import ModalRequire from "../../Modal/ModalRequire";
+import LoadingPage from "../../LoadingPage/LoadingPage";
+import userSlice from "../../../Redux/userSlice";
+import { authApi, endpoint } from "../../../Services/Config/Api";
 const HomeScreen = ({ route }) => {
-  const currentUser = useSelector((state) => state?.user.currentUser);
+  const currentUser = useSelector((state) => state?.user?.currentUser);
   const [location, setLocation] = useState(null);
+  const auth = useSelector((state) => state?.auth?.currentUser);
   const [address, setAddress] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [accommodationUser, setAccommodationUser] = useState([]);
   const navigation = useNavigation();
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await authApi(auth?.access_token).get(
+        endpoint["user_accommodation"]
+      );
+      setAccommodationUser(res.data);
+    };
+    fetchData();
+  }, []);
+
   useEffect(() => {
     const getPermission = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -58,12 +73,14 @@ const HomeScreen = ({ route }) => {
     }
   };
 
+  useEffect(() => {
+    if (currentUser?.role === "HOST" && accommodationUser.length === 0) {
+      setModalVisible(true);
+    }
+  }, [currentUser, accommodationUser]);
+
   if (!currentUser) {
-    return (
-      <SafeAreaView style={style.container}>
-        <Text>Loading...</Text>
-      </SafeAreaView>
-    );
+    <LoadingPage />;
   }
 
   return (
@@ -73,7 +90,7 @@ const HomeScreen = ({ route }) => {
           <View style={style.title_hello}>
             <Text style={style.text_title}>Welcome back</Text>
             <Text style={style.text_title}>
-              {currentUser.last_name} {currentUser.first_name}
+              {currentUser?.last_name} {currentUser?.first_name}
             </Text>
           </View>
           <View style={style.address}>

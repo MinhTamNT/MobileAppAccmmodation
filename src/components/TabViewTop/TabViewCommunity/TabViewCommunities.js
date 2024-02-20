@@ -6,14 +6,18 @@ import {
   FlatList,
   ActivityIndicator,
   Image,
+  TextInput,
+  RefreshControl,
 } from "react-native";
 import { styleTab } from "../TabViewUser/TabStyle";
 import { Ionicons } from "@expo/vector-icons";
 import ModalPost from "../../Modal/ModalPost";
-import Api, { endpoint } from "../../../Services/Config/Api";
-import { RefreshControl } from "react-native";
+import Api, { authApi, endpoint } from "../../../Services/Config/Api";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
-import Swiper from "react-native-swiper";
+import { useNavigation } from "@react-navigation/native";
+import _ from "lodash"; // Import lodash
+import { useDispatch, useSelector } from "react-redux";
+import { commentPost } from "../../../Redux/apiRequest";
 
 const TabViewCommunities = () => {
   const [isModalPost, setModalPost] = useState(false);
@@ -22,6 +26,17 @@ const TabViewCommunities = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
+  const [comments, setComments] = useState([]); // Use an array for comments
+  const [commentPosts, setCommentsPosts] = useState([]);
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state?.auth?.currentUser);
+  const user = useSelector((state) => state?.user?.currentUser);
+  const navigation = useNavigation();
+
+  const debouncedLoadMorePosts = useCallback(
+    _.debounce(() => loadMorePosts(), 500),
+    []
+  );
 
   const handlerPost = () => {
     setModalPost(!isModalPost);
@@ -34,6 +49,15 @@ const TabViewCommunities = () => {
     }
   };
 
+  const handlerComment = async (postId) => {
+    const form = new FormData();
+    const newComment = {
+      text: comments[postId] || "",
+    };
+    form.append("text", newComment.text);
+    await commentPost(auth?.access_token, form, dispatch, postId);
+  };
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -43,10 +67,15 @@ const TabViewCommunities = () => {
         if (newPosts.length > 0) {
           setPostPresent((prevPosts) => [...prevPosts, ...newPosts]);
 
+          // Initialize comments array with empty strings for each post
+          setComments((prevComments) => [
+            ...prevComments,
+            ...new Array(newPosts.length).fill(""),
+          ]);
+
           if (res.data.next !== null) {
             setCurrentPage((prevPage) => prevPage + 1);
             setHasNextPage(true);
-            setIsLoadingMore(true);
           } else {
             setHasNextPage(false);
           }
@@ -70,10 +99,10 @@ const TabViewCommunities = () => {
     try {
       const res = await Api.get(endpoint.all_post(1));
       const newPosts = res.data.results;
-      if (newPosts.length > 0 && res.data.next !== null) {
+
+      if (newPosts.length > 0) {
         setPostPresent(newPosts);
-        setCurrentPage((perv) => perv + 1);
-        setHasNextPage(true);
+        setComments(new Array(newPosts.length).fill("")); // Reset comments array
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -82,6 +111,18 @@ const TabViewCommunities = () => {
     }
   }, []);
 
+  useEffect(() => {
+    return () => {
+      debouncedLoadMorePosts.cancel();
+    };
+  }, [debouncedLoadMorePosts]);
+  const handlerFriendPage = (idUser) => {
+    if (user.username === idUser.username) {
+      navigation.navigate("UserDeatil");
+    } else {
+      navigation.navigate("Friend", { userId: idUser });
+    }
+  };
   return (
     <View style={styleTab.container}>
       <TouchableOpacity style={styleTab.btnCreatePost} onPress={handlerPost}>
@@ -100,38 +141,61 @@ const TabViewCommunities = () => {
         renderItem={({ item, index }) => (
           <View key={item.id} style={styleTab.postWrapper}>
             <View style={styleTab.ownerPost}>
-              <View style={StyleDefault.flexBoxRow}>
+              <TouchableOpacity
+                style={StyleDefault.flexBoxRow}
+                onPress={() => handlerFriendPage(item.user_post)}
+              >
                 <Image
                   source={{ uri: item.user_post.avatar_user }}
                   style={StyleDefault.imageUserPost}
                 />
                 <Text>{item.user_post.username}</Text>
-              </View>
-            
+              </TouchableOpacity>
+
               <View style={styleTab.contentPost}>
                 <Text>{item.caption}</Text>
                 <Text>{item.description}</Text>
-                {item.image.length > 0 && (
-                  <Swiper style={{ height: 200 }}>
-                    {item.image.map((imageObj, index) => (
-                      <Image
-                        key={index}
-                        source={{ uri: imageObj.image }}
-                        style={{ flex: 1 }}
-                        resizeMode="cover"
-                      />
-                    ))}
-                  </Swiper>
-                )}
-                
+                <View style={{ flexDirection: "row" }}>
+                  {item.image.map((imageObj, index) => (
+                    <Image
+                      key={index}
+                      source={{ uri: imageObj.image }}
+                      style={{ width: 100, height: 100, marginRight: 10 }}
+                    />
+                  ))}
+                </View>
+                <View style={styleTab.addCommentContainer}>
+                  <TextInput
+                    style={styleTab.commentInput}
+                    placeholder="Add a comment..."
+                    value={comments[item.id]}
+                    onChangeText={(text) =>
+                      setComments((prevComments) => {
+                        const updatedComments = [...prevComments];
+                        updatedComments[item.id] = text;
+                        return updatedComments;
+                      })
+                    }
+                    placeholderTextColor={"#333"}
+                  />
+                  <TouchableOpacity
+                    style={{ position: "absolute", right: 12, top: 20 }}
+                    onPress={() => handlerComment(item.id)}
+                  >
+                    <Ionicons name="send" size={20} color="#697689" />
+                  </TouchableOpacity>
+                </View>
+                <View></View>
               </View>
             </View>
           </View>
         )}
-        onEndReached={loadMorePosts}
+        onEndReached={debouncedLoadMorePosts}
         onEndReachedThreshold={0.1}
         ListFooterComponent={() =>
-          isLoadingMore && <ActivityIndicator size="small" color="#0000ff" />
+          isLoadingMore && hasNextPage ? (
+            <ActivityIndicator size="small" color="#0000ff" />
+          ) : null
         }
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

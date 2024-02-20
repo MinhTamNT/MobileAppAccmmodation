@@ -8,6 +8,9 @@ import {
 } from "./autheslice";
 import Api, { authApi, endpoint } from "../Services/Config/Api";
 import {
+  followUserFailed,
+  followUserStart,
+  followUserSuccess,
   getUserFailed,
   getUserStart,
   getUserSuccess,
@@ -27,16 +30,17 @@ import {
   createPostFailed,
   createPostStart,
   createPostSuccess,
-  getAllPostFail,
-  getAllPostStart,
-  getAllPostSucess,
 } from "./postSlices";
 import { FIREBASE_AUTH } from "../Services/firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   signInAnonymously,
-  signInWithEmailAndPassword,
 } from "firebase/auth";
+import {
+  addCommentFail,
+  addCommentSucess,
+  addCommentstart,
+} from "./commentSlice";
 const auth = FIREBASE_AUTH;
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
@@ -134,5 +138,23 @@ export const getAllAccommodation = async (dispatch) => {
   } catch (error) {
     console.log(error);
     dispatch(getAllAccommodationFail());
+  }
+};
+export const followUser = async (token, username, dispatch) => {
+  dispatch(followUserStart());
+  try {
+    const res = await authApi(token).post(endpoint.follow_user(username));
+    dispatch(followUserSuccess(res.data));
+  } catch (error) {
+    console.log(error);
+    dispatch(followUserFailed());
+  }
+};
+export const commentPost = async (token, newComment, dispatch, postId) => {
+  dispatch(addCommentstart());
+  try {
+    await authApi(token).post(endpoint.comment_post(postId), newComment);
+  } catch (error) {
+    console.error("Axios Error:", error);
   }
 };

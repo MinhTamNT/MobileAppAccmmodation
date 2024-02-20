@@ -9,6 +9,10 @@ export const endpoint = {
   creare_post: "/post/create/",
   all_accommodation: "/accommodation/",
   all_post: (pageNumber) => `/post/?page=${pageNumber}`,
+  user_accommodation: "/accommodation/accmmodation_user/",
+  follow_user: (username) => `/users/follow/?username=${username}`,
+  comment_post: (postId) => `/post/${postId}/comment/`,
+  comment_of_post: (postId) => `/post/${postId}/comments_of_post/`,
 };
 
 export const authApi = (accessToken) =>
