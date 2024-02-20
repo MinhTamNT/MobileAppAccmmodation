@@ -40,4 +40,10 @@ export const StyleDefault = StyleSheet.create({
     borderRadius: 50,
     resizeMode: "cover",
   },
+  imageUserPost:{
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    resizeMode: "cover",
+  }
 });

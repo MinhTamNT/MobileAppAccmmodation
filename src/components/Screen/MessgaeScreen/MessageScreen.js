@@ -12,10 +12,13 @@ const MessageScreen = () => {
   return (
     <SafeAreaView style={StyleDefault.container}>
       <View style={MeassgeStyle.header}>
-        <Image
-          source={{ uri: user.avatar_user }}
-          style={StyleDefault.imageUsers}
-        />
+        <View style={StyleDefault.flexBoxRow}>
+          <Image
+            source={{ uri: user.avatar_user }}
+            style={StyleDefault.imageUsers}
+          />
+          <Text style={StyleDefault.FontSizeMedium}>{user.username}</Text>
+        </View>
       </View>
       <TabViewTopCommunity />
     </SafeAreaView>

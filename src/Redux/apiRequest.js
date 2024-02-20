@@ -130,19 +130,9 @@ export const getAllAccommodation = async (dispatch) => {
   dispatch(getAllAccommodationStart());
   try {
     const res = await Api.get(endpoint["all_accommodation"]);
-    dispatch(getAllAccommodationSuccess(res.data));
+    dispatch(getAllAccommodationSuccess(res.data.results));
   } catch (error) {
     console.log(error);
     dispatch(getAllAccommodationFail());
-  }
-};
-export const getAllPost = async (dispatch) => {
-  dispatch(getAllPostStart());
-  try {
-    const res = await Api.get(endpoint["all_post"]);
-    dispatch(getAllPostSucess(res.data));
-  } catch (error) {
-    console.log(error);
-    dispatch(getAllPostFail());
   }
 };

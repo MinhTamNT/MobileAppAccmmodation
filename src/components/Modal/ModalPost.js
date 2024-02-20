@@ -22,7 +22,7 @@ import * as ImagePicker from "expo-image-picker";
 import { createPost } from "../../Redux/apiRequest";
 import * as FileSystem from "expo-file-system";
 
-const ModalPost = ({ setModalPost }) => {
+const ModalPost = ({ setModalPost, setCurrentPage }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [descreiption, setDescription] = useState("");
@@ -68,7 +68,10 @@ const ModalPost = ({ setModalPost }) => {
         name: `image${index}.jpg`,
       });
     });
-    await createPost(dispatch, formData, token);
+    try {
+      await createPost(dispatch, formData, token);
+      setCurrentPage(1);
+    } catch (e) {}
     setModalPost(false);
     Platform.OS == "ios"
       ? alert("Create Post Success")

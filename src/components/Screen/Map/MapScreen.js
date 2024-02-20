@@ -22,8 +22,7 @@ import { MAP_KEY } from "@env";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAccommodation } from "../../../Redux/apiRequest";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
-import accommodation from "../../../Redux/accommodation";
-
+import { FontAwesome } from "@expo/vector-icons";
 export default ({ route }) => {
   const actions = [
     {
@@ -65,9 +64,7 @@ export default ({ route }) => {
       fetchData();
     }
   }, [dispacth]);
-
-  console.log("Fetched data:", allAccomoda);
-
+  console.log(allAccomoda);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -166,7 +163,7 @@ export default ({ route }) => {
           radius={1000}
           fillColor="rgba(100, 100, 255, 0.5)"
         />
-        {/* {allAccomoda.map((accommodation, index) => (
+        {allAccomoda.map((accommodation, index) => (
           <Marker
             key={index}
             coordinate={{
@@ -182,7 +179,7 @@ export default ({ route }) => {
               />
             </Animated.View>
           </Marker>
-        ))} */}
+        ))}
       </MapView>
 
       <View style={MapStyle.searchBox}>
@@ -220,7 +217,20 @@ export default ({ route }) => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-      {/* <Animated.ScrollView
+      <TouchableOpacity
+        style={{
+          position: "absolute",
+          bottom: 270,
+          backgroundColor: "white",
+          right: 12,
+          padding: 12,
+          borderRadius: 10,
+          zIndex: 99,
+        }}
+      >
+        <FontAwesome name="location-arrow" size={24} color="black" />
+      </TouchableOpacity>
+      <Animated.ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         style={MapStyle.scrollView}
@@ -242,24 +252,22 @@ export default ({ route }) => {
                     { justifyContent: "space-between" },
                   ]}
                 >
-                  <TouchableOpacity>
-                    <Text>{item.rent_cost}VND</Text>
-                  </TouchableOpacity>
                   <View style={StyleDefault.flexBoxRow}>
+                    <Text>{item.rent_cost}VND</Text>
                     <Text style={StyleDefault.FontSizeMedium}>
                       {item.number_of_people}
                     </Text>
                     <User size="15" color="#697689" />
                   </View>
+                  <TouchableOpacity style={MapStyle.actionDetail}>
+                    <Text style={{ color: "white" }}>Detail</Text>
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity>
-                  <Text>Detail</Text>
-                </TouchableOpacity>
               </View>
             </View>
           </View>
         ))}
-      </Animated.ScrollView> */}
+      </Animated.ScrollView>
 
       {searchText.length > 0 && (
         <View style={MapStyle.searchAction}>

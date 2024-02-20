@@ -8,14 +8,7 @@ const TabViewPost = () => {
   const handlerPost = () => {
     setModalPost(!isModalPost);
   };
-  return (
-    <View style={styleTab.container}>
-      <TouchableOpacity style={styleTab.btnCreatePost} onPress={handlerPost}>
-        <Ionicons name="create-outline" size={25} color="white" />
-      </TouchableOpacity>
-      {isModalPost && <ModalPost setModalPost={setModalPost} />}
-    </View>
-  );
+  return <View style={styleTab.container}></View>;
 };
 const style = StyleSheet.create({});
 export default TabViewPost;
