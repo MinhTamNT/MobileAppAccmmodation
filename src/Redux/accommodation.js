@@ -38,12 +38,15 @@ export const accommodationSlice = createSlice({
     getAllAccommodationSuccess: (state, action) => {
       state.allAccommodation.pending = false;
       state.allAccommodation.accommodations = [
-        ...new Set([
-          ...state.allAccommodation.accommodations,
-          ...action.payload,
-        ]),
+        ...state.allAccommodation.accommodations,
+        ...action.payload.filter(
+          (newAccommodation) =>
+            !state.allAccommodation.accommodations.some(
+              (existingAccommodation) =>
+                existingAccommodation.id === newAccommodation.id
+            )
+        ),
       ];
-      state.allAccommodation.error = false;
     },
     getAllAccommodationFail: (state) => {
       state.allAccommodation.error = true;

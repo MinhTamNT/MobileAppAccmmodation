@@ -8,9 +8,9 @@ export const styleTab = StyleSheet.create({
   btnCreatePost: {
     backgroundColor: "#333",
     position: "absolute",
-    bottom: 0,
-    padding: 12,
-    left: 12,
-    borderRadius: 15,
+    bottom: 50,
+    padding: 10,
+    right: 12,
+    borderRadius: 10,
   },
 });

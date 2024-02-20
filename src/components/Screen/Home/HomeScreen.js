@@ -21,7 +21,7 @@ const HomeScreen = ({ route }) => {
   const currentUser = useSelector((state) => state?.user.currentUser);
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState(null);
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   useEffect(() => {
     const getPermission = async () => {

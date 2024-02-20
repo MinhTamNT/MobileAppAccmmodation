@@ -27,6 +27,9 @@ import {
   createPostFailed,
   createPostStart,
   createPostSuccess,
+  getAllPostFail,
+  getAllPostStart,
+  getAllPostSucess,
 } from "./postSlices";
 import { FIREBASE_AUTH } from "../Services/firebaseConfig";
 import {
@@ -131,5 +134,15 @@ export const getAllAccommodation = async (dispatch) => {
   } catch (error) {
     console.log(error);
     dispatch(getAllAccommodationFail());
+  }
+};
+export const getAllPost = async (dispatch) => {
+  dispatch(getAllPostStart());
+  try {
+    const res = await Api.get(endpoint["all_post"]);
+    dispatch(getAllPostSucess(res.data));
+  } catch (error) {
+    console.log(error);
+    dispatch(getAllPostFail());
   }
 };

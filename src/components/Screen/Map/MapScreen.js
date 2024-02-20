@@ -16,10 +16,13 @@ import {
   SearchNormal,
   Profile2User,
   Clock,
+  User,
 } from "iconsax-react-native";
 import { MAP_KEY } from "@env";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAccommodation } from "../../../Redux/apiRequest";
+import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
+import accommodation from "../../../Redux/accommodation";
 
 export default ({ route }) => {
   const actions = [
@@ -37,17 +40,33 @@ export default ({ route }) => {
   ];
   const mapRef = useRef(null);
   const { locationPresent } = route?.params;
-  const allAccomoda = useSelector(
-    (state) => state?.accommodation?.allAccommodation?.accommodations
-  );
+
   const [markersToShow, setMarkersToShow] = useState(marker);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [formattedAddresses, setFormattedAddresses] = useState([]);
+  const allAccomoda = useSelector(
+    (state) => state?.accommodation?.allAccommodation?.accommodations
+  );
   const [selectedAddress, setSelectedAddress] = useState("");
   const [latitude, setLatitude] = useState(locationPresent.coords.latitude);
   const [longitude, setLongitude] = useState(locationPresent.coords.longitude);
-  console.log(allAccomoda);
+  const dispacth = useDispatch();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await getAllAccommodation(dispacth);
+      } catch (error) {
+        console.error("Error fetching accommodation:", error.message);
+      }
+    };
+
+    if (!allAccomoda.length) {
+      fetchData();
+    }
+  }, [dispacth]);
+
+  console.log("Fetched data:", allAccomoda);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -147,7 +166,7 @@ export default ({ route }) => {
           radius={1000}
           fillColor="rgba(100, 100, 255, 0.5)"
         />
-        {allAccomoda.map((accommodation, index) => (
+        {/* {allAccomoda.map((accommodation, index) => (
           <Marker
             key={index}
             coordinate={{
@@ -163,7 +182,7 @@ export default ({ route }) => {
               />
             </Animated.View>
           </Marker>
-        ))}
+        ))} */}
       </MapView>
 
       <View style={MapStyle.searchBox}>
@@ -201,6 +220,46 @@ export default ({ route }) => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+      {/* <Animated.ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={MapStyle.scrollView}
+      >
+        {allAccomoda.map((item, index) => (
+          <View style={MapStyle.card} key={index}>
+            <Image
+              source={{ uri: item.image[0].image }}
+              style={MapStyle.cardImage}
+            />
+            <View style={MapStyle.textContent}>
+              <Text numberOfLines={1}>
+                {item.address} {item.district}
+              </Text>
+              <View>
+                <View
+                  style={[
+                    StyleDefault.flexBoxRow,
+                    { justifyContent: "space-between" },
+                  ]}
+                >
+                  <TouchableOpacity>
+                    <Text>{item.rent_cost}VND</Text>
+                  </TouchableOpacity>
+                  <View style={StyleDefault.flexBoxRow}>
+                    <Text style={StyleDefault.FontSizeMedium}>
+                      {item.number_of_people}
+                    </Text>
+                    <User size="15" color="#697689" />
+                  </View>
+                </View>
+                <TouchableOpacity>
+                  <Text>Detail</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        ))}
+      </Animated.ScrollView> */}
 
       {searchText.length > 0 && (
         <View style={MapStyle.searchAction}>

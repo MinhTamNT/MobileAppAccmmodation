@@ -10,6 +10,7 @@ export const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    borderRadius: 30,
   },
   header_title: {
     paddingHorizontal: 16,

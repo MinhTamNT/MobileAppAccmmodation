@@ -5,6 +5,7 @@ export const postSlice = createSlice({
   initialState: {
     posts: [],
     comment: [],
+    post: [],
     pending: false,
     error: false,
     userPost: null,
@@ -22,9 +23,26 @@ export const postSlice = createSlice({
       state.pending = false;
       state.error = true;
     },
+    getAllPostStart: (state) => {
+      state.pending = true;
+    },
+    getAllPostSucess: (state, action) => {
+      state.pending = false;
+      state.posts = action.payload;
+    },
+    getAllPostFail: (state) => {
+      state.pending = false;
+      state.error = true;
+    },
   },
 });
 
-export const { createPostFailed, createPostStart, createPostSuccess } =
-  postSlice.actions;
+export const {
+  createPostFailed,
+  createPostStart,
+  createPostSuccess,
+  getAllPostFail,
+  getAllPostSucess,
+  getAllPostStart,
+} = postSlice.actions;
 export default postSlice.reducer;

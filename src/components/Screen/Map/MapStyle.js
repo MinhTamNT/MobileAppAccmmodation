@@ -105,7 +105,7 @@ export const MapStyle = StyleSheet.create({
   },
   scrollView: {
     position: "absolute",
-    bottom: 10,
+    bottom: 0,
     left: 0,
     right: 0,
     paddingVertical: 10,
@@ -128,7 +128,7 @@ export const MapStyle = StyleSheet.create({
     overflow: "hidden",
   },
   cardImage: {
-    flex: 1.5,
+    flex: 2.5,
     width: "100%",
     height: "100%",
     alignSelf: "center",

@@ -8,6 +8,7 @@ export const endpoint = {
   create_accomommdation: "/accommodation/create/",
   creare_post: "/post/create/",
   all_accommodation: "/accommodation/",
+  all_post: "/post/",
 };
 
 export const authApi = (accessToken) =>
