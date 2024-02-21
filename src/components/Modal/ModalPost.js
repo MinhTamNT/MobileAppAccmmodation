@@ -80,7 +80,9 @@ const ModalPost = ({ setModalPost, setCurrentPage }) => {
   return (
     <Modal animationType="slide">
       <KeyboardAvoidingView
+        style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={160}
       >
         <View style={style.conatiner}>
           <View

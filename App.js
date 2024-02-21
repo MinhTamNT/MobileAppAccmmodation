@@ -16,6 +16,7 @@ import PostDetail from "./src/components/SuggestPost/PostDeatil.js";
 import { PersistGate } from "redux-persist/integration/react";
 import Toast from "react-native-toast-message";
 import FriendProfile from "./src/components/Screen/FriendProfile/FriendProfile.js";
+import RoomChat from "./src/components/Screen/RoomChat/RoomChat.js";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -76,6 +77,13 @@ export default function App() {
               {({ navigation, route }) => (
                 <RequireUsers navigation={navigation} route={route}>
                   <FriendProfile />
+                </RequireUsers>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="ChatRoom">
+              {({ navigation, route }) => (
+                <RequireUsers navigation={navigation} route={route}>
+                  <RoomChat />
                 </RequireUsers>
               )}
             </Stack.Screen>

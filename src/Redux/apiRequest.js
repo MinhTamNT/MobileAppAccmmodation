@@ -32,10 +32,7 @@ import {
   createPostSuccess,
 } from "./postSlices";
 import { FIREBASE_AUTH } from "../Services/firebaseConfig";
-import {
-  createUserWithEmailAndPassword,
-  signInAnonymously,
-} from "firebase/auth";
+
 import {
   addCommentFail,
   addCommentSucess,
@@ -52,8 +49,6 @@ export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
   try {
     const response = await Api.post(endpoint["register"], form);
-    console.log(form);
-    await createUserWithEmailAndPassword(auth, form.email, form.password);
     dispatch(registerSuccess(response.data));
     navigation.navigate("Login");
   } catch (error) {
@@ -68,7 +63,6 @@ export const LoginUser = async (users, dispatch, navigation) => {
 
   try {
     let response = await Api.post(endpoint["login"], users);
-    await signInAnonymously(auth);
     dispatch(loginSuccess(response.data));
     navigation.navigate("Home");
   } catch (error) {

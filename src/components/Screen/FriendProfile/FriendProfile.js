@@ -51,6 +51,7 @@ const FriendProfile = ({ route }) => {
           >
             <TouchableOpacity
               style={[friendStyle.btnFollowing, StyleDefault.flexBoxRow]}
+              onPress={() => navigation.navigate("ChatRoom", { userId })}
             >
               <Message size="14" color="white" />
               <Text style={{ color: "white" }}>Message</Text>

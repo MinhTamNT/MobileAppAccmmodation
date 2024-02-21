@@ -10,19 +10,21 @@ import {
 } from "react-native";
 import MapView, { Circle, Marker } from "react-native-maps";
 import { MapStyle } from "./MapStyle";
-import { marker } from "./MapData";
 import {
   Moneys,
   SearchNormal,
   Profile2User,
   Clock,
   User,
+  ArrowLeft2,
 } from "iconsax-react-native";
 import { MAP_KEY } from "@env";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAccommodation } from "../../../Redux/apiRequest";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+
 export default ({ route }) => {
   const actions = [
     {
@@ -39,16 +41,33 @@ export default ({ route }) => {
   ];
   const mapRef = useRef(null);
   const { locationPresent } = route?.params;
-
-  const [markersToShow, setMarkersToShow] = useState(marker);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [formattedAddresses, setFormattedAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [latitude, setLatitude] = useState(locationPresent.coords.latitude);
   const [longitude, setLongitude] = useState(locationPresent.coords.longitude);
-  const [allAccomoda, setAllAccomoda] = useState([]);
-  const dispacth = useDispatch();
+  const allAccomoda = useSelector(
+    (state) => state?.accommodation?.allAccommodation?.accommodations
+  );
+  const [currentLocationMarker, setCurrentLocationMarker] = useState(null);
+  const [selectedMarker, setSelectedMarker] = useState(null);
+  const navigation = useNavigation();
+  const handleReturnToCurrentLocation = () => {
+    if (mapRef.current) {
+      mapRef.current.animateToRegion({
+        latitude: locationPresent.coords.latitude,
+        longitude: locationPresent.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+      setCurrentLocationMarker({
+        latitude: locationPresent.coords.latitude,
+        longitude: locationPresent.coords.longitude,
+      });
+    }
+  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,6 +109,10 @@ export default ({ route }) => {
     fetchData();
   }, [searchText]);
 
+  useEffect(() => {
+    getAllAccommodation(dispatch);
+  }, [dispatch]);
+
   const handleAddressSelect = async (selectedAddress) => {
     try {
       const response = await fetch(
@@ -117,6 +140,7 @@ export default ({ route }) => {
 
       setSelectedAddress(selectedAddress);
       setSearchText("");
+      setCurrentLocationMarker(false);
     } catch (error) {
       console.error("Error fetching location coordinates:", error.message);
     }
@@ -134,20 +158,43 @@ export default ({ route }) => {
         }}
         ref={mapRef}
       >
-        <Marker
-          coordinate={{
-            latitude: latitude,
-            longitude: longitude,
-          }}
-        />
-        <Circle
-          center={{
-            latitude: latitude,
-            longitude: longitude,
-          }}
-          radius={1000}
-          fillColor="rgba(100, 100, 255, 0.5)"
-        />
+        {currentLocationMarker ? (
+          <>
+            <Marker
+              coordinate={{
+                latitude: locationPresent.coords.latitude,
+                longitude: locationPresent.coords.longitude,
+              }}
+            />
+
+            <Circle
+              center={{
+                latitude: locationPresent.coords.latitude,
+                longitude: locationPresent.coords.longitude,
+              }}
+              radius={1000}
+              fillColor="rgba(100, 100, 255, 0.5)"
+            />
+          </>
+        ) : (
+          <>
+            <Marker
+              coordinate={{
+                latitude: latitude,
+                longitude: longitude,
+              }}
+            />
+            <Circle
+              center={{
+                latitude: latitude,
+                longitude: longitude,
+              }}
+              radius={1000}
+              fillColor="rgba(100, 100, 255, 0.5)"
+            />
+          </>
+        )}
+
         {allAccomoda.map((accommodation, index) => (
           <Marker
             key={index}
@@ -155,11 +202,20 @@ export default ({ route }) => {
               latitude: accommodation.latitude,
               longitude: accommodation.longitude,
             }}
+            onPress={() => setSelectedMarker(accommodation)}
           >
-            <Animated.View style={[MapStyle.markerWrap]}>
+            <Animated.View
+              style={[
+                MapStyle.markerWrap,
+                selectedMarker === accommodation && MapStyle.selectedMarkerWrap,
+              ]}
+            >
               <Animated.Image
                 source={require("../../../assets/image/map_marker.png")}
-                style={[MapStyle.marker]}
+                style={[
+                  MapStyle.marker,
+                  selectedMarker === accommodation && MapStyle.selectedMarker,
+                ]}
                 resizeMode="cover"
               />
             </Animated.View>
@@ -212,13 +268,28 @@ export default ({ route }) => {
           borderRadius: 10,
           zIndex: 99,
         }}
+        onPress={handleReturnToCurrentLocation}
       >
         <FontAwesome name="location-arrow" size={24} color="black" />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          position: "absolute",
+          top: 52,
+          left: 12,
+          zIndex: 99,
+        }}
+        onPress={() => navigation.goBack()}
+      >
+        <ArrowLeft2 size="30" color="white" />
       </TouchableOpacity>
       <Animated.ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={MapStyle.scrollView}
+        style={[
+          MapStyle.scrollView,
+          selectedMarker && MapStyle.scrollViewWithCard,
+        ]}
       >
         {allAccomoda.map((item, index) => (
           <View style={MapStyle.card} key={index}>

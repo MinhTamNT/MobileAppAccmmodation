@@ -51,4 +51,7 @@ export const styleFields = StyleSheet.create({
     paddingHorizontal: 5,
     fontSize: 25,
   },
+  message:{
+    backgroundColor: COLOR.offWhite,
+  }
 });
