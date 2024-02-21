@@ -44,27 +44,12 @@ export default ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [formattedAddresses, setFormattedAddresses] = useState([]);
-  const allAccomoda = useSelector(
-    (state) => state?.accommodation?.allAccommodation?.accommodations
-  );
   const [selectedAddress, setSelectedAddress] = useState("");
   const [latitude, setLatitude] = useState(locationPresent.coords.latitude);
   const [longitude, setLongitude] = useState(locationPresent.coords.longitude);
+  const [allAccomoda, setAllAccomoda] = useState([]);
   const dispacth = useDispatch();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await getAllAccommodation(dispacth);
-      } catch (error) {
-        console.error("Error fetching accommodation:", error.message);
-      }
-    };
 
-    if (!allAccomoda.length) {
-      fetchData();
-    }
-  }, [dispacth]);
-  console.log(allAccomoda);
   useEffect(() => {
     const fetchData = async () => {
       try {

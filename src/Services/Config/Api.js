@@ -13,6 +13,9 @@ export const endpoint = {
   follow_user: (username) => `/users/follow/?username=${username}`,
   comment_post: (postId) => `/post/${postId}/comment/`,
   comment_of_post: (postId) => `/post/${postId}/comments_of_post/`,
+  rely_comment: (commentId) => `/comment/${commentId}/reply/`,
+  edit_comment: (commentId) => `/comment/${commentId}/edit/`,
+  delete_comment: (commentId) => `/comment/${commentId}/delete/`,
 };
 
 export const authApi = (accessToken) =>

@@ -27,12 +27,22 @@ export const styleComment = StyleSheet.create({
     width: "80%",
   },
   sendReplyButton: {
-    color: COLOR.primary_color,
+    color: COLOR.offWhite,
     fontWeight: "bold",
   },
   replyContainer: {
+    marginLeft: 12,
+    marginVertical: 5,
+  },
+  replyContainers: {
     flexDirection: "row",
+    gap: 2,
     alignItems: "center",
+  },
+  btnAction: {
+    borderRadius: 10,
+    backgroundColor: "#282828",
+    padding: 10,
   },
   username: {
     fontWeight: "bold",

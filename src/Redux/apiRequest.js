@@ -40,6 +40,12 @@ import {
   addCommentFail,
   addCommentSucess,
   addCommentstart,
+  deleteCommentFailed,
+  deleteCommentStart,
+  deleteCommentSuccess,
+  relyCommentFail,
+  relyCommentStart,
+  relyCommentSuccess,
 } from "./commentSlice";
 const auth = FIREBASE_AUTH;
 export const registerUser = async (form, dispatch, navigation) => {
@@ -157,5 +163,30 @@ export const commentPost = async (token, newComment, dispatch, postId) => {
   } catch (error) {
     console.error("Axios Error:", error);
     dispatch(addCommentFail());
+  }
+};
+export const relyCommentPrev = async (
+  token,
+  comentRely,
+  dispatch,
+  commentId
+) => {
+  dispatch(relyCommentStart());
+  try {
+    await authApi(token).post(endpoint.rely_comment(commentId), comentRely);
+    dispatch(relyCommentSuccess());
+  } catch (error) {
+    console.log(error);
+    dispatch(relyCommentFail());
+  }
+};
+export const deletedComment = async (token, dispatch, commetId) => {
+  dispatch(deleteCommentStart());
+  try {
+    await authApi(token).delete(endpoint.delete_comment(commetId));
+    dispatch(deleteCommentSuccess());
+  } catch (error) {
+    console.log(error);
+    dispatch(deleteCommentFailed());
   }
 };

@@ -31,6 +31,7 @@ const TabViewCommunities = () => {
   const [comments, setComments] = useState([]); // Use an array for comments
   const [commentPosts, setCommentsPosts] = useState([]);
   const [isComment, setIsComent] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null); // Add selectedPostId state
   const dispatch = useDispatch();
   const auth = useSelector((state) => state?.auth?.currentUser);
   const user = useSelector((state) => state?.user?.currentUser);
@@ -153,6 +154,15 @@ const TabViewCommunities = () => {
       navigation.navigate("Friend", { userId: idUser });
     }
   };
+  const handlerOpenComment = async (postId) => {
+    if (selectedPostId === postId) {
+      setIsComent((prevIsComment) => !prevIsComment);
+    } else {
+      setSelectedPostId(postId);
+      setIsComent(true);
+    }
+
+  };
   return (
     <View style={styleTab.container}>
       <TouchableOpacity style={styleTab.btnCreatePost} onPress={handlerPost}>
@@ -244,6 +254,7 @@ const TabViewCommunities = () => {
                 <CommentPosts
                   comment={commentPosts[item.id]}
                   setComments={setComments}
+                  currentUserId={user?.id}
                 />
               ) : (
                 <></>
