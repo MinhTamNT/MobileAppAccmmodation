@@ -118,7 +118,7 @@ const RoomChat = ({ route }) => {
               onPress={sendMessage}
               style={{ position: "absolute", right: 12, top: 36 }}
             >
-              <FontAwesome name="send-o" size={24} color="black" />
+              <FontAwesome name="send" size={24} color="black" />
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
