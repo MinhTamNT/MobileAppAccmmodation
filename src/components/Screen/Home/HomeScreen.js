@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
-} from "react-native";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { style } from "./HomeStyle";
@@ -18,7 +11,6 @@ import { useNavigation } from "@react-navigation/native";
 import InputField from "../../InputFields/InputField";
 import ModalRequire from "../../Modal/ModalRequire";
 import LoadingPage from "../../LoadingPage/LoadingPage";
-import userSlice from "../../../Redux/userSlice";
 import { authApi, endpoint } from "../../../Services/Config/Api";
 const HomeScreen = ({ route }) => {
   const currentUser = useSelector((state) => state?.user?.currentUser);

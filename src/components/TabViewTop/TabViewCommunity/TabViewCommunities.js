@@ -10,15 +10,17 @@ import {
   RefreshControl,
 } from "react-native";
 import { styleTab } from "../TabViewUser/TabStyle";
-import { Ionicons } from "@expo/vector-icons";
 import ModalPost from "../../Modal/ModalPost";
-import Api, { authApi, endpoint } from "../../../Services/Config/Api";
+import Api, { endpoint } from "../../../Services/Config/Api";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { useNavigation } from "@react-navigation/native";
-import _ from "lodash"; // Import lodash
+import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { commentPost } from "../../../Redux/apiRequest";
-
+import moment from "moment";
+import CommentPosts from "../../Comment/CommentPots";
+import { COLOR } from "../../../contants";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 const TabViewCommunities = () => {
   const [isModalPost, setModalPost] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,6 +30,7 @@ const TabViewCommunities = () => {
   const [hasNextPage, setHasNextPage] = useState(true);
   const [comments, setComments] = useState([]); // Use an array for comments
   const [commentPosts, setCommentsPosts] = useState([]);
+  const [isComment, setIsComent] = useState(false);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state?.auth?.currentUser);
   const user = useSelector((state) => state?.user?.currentUser);
@@ -56,6 +59,7 @@ const TabViewCommunities = () => {
     };
     form.append("text", newComment.text);
     await commentPost(auth?.access_token, form, dispatch, postId);
+    setComments(new Array(newPosts.length).fill(""));
   };
 
   useEffect(() => {
@@ -67,12 +71,23 @@ const TabViewCommunities = () => {
         if (newPosts.length > 0) {
           setPostPresent((prevPosts) => [...prevPosts, ...newPosts]);
 
-          // Initialize comments array with empty strings for each post
           setComments((prevComments) => [
             ...prevComments,
             ...new Array(newPosts.length).fill(""),
           ]);
+          const commentPromise = newPosts.map(async (post) => {
+            const commentRes = await Api.get(endpoint.comment_of_post(post.id));
+            return commentRes.data;
+          });
+          const commentsArray = await Promise.all(commentPromise);
+          const commentsObj = Object.fromEntries(
+            newPosts.map((post, index) => [post.id, commentsArray[index]])
+          );
 
+          setCommentsPosts((prevCommentsPosts) => ({
+            ...prevCommentsPosts,
+            ...commentsObj,
+          }));
           if (res.data.next !== null) {
             setCurrentPage((prevPage) => prevPage + 1);
             setHasNextPage(true);
@@ -102,7 +117,22 @@ const TabViewCommunities = () => {
 
       if (newPosts.length > 0) {
         setPostPresent(newPosts);
-        setComments(new Array(newPosts.length).fill("")); // Reset comments array
+
+        // Fetch comments for each post
+        const commentPromise = newPosts.map(async (post) => {
+          const commentRes = await Api.get(endpoint.comment_of_post(post.id));
+          return commentRes.data;
+        });
+
+        const commentsArray = await Promise.all(commentPromise);
+        const commentsObj = Object.fromEntries(
+          newPosts.map((post, index) => [post.id, commentsArray[index]])
+        );
+
+        setCommentsPosts((prevCommentsPosts) => ({
+          ...prevCommentsPosts,
+          ...commentsObj,
+        }));
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -141,17 +171,26 @@ const TabViewCommunities = () => {
         renderItem={({ item, index }) => (
           <View key={item.id} style={styleTab.postWrapper}>
             <View style={styleTab.ownerPost}>
-              <TouchableOpacity
-                style={StyleDefault.flexBoxRow}
-                onPress={() => handlerFriendPage(item.user_post)}
+              <View
+                style={[
+                  StyleDefault.flexBoxRow,
+                  { justifyContent: "space-between" },
+                ]}
               >
-                <Image
-                  source={{ uri: item.user_post.avatar_user }}
-                  style={StyleDefault.imageUserPost}
-                />
-                <Text>{item.user_post.username}</Text>
-              </TouchableOpacity>
-
+                <TouchableOpacity
+                  style={StyleDefault.flexBoxRow}
+                  onPress={() => handlerFriendPage(item.user_post)}
+                >
+                  <Image
+                    source={{ uri: item.user_post.avatar_user }}
+                    style={StyleDefault.imageUserPost}
+                  />
+                  <Text>{item.user_post.username}</Text>
+                </TouchableOpacity>
+                <Text style={{ color: COLOR.text_weak_color }}>
+                  {moment(item.created_at).fromNow()}
+                </Text>
+              </View>
               <View style={styleTab.contentPost}>
                 <Text>{item.caption}</Text>
                 <Text>{item.description}</Text>
@@ -164,29 +203,51 @@ const TabViewCommunities = () => {
                     />
                   ))}
                 </View>
-                <View style={styleTab.addCommentContainer}>
-                  <TextInput
-                    style={styleTab.commentInput}
-                    placeholder="Add a comment..."
-                    value={comments[item.id]}
-                    onChangeText={(text) =>
-                      setComments((prevComments) => {
-                        const updatedComments = [...prevComments];
-                        updatedComments[item.id] = text;
-                        return updatedComments;
-                      })
-                    }
-                    placeholderTextColor={"#333"}
-                  />
+                {isComment ? (
+                  <View style={styleTab.addCommentContainer}>
+                    <TouchableOpacity
+                      style={styleTab.btnCloseActionComment}
+                      onPress={() => setIsComent(false)}
+                    >
+                      <AntDesign name="close" size={22} color="#697689" />
+                    </TouchableOpacity>
+                    <TextInput
+                      style={styleTab.commentInput}
+                      placeholder="Add a comment..."
+                      value={comments[item.id]}
+                      onChangeText={(text) =>
+                        setComments((prevComments) => {
+                          const updatedComments = [...prevComments];
+                          updatedComments[item.id] = text;
+                          return updatedComments;
+                        })
+                      }
+                      placeholderTextColor={"#333"}
+                    />
+                    <TouchableOpacity
+                      style={{ position: "absolute", right: 12, top: 20 }}
+                      onPress={() => handlerComment(item.id)}
+                    >
+                      <Ionicons name="send" size={20} color="#697689" />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
                   <TouchableOpacity
-                    style={{ position: "absolute", right: 12, top: 20 }}
-                    onPress={() => handlerComment(item.id)}
+                    style={styleTab.actionComment}
+                    onPress={() => setIsComent(!isComment)}
                   >
-                    <Ionicons name="send" size={20} color="#697689" />
+                    <Text style={{ color: "white" }}>Comment Post</Text>
                   </TouchableOpacity>
-                </View>
-                <View></View>
+                )}
               </View>
+              {isComment ? (
+                <CommentPosts
+                  comment={commentPosts[item.id]}
+                  setComments={setComments}
+                />
+              ) : (
+                <></>
+              )}
             </View>
           </View>
         )}

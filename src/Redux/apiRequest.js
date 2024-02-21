@@ -62,7 +62,6 @@ export const LoginUser = async (users, dispatch, navigation) => {
 
   try {
     let response = await Api.post(endpoint["login"], users);
-    console.log("usersApi", users);
     await signInAnonymously(auth);
     dispatch(loginSuccess(response.data));
     navigation.navigate("Home");
@@ -154,7 +153,9 @@ export const commentPost = async (token, newComment, dispatch, postId) => {
   dispatch(addCommentstart());
   try {
     await authApi(token).post(endpoint.comment_post(postId), newComment);
+    dispatch(addCommentSucess());
   } catch (error) {
     console.error("Axios Error:", error);
+    dispatch(addCommentFail());
   }
 };
