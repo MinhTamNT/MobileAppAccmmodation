@@ -19,6 +19,7 @@ import * as ImagePicker from "expo-image-picker";
 import { TextInput } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import { createAccommodation } from "../../Redux/apiRequest";
+import Toast from "react-native-toast-message";
 const VND = new Intl.NumberFormat("vi-VN", {
   style: "currency",
   currency: "VND",
@@ -26,38 +27,50 @@ const VND = new Intl.NumberFormat("vi-VN", {
 const ModalRequire = ({ setModalVisible, location }) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const user = useSelector((state) => state?.user?.currentUser);
-  console.log(user.role);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state?.auth?.currentUser);
   const tokenUser = auth?.access_token;
-  console.log(tokenUser);
   const [formValue, setFormValues] = useState({
-    user: user?.id,
     address: "",
     city: "",
+    district: "",
     number_of_people: "",
-    rent_cost: 1000,
+    rent_cost: VND.format(1000),
     latitude: "",
     longitude: "",
-    image: "",
+    image: [],
   });
   const handlerCreateAccommodation = async () => {
     try {
       if (user.role === "HOST" && selectedImages.length >= 3) {
         const form = new FormData();
+
         for (let key in formValue) {
-          form.append(key, formValue[key]);
+          if (key === "image") {
+            selectedImages.forEach((image, index) => {
+              form.append("image", {
+                uri: image.uri,
+                type: "image/jpeg",
+                name: `image_${index}.jpg`,
+              });
+            });
+          } else {
+            form.append(key, formValue[key]);
+          }
         }
-
-        selectedImages.forEach((image, index) => {
-          form.append(`image_${index}`, {
-            uri: image.uri,
-            type: "image/jpeg", 
-            name: `image_${index}.jpg`,
-          });
-        });
-
+        console.log(form);
         await createAccommodation(dispatch, form, tokenUser);
+        setModalVisible(false);
+        Platform.OS === "ios"
+        ? Toast.show({
+            type: "success",
+            visibilityTime: 2000,
+            autoHide: true,
+            text1: "Create Accommodation",
+            text2: "Create Accommodation Successfuly",
+          })
+        : ToastAndroid.show("Update successfully", ToastAndroid.SHORT);
+
       } else {
         console.log("User is not a HOST or not enough images");
       }
@@ -99,7 +112,6 @@ const ModalRequire = ({ setModalVisible, location }) => {
           id: asset.assetId,
           uri: asset.uri,
         }));
-
         setSelectedImages((prevImages) => [...prevImages, ...newImages]);
         change("image", newImages);
       }
@@ -107,7 +119,6 @@ const ModalRequire = ({ setModalVisible, location }) => {
       console.error("Error picking an image", error);
     }
   };
-  console.log(formValue.image);
 
   return (
     <Modal animationType="slide">
@@ -140,6 +151,13 @@ const ModalRequire = ({ setModalVisible, location }) => {
             style={styleFields.formEdit}
             onChangeText={(t) => change("city", t)}
           />
+          <InputField
+            label={"District"}
+            value={formValue.district}
+            placeholder={"District accommodation"}
+            style={styleFields.formEdit}
+            onChangeText={(t) => change("district", t)}
+          />
           <View
             style={[
               StyleDefault.flexBoxRow,
@@ -159,7 +177,7 @@ const ModalRequire = ({ setModalVisible, location }) => {
                 style={style.customCost}
                 placeholder="Price"
                 placeholderTextColor={"#333"}
-                value={VND.format(formValue.rent_cost)} // Sử dụng VND.format trực tiếp trên giá trị
+                value={formValue.rent_cost} // Display the formatted value
                 onChangeText={(t) => change("rent_cost", t)}
                 keyboardType="numeric"
               />
@@ -255,8 +273,8 @@ const style = StyleSheet.create({
     alignItems: "center",
   },
   uploadedImage: {
-    width: 250,
-    height: 250,
+    width: 200,
+    height: 200,
     marginVertical: 5,
     marginHorizontal: 12,
     borderRadius: 10,

@@ -17,7 +17,6 @@ const ModalSort = (props) => {
       animationType="slide"
       transparent={true}
       visible={isModal}
-      backdropOpacity={1}
     >
       <View
         style={{

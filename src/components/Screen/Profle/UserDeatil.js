@@ -7,8 +7,8 @@ import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { ArrowLeft2, Edit2 } from "iconsax-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import TabViewBottom from "../../TabViewTop/TabViewBottom";
 import ModalEdit from "../../Modal/ModalEdit";
+import { TabViewBottom } from "../../TabViewTop/TabViewBottom";
 const UserDeatil = () => {
   const navigation = useNavigation();
   const user = useSelector((state) => state?.user.currentUser);

@@ -4,9 +4,8 @@ export const style = StyleSheet.create({
   styleNavigation: {
     height: 70,
     position: "absolute",
-    bottom: 25,
     marginHorizontal: 16,
-    borderRadius: 16,
+    borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 0.5,
@@ -30,10 +29,10 @@ export const style = StyleSheet.create({
   },
   title: {
     fontSize: 10,
-    fontWeight: '800',
-    textAlign: 'center',
-    color: '#697689',
-    position: 'absolute',
+    fontWeight: "800",
+    textAlign: "center",
+    color: "#697689",
+    position: "absolute",
     bottom: 20,
-}
+  },
 });

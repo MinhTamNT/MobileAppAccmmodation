@@ -8,6 +8,9 @@ import {
 } from "./autheslice";
 import Api, { authApi, endpoint } from "../Services/Config/Api";
 import {
+  followUserFailed,
+  followUserStart,
+  followUserSuccess,
   getUserFailed,
   getUserStart,
   getUserSuccess,
@@ -15,17 +18,36 @@ import {
   updateStart,
   updateSuccess,
 } from "./userSlice";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   createAccommodationFailed,
   createAccommodationStart,
   createAccommodationSuccess,
+  getAllAccommodationFail,
+  getAllAccommodationStart,
+  getAllAccommodationSuccess,
 } from "./accommodation";
-import { err } from "react-native-svg";
+import {
+  createPostFailed,
+  createPostStart,
+  createPostSuccess,
+} from "./postSlices";
+import { FIREBASE_AUTH } from "../Services/firebaseConfig";
+import {
+  createUserWithEmailAndPassword,
+  signInAnonymously,
+} from "firebase/auth";
+import {
+  addCommentFail,
+  addCommentSucess,
+  addCommentstart,
+} from "./commentSlice";
+const auth = FIREBASE_AUTH;
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
   try {
     const response = await Api.post(endpoint["register"], form);
+    console.log(form);
+    await createUserWithEmailAndPassword(auth, form.email, form.password);
     dispatch(registerSuccess(response.data));
     navigation.navigate("Login");
   } catch (error) {
@@ -37,10 +59,11 @@ export const registerUser = async (form, dispatch, navigation) => {
 export const LoginUser = async (users, dispatch, navigation) => {
   dispatch(loginStart());
   dispatch(updateStart());
+
   try {
     let response = await Api.post(endpoint["login"], users);
+    await signInAnonymously(auth);
     dispatch(loginSuccess(response.data));
-    dispatch(updateSuccess(response.data));
     navigation.navigate("Home");
   } catch (error) {
     dispatch(loginFail(error.response.data.message));
@@ -77,10 +100,62 @@ export const createAccommodation = async (dispatch, accommodation, token) => {
   console.log(token);
   try {
     dispatch(createAccommodationStart());
-    await authApi(token).post(endpoint["create_accomommdation"], accommodation);
-    dispatch(createAccommodationSuccess());
+    const res = await authApi(token).post(
+      endpoint["create_accomommdation"],
+      accommodation,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    dispatch(createAccommodationSuccess(res.data));
   } catch (error) {
     console.log(error);
     dispatch(createAccommodationFailed());
+  }
+};
+export const createPost = async (dispatch, newPost, token) => {
+  dispatch(createPostStart());
+  try {
+    await authApi(token).post(endpoint["creare_post"], newPost, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    dispatch(createPostSuccess());
+  } catch (error) {
+    console.log(error);
+    dispatch(createPostFailed());
+  }
+};
+export const getAllAccommodation = async (dispatch) => {
+  dispatch(getAllAccommodationStart());
+  try {
+    const res = await Api.get(endpoint["all_accommodation"]);
+    dispatch(getAllAccommodationSuccess(res.data.results));
+  } catch (error) {
+    console.log(error);
+    dispatch(getAllAccommodationFail());
+  }
+};
+export const followUser = async (token, username, dispatch) => {
+  dispatch(followUserStart());
+  try {
+    const res = await authApi(token).post(endpoint.follow_user(username));
+    dispatch(followUserSuccess(res.data));
+  } catch (error) {
+    console.log(error);
+    dispatch(followUserFailed());
+  }
+};
+export const commentPost = async (token, newComment, dispatch, postId) => {
+  dispatch(addCommentstart());
+  try {
+    await authApi(token).post(endpoint.comment_post(postId), newComment);
+    dispatch(addCommentSucess());
+  } catch (error) {
+    console.error("Axios Error:", error);
+    dispatch(addCommentFail());
   }
 };

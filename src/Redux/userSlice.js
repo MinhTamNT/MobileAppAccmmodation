@@ -8,6 +8,9 @@ const userSlice = createSlice({
     error: false,
     otherUser: null,
     loading: false,
+    currentUserFollow: null,
+    pending: false,
+    error: false,
   },
   reducers: {
     getUserStart: (state) => {
@@ -34,6 +37,17 @@ const userSlice = createSlice({
       state.pending = false;
       state.error = true;
     },
+    followUserStart: (state) => {
+      state.pending = true;
+    },
+    followUserSuccess: (state, action) => {
+      state.currentUserFollow = action.payload;
+      state.pending = false;
+    },
+    followUserFailed: (state) => {
+      state.pending = false;
+      state.error = false;
+    },
   },
 });
 
@@ -44,5 +58,8 @@ export const {
   getUserStart,
   getUserSuccess,
   getUserFailed,
+  followUserStart,
+  followUserSuccess,
+  followUserFailed,
 } = userSlice.actions;
 export default userSlice.reducer;

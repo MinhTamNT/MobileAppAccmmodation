@@ -14,6 +14,8 @@ import SignIn from "./src/components/Screen/SignInAndUp/SignIn.js";
 import MapScreen from "./src/components/Screen/Map/MapScreen.js";
 import PostDetail from "./src/components/SuggestPost/PostDeatil.js";
 import { PersistGate } from "redux-persist/integration/react";
+import Toast from "react-native-toast-message";
+import FriendProfile from "./src/components/Screen/FriendProfile/FriendProfile.js";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -70,9 +72,17 @@ export default function App() {
                 </RequireUsers>
               )}
             </Stack.Screen>
+            <Stack.Screen name="Friend">
+              {({ navigation, route }) => (
+                <RequireUsers navigation={navigation} route={route}>
+                  <FriendProfile />
+                </RequireUsers>
+              )}
+            </Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>
       </PersistGate>
+      <Toast />
     </Provider>
   );
 }

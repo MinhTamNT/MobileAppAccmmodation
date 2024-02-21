@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Linking } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
@@ -16,7 +16,6 @@ import {
 } from "iconsax-react-native";
 import { COLOR } from "../../../contants";
 import { FacebookLogo, GoogleLogo } from "../../../assets/image/image";
-import { LogoutUser } from "../../../Redux/apiRequest";
 import { logout } from "../../../Redux/store";
 
 const Profile = ({ navigation }) => {
@@ -30,6 +29,18 @@ const Profile = ({ navigation }) => {
   };
   const handlerNavigate = () => {
     navigation.navigate("UserDeatil");
+  };
+  const handlerPrivacy = () => {
+    const privacyPolicyURL =
+      "https://docs.google.com/document/d/1nmkipv_MWTI3LdWDfvpS0PqojZqRZLL0pBwkWoHLRQE/edit#heading=h.42x4cq6r7kqw";
+
+    Linking.openURL(privacyPolicyURL)
+      .then((supported) => {
+        if (!supported) {
+          console.log("Opening URL is not supported");
+        }
+      })
+      .catch((err) => console.error("An error occurred", err));
   };
 
   const data = [
@@ -52,7 +63,7 @@ const Profile = ({ navigation }) => {
       title: "Privacy policy",
       iconLeft: <Document color="#697689" />,
       icon: <ArrowRight2 color="#697689" />,
-      handler: null,
+      handler: handlerPrivacy,
     },
     {
       id: 4,

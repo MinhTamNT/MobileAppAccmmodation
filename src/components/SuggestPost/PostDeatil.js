@@ -16,6 +16,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { SliderBox } from "react-native-image-slider-box";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
+
 import {
   Location,
   House,
@@ -28,7 +29,7 @@ import { COLOR, SHADOWS } from "../../contants";
 import { useSelector } from "react-redux";
 import InputField from "../InputFields/InputField";
 import { styleFields } from "../InputFields/InputFieldStyle";
-import Comment from "../Comment/Comment";
+import CommentPosts from "../Comment/CommentPots";
 const PostDetail = ({ route }) => {
   const { itemPost } = route.params;
   const user = useSelector((state) => state.user.user?.currentUser);
@@ -124,7 +125,7 @@ const PostDetail = ({ route }) => {
                 />
                 {comments.map((comment, index) => (
                   <View key={index}>
-                    <Comment comment={comment} setComments={setComments} />
+                    <CommentPosts comment={comment} setComments={setComments} />
                   </View>
                 ))}
               </View>
