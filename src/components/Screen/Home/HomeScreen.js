@@ -20,9 +20,10 @@ import ModalRequire from "../../Modal/ModalRequire"
 import LoadingPage from "../../LoadingPage/LoadingPage"
 import { authApi, endpoint } from "../../../Services/Config/Api"
 import HomeBtn from "./HomeBtn"
-import HomeCard from "./HomeCard"
 import { getAllAccommodation } from "../../../Redux/apiRequest"
 import { all } from "axios"
+import HomeCards from "./HomeCards"
+import HomeList from "./HomeList"
 
 const HomeScreen = ({ route }) => {
   const currentUser = useSelector((state) => state?.user?.currentUser)
@@ -89,9 +90,8 @@ const HomeScreen = ({ route }) => {
   }, [currentUser, accommodationUser])
 
   if (!currentUser) {
-    <LoadingPage />
+    ;<LoadingPage />
   }
-  console.log(allAccomodation);
   return (
     <SafeAreaView style={style.container}>
       <View style={style.content_header}>
@@ -156,22 +156,38 @@ const HomeScreen = ({ route }) => {
             style={[style.pl_14, { marginBottom: 18 }]}
           ></FlatList>
         </View>
-        <View style={[style.pH_14, { marginTop: 15 }]}>
-          <View>
-            <View style={[style.flex_row, { marginBottom: 20 }]}>
-              <Text style={style.text_HomeCrad}>Near from you</Text>
-              <Text
-                style={style.text_2}
-                onPress={() => {
-                  console.log("See more")
-                }}
-              >
-                See more
-              </Text>
-            </View>
-
-            <HomeCard accommodation = {allAccomodation} />
+        <View style={[{ paddingTop: 15 }]}>
+          <View style={[style.flex_row, style.pH_14, { marginBottom: 20 }]}>
+            <Text style={style.text_HomeCrad}>Near from you</Text>
+            <Text
+              style={style.text_2}
+              onPress={() => {
+                console.log("See more")
+              }}
+            >
+              See more
+            </Text>
           </View>
+          <HomeCards allAccommodation={allAccomodation} />
+        </View>
+        <View style={[{ marginTop: -30 }, style.pH_14]}>
+          <View style={[style.flex_row, { marginBottom: 20 }]}>
+            <Text style={style.text_HomeCrad}>Best for you</Text>
+            <Text
+              style={style.text_2}
+              onPress={() => {
+                console.log("See more")
+              }}
+            >
+              See more
+            </Text>
+          </View>
+          <FlatList
+            data={allAccomodation}
+            renderItem={(item) => {
+              return <HomeList item={item.item} />
+            }}
+          />
         </View>
       </ScrollView>
       {modalVisible && (

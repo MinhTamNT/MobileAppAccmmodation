@@ -62,6 +62,9 @@ export const style = StyleSheet.create({
   pl_14:{
     paddingLeft: 14,
   },
+  pr_14:{
+    paddingRight: 14,
+  },
   pH_14:{
     paddingHorizontal:14
   },

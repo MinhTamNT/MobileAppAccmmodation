@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   container: {
     width: "auto",
     height: 50,
-    backgroundColor: "pink",
+    backgroundColor: "#ff3787",
     marginRight: 10,
     borderRadius: 20,
     alignItems: "center",
