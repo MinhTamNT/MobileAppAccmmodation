@@ -59,4 +59,23 @@ export const style = StyleSheet.create({
     backgroundColor: COLOR.offWhite,
     marginTop: 10,
   },
+  pl_14:{
+    paddingLeft: 14,
+  },
+  pH_14:{
+    paddingHorizontal:14
+  },
+  flex_row: {
+    flexDirection: "row",
+    justifyContent: 'space-between'
+  },
+
+  text_HomeCrad: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  text_2: {
+    fontSize: 18,
+    opacity: 0.2
+  }
 });
