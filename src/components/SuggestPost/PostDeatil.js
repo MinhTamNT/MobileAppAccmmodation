@@ -32,7 +32,7 @@ import { styleFields } from "../InputFields/InputFieldStyle";
 import CommentPosts from "../Comment/CommentPots";
 const PostDetail = ({ route }) => {
   const { itemPost } = route.params;
-  const user = useSelector((state) => state.user.user?.currentUser);
+  const user = useSelector((state) => state?.user?.currentUser);
   const navigation = useNavigation();
   const [comments, setComments] = useState([]);
   const [showFullDescription, setShowFullDescription] = useState(false);

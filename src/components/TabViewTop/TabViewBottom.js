@@ -28,7 +28,7 @@ export const TabViewBottom = () => {
       ) : (
         <>
           <Tab.Screen name="Post" component={TabViewPost} />
-          <Tab.Screen name="Comment" component={TabViewCommunities} />
+          <Tab.Screen name="Comment" component={TabViewComment} />
         </>
       )}
     </Tab.Navigator>

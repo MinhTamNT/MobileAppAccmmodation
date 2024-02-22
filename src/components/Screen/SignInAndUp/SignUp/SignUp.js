@@ -225,14 +225,16 @@ const SignUp = () => {
               error={formErrors.password}
             />
 
-            <InputField
-              label="Phone Number"
-              placeholder="Enter your phone number"
-              keyboardType="phone-pad"
-              value={formValues.phone}
-              onChangeText={(value) => handleChange("phone", value)}
-              error={formErrors.phone}
-            />
+            <View>
+              <InputField
+                label="Phone Number"
+                placeholder="Enter your phone number"
+                keyboardType="phone-pad"
+                value={formValues.phone}
+                onChangeText={(value) => handleChange("phone", value)}
+                error={formErrors.phone}
+              />
+            </View>
           </>
         );
       case 2:
@@ -324,7 +326,9 @@ const SignUp = () => {
                   style={style.btnRegister_action}
                   onPress={handleRegister}
                 >
-                  <Text style={{ textAlign: "center",color:"white" }}>Create an account</Text>
+                  <Text style={{ textAlign: "center", color: "white" }}>
+                    Create an account
+                  </Text>
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity

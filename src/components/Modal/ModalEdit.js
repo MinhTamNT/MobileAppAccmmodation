@@ -73,7 +73,6 @@ const ModalEdit = (prop) => {
       phone: phone,
       avatar_user: avatar_user,
     };
-    console.log(newUser);
     updateUser(user?.id, auth?.access_token, newUser, dispatch);
     setVissable(false);
     Platform.OS === "ios"

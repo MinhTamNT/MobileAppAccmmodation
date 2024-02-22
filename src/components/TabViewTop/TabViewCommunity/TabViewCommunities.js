@@ -21,6 +21,7 @@ import moment from "moment";
 import CommentPosts from "../../Comment/CommentPots";
 import { COLOR } from "../../../contants";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+
 const TabViewCommunities = () => {
   const [isModalPost, setModalPost] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,17 +29,17 @@ const TabViewCommunities = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [comments, setComments] = useState([]); // Use an array for comments
+  const [comments, setComments] = useState([]);
   const [commentPosts, setCommentsPosts] = useState([]);
   const [isComment, setIsComent] = useState(false);
-  const [selectedPostId, setSelectedPostId] = useState(null); // Add selectedPostId state
+  const [selectedPostId, setSelectedPostId] = useState(null);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state?.auth?.currentUser);
   const user = useSelector((state) => state?.user?.currentUser);
   const navigation = useNavigation();
 
   const debouncedLoadMorePosts = useCallback(
-    _.debounce(() => loadMorePosts(), 500),
+    _.debounce(() => loadMorePosts(), 3000),
     []
   );
 
@@ -60,7 +61,11 @@ const TabViewCommunities = () => {
     };
     form.append("text", newComment.text);
     await commentPost(auth?.access_token, form, dispatch, postId);
-    setComments(new Array(newPosts.length).fill(""));
+    setComments((prevComments) => {
+      const updatedComments = [...prevComments];
+      updatedComments[postId] = ""; // Clear the comment for the current post
+      return updatedComments;
+    });
   };
 
   useEffect(() => {
@@ -68,18 +73,18 @@ const TabViewCommunities = () => {
       try {
         const res = await Api.get(endpoint.all_post(currentPage));
         const newPosts = res.data.results;
-
         if (newPosts.length > 0) {
           setPostPresent((prevPosts) => [...prevPosts, ...newPosts]);
-
           setComments((prevComments) => [
             ...prevComments,
             ...new Array(newPosts.length).fill(""),
           ]);
+
           const commentPromise = newPosts.map(async (post) => {
             const commentRes = await Api.get(endpoint.comment_of_post(post.id));
             return commentRes.data;
           });
+
           const commentsArray = await Promise.all(commentPromise);
           const commentsObj = Object.fromEntries(
             newPosts.map((post, index) => [post.id, commentsArray[index]])
@@ -89,6 +94,7 @@ const TabViewCommunities = () => {
             ...prevCommentsPosts,
             ...commentsObj,
           }));
+
           if (res.data.next !== null) {
             setCurrentPage((prevPage) => prevPage + 1);
             setHasNextPage(true);
@@ -113,13 +119,11 @@ const TabViewCommunities = () => {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
+      setCurrentPage(1); // Reset page to 1 when refreshing
       const res = await Api.get(endpoint.all_post(1));
       const newPosts = res.data.results;
-
       if (newPosts.length > 0) {
         setPostPresent(newPosts);
-
-        // Fetch comments for each post
         const commentPromise = newPosts.map(async (post) => {
           const commentRes = await Api.get(endpoint.comment_of_post(post.id));
           return commentRes.data;
@@ -130,10 +134,7 @@ const TabViewCommunities = () => {
           newPosts.map((post, index) => [post.id, commentsArray[index]])
         );
 
-        setCommentsPosts((prevCommentsPosts) => ({
-          ...prevCommentsPosts,
-          ...commentsObj,
-        }));
+        setCommentsPosts(commentsObj);
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -147,6 +148,7 @@ const TabViewCommunities = () => {
       debouncedLoadMorePosts.cancel();
     };
   }, [debouncedLoadMorePosts]);
+
   const handlerFriendPage = (idUser) => {
     if (user.username === idUser.username) {
       navigation.navigate("UserDeatil");
@@ -154,15 +156,7 @@ const TabViewCommunities = () => {
       navigation.navigate("Friend", { userId: idUser });
     }
   };
-  const handlerOpenComment = async (postId) => {
-    if (selectedPostId === postId) {
-      setIsComent((prevIsComment) => !prevIsComment);
-    } else {
-      setSelectedPostId(postId);
-      setIsComent(true);
-    }
 
-  };
   return (
     <View style={styleTab.container}>
       <TouchableOpacity style={styleTab.btnCreatePost} onPress={handlerPost}>
@@ -267,7 +261,9 @@ const TabViewCommunities = () => {
         ListFooterComponent={() =>
           isLoadingMore && hasNextPage ? (
             <ActivityIndicator size="small" color="#0000ff" />
-          ) : null
+          ) : (
+            <></>
+          )
         }
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

@@ -10,11 +10,16 @@ import ModalSort from "../Modal/ModalSort/ModalSort";
 import { useNavigation } from "@react-navigation/native";
 import { COLOR } from "../../contants";
 import ModalPirceRange from "../Modal/ModalPirceRange";
+import { getAllAccommodation } from "../../Redux/apiRequest";
+import { useDispatch, useSelector } from "react-redux";
 const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [sortOption, setSortOption] = useState(null);
   const [sortedData, setSortedData] = useState(postData);
-
+  const disptach = useDispatch();
+  const allAccomoda = useSelector(
+    (state) => state?.accommodation?.allAccommodation?.accommodations
+  );
   const sortData = (op) => {
     const sortedResult = [...postData].sort((a, b) =>
       op === "low" ? a.price - b.price : b.price - a.price
@@ -44,19 +49,11 @@ const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
     setSortedData(filteredData);
   }, [selectedDistrict, sortOption]);
 
-  const renderSortOption = (text, option) => (
-    <TouchableOpacity
-      key={option}
-      style={{ flexDirection: "row", alignItems: "center", gap: 2 }}
-      onPress={() => sortData(option)}
-    >
-      <Text style={{ fontSize: 16 }}>{text}</Text>
-      <AntDesign name="down" />
-    </TouchableOpacity>
-  );
-
   const renderPostItem = (item, index) => <Item key={index} item={item} />;
-
+  useEffect(() => {
+    getAllAccommodation(disptach);
+  }, [disptach]);
+  console.log(allAccomoda);
   return (
     <View style={postStyle.wrapper}>
       <View style={postStyle.wrapperItem}>

@@ -8,7 +8,9 @@ const TabViewPost = () => {
   const handlerPost = () => {
     setModalPost(!isModalPost);
   };
-  return <View style={styleTab.container}></View>;
+  return <View style={styleTab.container}>
+    
+  </View>;
 };
 const style = StyleSheet.create({});
 export default TabViewPost;

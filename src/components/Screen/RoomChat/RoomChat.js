@@ -22,8 +22,6 @@ import {
   orderBy,
   serverTimestamp,
   onSnapshot,
-  QuerySnapshot,
-  doc,
 } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../Services/firebaseConfig";
 import { styleRoomChat } from "./RoomChatStyle";
