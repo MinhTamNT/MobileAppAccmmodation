@@ -20,9 +20,9 @@ const SignIn = () => {
       const newUser = {
         username: values.username,
         password: values.password,
-        client_id: "HE42r4YfQJbSL8B3mqSlQrM0SmHLni7vVlDN6stB",
+        client_id: "qzszzP8KhwLRAFRzFk6L02PhLf2Wwqt6zBcARdcG",
         client_secret:
-          "QcYIuhUmJYtky6Ba1NnotllUX0zhjVoLc4N21A3M2OXMLkAQ4z3W7brP4HigQyuQLzN5aMjFDRAOsJzwexarcuR91nCHktq7016LccWwBMIck6vBHsHG1YhCnvBbiE7k",
+          "5VXjJVseXlWhra3R2tM4INwjsJH5fOIKdIwQvYEewiVoipm2foxINTUvTyOCkD40FWFPhkejlcGHq1B6iTA2fPOL5RlJlU3YMPfW9WzqFX1vag7989tOTiMcWNONBo8Y",
         grant_type: "password",
       };
       console.log(newUser);
