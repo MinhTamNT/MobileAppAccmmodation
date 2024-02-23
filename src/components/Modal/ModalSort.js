@@ -1,7 +1,7 @@
 import { Modal, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
-import { COLOR } from "../../../contants";
-import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
+import { COLOR } from "../../contants";
+import { StyleDefault } from "../StyleDeafult/StyleDeafult";
 import { AntDesign } from "@expo/vector-icons";
 import { RadioButton } from "react-native-paper";
 const ModalSort = (props) => {

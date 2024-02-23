@@ -6,14 +6,13 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { style } from "./HomeStyle";
 import { Feather } from "@expo/vector-icons";
 import { COLOR } from "../../../contants";
 import Carousel from "../../Carousel/Carousel";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
 import InputField from "../../InputFields/InputField";
@@ -31,8 +30,6 @@ const HomeScreen = ({ route }) => {
   const [accommodationUser, setAccommodationUser] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [modalVisible, setModalVisible] = useState(false);
-
-  const dispatch = useDispatch();
 
   const [allAccommodation, setAllAccommodation] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -174,7 +171,7 @@ const HomeScreen = ({ route }) => {
             onPressIn={() =>
               navigation.navigate("Search", { locationUser: location })
             }
-            editable={false} // Set this prop to make the input non-editable
+            editable={false}
           />
         </View>
         <View style={[{ paddingTop: 15 }]}>
@@ -200,7 +197,7 @@ const HomeScreen = ({ route }) => {
           </View>
           <FlatList
             data={allAccommodation}
-            keyExtractor={(item) => item.id.toString()} // Assuming 'id' is unique
+            keyExtractor={(item) => item.id.toString()}
             renderItem={(item) => {
               return <HomeList item={item.item} />;
             }}

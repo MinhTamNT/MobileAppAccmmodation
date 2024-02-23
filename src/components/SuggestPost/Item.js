@@ -26,8 +26,9 @@ export const Item = ({ item }) => {
         ImageComponentStyle={{
           width: 390,
           resizeMode: "cover",
-          marginRight: 25,
+          marginRight: 12,
           marginTop: 10,
+          borderRadius: 10,
         }}
       />
       <TouchableOpacity onPress={() => navigateToPostDetail(item)}>

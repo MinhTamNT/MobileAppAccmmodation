@@ -5,20 +5,35 @@ import { Item } from "./Item";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
 import { AntDesign } from "@expo/vector-icons";
 import { Sort } from "iconsax-react-native";
-import ModalSort from "../Modal/ModalSort/ModalSort";
 import { COLOR } from "../../contants";
-import { getAllAccommodation } from "../../Redux/apiRequest";
 import { useDispatch, useSelector } from "react-redux";
+import { authApi, endpoint } from "../../Services/Config/Api";
+import ModalSort from "../Modal/ModalSort";
 
 const SuggestPost = ({ selectedDistrict, searchInput }) => {
-  const allAccomoda = useSelector(
-    (state) => state?.accommodation?.allAccommodation?.accommodations
-  );
-  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [sortOption, setSortOption] = useState(null);
-  const [sortedData, setSortedData] = useState(allAccomoda);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [allAccomoda, setAllAccommodation] = useState([]);
+  const [pageNumber, setPageNumer] = useState(1);
+  const [sortDatas, setSordata] = useState(allAccomoda);
+  const [limit, setLimit] = useState(20);
+  const auth = useSelector((state) => state?.auth?.currentUser);
+  useEffect(() => {
+    const fecthAccommodation = async () => {
+      try {
+        const res = await authApi(auth?.access_token).get(
+          endpoint.all_accommodation(pageNumber, limit)
+        );
+        console.log("API Response:", res.data);
+        setAllAccommodation(res.data.results);
+        setSordata(res.data.results)
+      } catch (error) {
+        console.error("Error fetching accommodations:", error);
+      }
+    };
+    fecthAccommodation();
+  }, [auth?.access_token, pageNumber, limit]);
+
   const sortData = (op) => {
     const sortedResult = [...allAccomoda].sort((a, b) => {
       const priceA = typeof a.rent_cost === "number" ? a.rent_cost : 0;
@@ -26,7 +41,7 @@ const SuggestPost = ({ selectedDistrict, searchInput }) => {
       return op === "low" ? priceA - priceB : priceB - priceA;
     });
     setSortOption(op);
-    setSortedData([...sortedResult]);
+    setSordata([...sortedResult]);
   };
   console.log(allAccomoda);
   useEffect(() => {
@@ -53,15 +68,8 @@ const SuggestPost = ({ selectedDistrict, searchInput }) => {
       );
     }
 
-    setSortedData(filteredData);
+    setSordata(filteredData);
   }, [selectedDistrict, sortOption, searchInput]);
-
-  useEffect(() => {
-    if (!dataLoaded) {
-      setDataLoaded(true);
-      getAllAccommodation(dispatch);
-    }
-  }, [dispatch, dataLoaded]);
 
   const renderPostItem = (item, index) => (
     <TouchableOpacity key={index}>
@@ -104,7 +112,7 @@ const SuggestPost = ({ selectedDistrict, searchInput }) => {
         <View style={postStyle.headerItem}>
           <View style={postStyle.headerItem_content}>
             <Text style={{ fontSize: 18 }}>
-              There are {sortedData.length} results
+              There are {sortDatas.length} results
             </Text>
             <TouchableOpacity
               style={[StyleDefault.flexBoxRow]}
@@ -120,8 +128,8 @@ const SuggestPost = ({ selectedDistrict, searchInput }) => {
           setModal={setModalVisible}
           onSort={sortData}
         />
-        {sortedData.length > 0 ? (
-          sortedData.map(renderPostItem)
+        {sortDatas.length > 0 ? (
+          sortDatas.map(renderPostItem)
         ) : (
           <View
             style={[

@@ -7,13 +7,12 @@ export const endpoint = {
   update_user: (userID) => `/users/${userID}/update/`,
   create_accomommdation: "/accommodation/create/",
   creare_post: "/post/create/",
-  all_accommodation: (pageNumber) =>
-    `/accommodation/?page=${pageNumber}&limit=3`,
+  all_accommodation: (pageNumber, limit) =>
+    `/accommodation/?page=${pageNumber}&limit=${limit}`,
   current_accommodation: (pageNumber, latitude, longitude) =>
     `accommodation/?latitude=${latitude}&longitude=${longitude}&page=${pageNumber}&limit=3`,
   all_post: (pageNumber) => `/post/?page=${pageNumber}&limit=3`,
   user_accommodation: "/accommodation/accmmodation_user/",
-
   follow_user: (username) => `/users/follow/?username=${username}`,
   comment_post: (postId) => `/post/${postId}/comment/`,
   comment_of_post: (postId) => `/post/${postId}/comments_of_post/`,
@@ -21,6 +20,8 @@ export const endpoint = {
   edit_comment: (commentId) => `/comment/${commentId}/edit/`,
   delete_comment: (commentId) => `/comment/${commentId}/delete/`,
   user_post: "/post/post_of_user/",
+  map_accommodation: (latitude, longitude) =>
+    `/accommodation/?latitude=${latitude}&longitude=${longitude}&limit=20`,
 };
 export const endpointAdmin = {
   postIsApproved: "/post/not_approved/",

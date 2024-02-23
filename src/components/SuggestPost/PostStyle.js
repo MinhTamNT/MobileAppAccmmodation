@@ -33,7 +33,7 @@ export const postStyle = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 10,
     elevation: 5,
-    
+
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -54,7 +54,7 @@ export const postStyle = StyleSheet.create({
   },
   detail: {
     width: "100%",
-    padding: 5,
+    paddingHorizontal: 10,
     position: "absolute",
     bottom: 75,
   },

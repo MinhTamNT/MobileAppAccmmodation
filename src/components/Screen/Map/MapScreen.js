@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import MapView, { Circle, Marker } from "react-native-maps";
 import { MapStyle } from "./MapStyle";
@@ -19,11 +20,11 @@ import {
   ArrowLeft2,
 } from "iconsax-react-native";
 import { MAP_KEY } from "@env";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllAccommodation } from "../../../Redux/apiRequest";
+import { useSelector } from "react-redux";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { authApi, endpoint } from "../../../Services/Config/Api";
 
 export default ({ route }) => {
   const actions = [
@@ -47,12 +48,14 @@ export default ({ route }) => {
   const [selectedAddress, setSelectedAddress] = useState("");
   const [latitude, setLatitude] = useState(locationPresent.coords.latitude);
   const [longitude, setLongitude] = useState(locationPresent.coords.longitude);
-  const allAccomoda = useSelector(
-    (state) => state?.accommodation?.allAccommodation?.accommodations
-  );
+  const [allAccomoda, setAllAccommodation] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const auth = useSelector((state) => state?.auth?.currentUser);
   const [currentLocationMarker, setCurrentLocationMarker] = useState(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [selectedAccommodation, setSelectedAccommodation] = useState(null);
   const navigation = useNavigation();
+
   const handleReturnToCurrentLocation = () => {
     if (mapRef.current) {
       mapRef.current.animateToRegion({
@@ -67,7 +70,6 @@ export default ({ route }) => {
       });
     }
   };
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -110,8 +112,25 @@ export default ({ route }) => {
   }, [searchText]);
 
   useEffect(() => {
-    getAllAccommodation(dispatch);
-  }, [dispatch]);
+    try {
+      const fetchDataCurrent = async () => {
+        setIsLoading(true);
+        const res = await authApi(auth?.access_token).get(
+          endpoint.map_accommodation(
+            locationPresent.coords.latitude,
+            locationPresent.coords.longitude
+          )
+        );
+        setAllAccommodation(res.data.results);
+      };
+
+      fetchDataCurrent();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [latitude, longitude]);
 
   const handleAddressSelect = async (selectedAddress) => {
     try {
@@ -145,6 +164,10 @@ export default ({ route }) => {
       console.error("Error fetching location coordinates:", error.message);
     }
   };
+
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
   return (
     <View style={MapStyle.container}>
@@ -202,7 +225,7 @@ export default ({ route }) => {
               latitude: accommodation.latitude,
               longitude: accommodation.longitude,
             }}
-            onPress={() => setSelectedMarker(accommodation)}
+            onPress={() => setSelectedAccommodation(accommodation)}
           >
             <Animated.View
               style={[
@@ -291,15 +314,15 @@ export default ({ route }) => {
           selectedMarker && MapStyle.scrollViewWithCard,
         ]}
       >
-        {allAccomoda.map((item, index) => (
-          <View style={MapStyle.card} key={index}>
+        {selectedAccommodation && (
+          <View style={MapStyle.card}>
             <Image
-              source={{ uri: item.image[0].image }}
+              source={{ uri: selectedAccommodation.image[0].image }}
               style={MapStyle.cardImage}
             />
             <View style={MapStyle.textContent}>
               <Text numberOfLines={1}>
-                {item.address} {item.district}
+                {selectedAccommodation.address} {selectedAccommodation.district}
               </Text>
               <View>
                 <View
@@ -309,9 +332,9 @@ export default ({ route }) => {
                   ]}
                 >
                   <View style={StyleDefault.flexBoxRow}>
-                    <Text>{item.rent_cost}VND</Text>
+                    <Text>{selectedAccommodation.rent_cost}VND</Text>
                     <Text style={StyleDefault.FontSizeMedium}>
-                      {item.number_of_people}
+                      {selectedAccommodation.number_of_people}
                     </Text>
                     <User size="15" color="#697689" />
                   </View>
@@ -322,7 +345,7 @@ export default ({ route }) => {
               </View>
             </View>
           </View>
-        ))}
+        )}
       </Animated.ScrollView>
 
       {searchText.length > 0 && (
