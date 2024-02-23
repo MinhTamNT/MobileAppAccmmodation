@@ -1,45 +1,58 @@
-import { Dimensions, Platform, StyleSheet, View, Text } from "react-native"
-import React, { useRef, useState, useEffect } from "react"
-import Carousel, { ParallaxImage } from "react-native-snap-carousel"
-import { COLOR } from "../../../contants"
+import {
+  Dimensions,
+  Platform,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+} from "react-native";
+import React, { useRef, useState, useEffect } from "react";
+import Carousel, { ParallaxImage } from "react-native-snap-carousel";
+import { COLOR } from "../../../contants";
+import { useNavigation } from "@react-navigation/native";
 
-
-const { width: screenWidth } = Dimensions.get("window")
+const { width: screenWidth } = Dimensions.get("window");
 
 const HomeCards = ({ allAccommodation }) => {
-  const [entries, setEntries] = useState([])
-  const CarouselRef = useRef(null)
+  const [entries, setEntries] = useState([]);
+  const CarouselRef = useRef(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    setEntries(allAccommodation)
-  }, [])
+    setEntries(allAccommodation);
+  }, []);
 
-
-  const renderItem =  ({item, index}, parallaxProps) => {
+  const handlerDeatilAccommodation = (accommodationId) => {
+    navigation.navigate("")
+  };
+  const renderItem = ({ item, index }, parallaxProps) => {
     return (
       <>
         <View style={style.item}>
           <ParallaxImage
-            source={{ uri: item.image[2].image }}
+            source={{ uri: item.image[1].image }}
             containerStyle={style.imageContainer}
             style={style.image}
             parallaxFactor={0.4}
             {...parallaxProps}
           />
-          
         </View>
-        <View style={style.text_container}>
-          <Text style={style.title}>{item.address}</Text>
-          <Text style={style.title}>District {item.district}, {item.city} city</Text>
-          <Text style={style.title}>Rent cost: {item.rent_cost}/month</Text>
-        </View>
+        <TouchableOpacity>
+          <View style={style.text_container}>
+            <Text style={style.title}>{item.address}</Text>
+            <Text style={style.title}>
+              District {item.district}, {item.city} city
+            </Text>
+          </View>
+        </TouchableOpacity>
       </>
-    )
-  }
+    );
+  };
 
   return (
-    <View style={{marginBottom: 60}}>
+    <View style={{ marginBottom: 60 }}>
       <Carousel
+        layout="default"
         ref={CarouselRef}
         sliderWidth={screenWidth}
         sliderHeight={screenWidth}
@@ -49,39 +62,37 @@ const HomeCards = ({ allAccommodation }) => {
         hasParallaxImages={true}
       />
     </View>
-  )
-}
+  );
+};
 
 const style = StyleSheet.create({
   item: {
     width: screenWidth - 60,
-    height: screenWidth - 60
+    height: screenWidth - 60,
   },
   imageContainer: {
     flex: 1,
     marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
     backgroundColor: "white",
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
+    borderTopRightRadius: 20,
   },
   image: {
     ...StyleSheet.absoluteFillObject,
-    resizeMode: "cover"
+    resizeMode: "cover",
   },
   text_container: {
-    padding: 8,
-    marginTop: "auto",
-    borderBottomEndRadius: 20,
-    borderBottomLeftRadius: 20,
-    backgroundColor: '#272c4f'
+    padding: 10,
+    position: "absolute",
+    bottom: 0,
   },
   title: {
     color: COLOR.offWhite,
     lineHeight: 30,
-    fontSize: 20,
+    fontSize: 14,
     fontWeight: "bold",
-    textAlign: "left"
-  }
-})
+    textAlign: "left",
+  },
+});
 
-export default HomeCards
+export default HomeCards;

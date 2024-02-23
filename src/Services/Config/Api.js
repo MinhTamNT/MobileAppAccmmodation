@@ -8,7 +8,7 @@ export const endpoint = {
   create_accomommdation: "/accommodation/create/",
   creare_post: "/post/create/",
   all_accommodation: "/accommodation/",
-  all_post: (pageNumber) => `/post/?page=${pageNumber}`,
+  all_post: (pageNumber) => `/post/?page=${pageNumber}&limit=3`,
   user_accommodation: "/accommodation/accmmodation_user/",
   follow_user: (username) => `/users/follow/?username=${username}`,
   comment_post: (postId) => `/post/${postId}/comment/`,
@@ -25,9 +25,9 @@ export const endpointAdmin = {
 };
 export const authApi = (accessToken) =>
   axios.create({
-    baseURL: "http://192.168.1.7:8000/",
+    baseURL: "http://192.168.0.104:8000/",
     headers: { Authorization: `bearer ${accessToken}` },
   });
 export default axios.create({
-  baseURL: "http://192.168.1.7:8000/",
+  baseURL: "http://192.168.0.104:8000/",
 });

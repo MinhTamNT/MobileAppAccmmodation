@@ -32,22 +32,16 @@ const TabViewCommunities = () => {
   const [comments, setComments] = useState([]);
   const [commentPosts, setCommentsPosts] = useState([]);
   const [isComment, setIsComent] = useState(false);
-  const [selectedPostId, setSelectedPostId] = useState(null);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state?.auth?.currentUser);
   const user = useSelector((state) => state?.user?.currentUser);
   const navigation = useNavigation();
 
-  const debouncedLoadMorePosts = useCallback(
-    _.debounce(() => loadMorePosts(), 3000),
-    []
-  );
-
   const handlerPost = () => {
     setModalPost(!isModalPost);
   };
 
-  const loadMorePosts = () => {
+  const loadMorePosts = async () => {
     if (!isLoadingMore && hasNextPage) {
       setIsLoadingMore(true);
       setCurrentPage((prevPage) => prevPage + 1);
@@ -68,11 +62,25 @@ const TabViewCommunities = () => {
     });
   };
 
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      setCurrentPage(1);
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setIsLoadingMore(true);
+
         const res = await Api.get(endpoint.all_post(currentPage));
-        const newPosts = res.data.results;
+        const newPosts = res.data.results.filter(
+          (post) => post.is_approved === true
+        );
+
         if (newPosts.length > 0) {
           setPostPresent((prevPosts) => [...prevPosts, ...newPosts]);
           setComments((prevComments) => [
@@ -96,7 +104,6 @@ const TabViewCommunities = () => {
           }));
 
           if (res.data.next !== null) {
-            setCurrentPage((prevPage) => prevPage + 1);
             setHasNextPage(true);
           } else {
             setHasNextPage(false);
@@ -115,39 +122,6 @@ const TabViewCommunities = () => {
       fetchPosts();
     }
   }, [currentPage, hasNextPage]);
-
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    try {
-      setCurrentPage(1); // Reset page to 1 when refreshing
-      const res = await Api.get(endpoint.all_post(1));
-      const newPosts = res.data.results;
-      if (newPosts.length > 0) {
-        setPostPresent(newPosts);
-        const commentPromise = newPosts.map(async (post) => {
-          const commentRes = await Api.get(endpoint.comment_of_post(post.id));
-          return commentRes.data;
-        });
-
-        const commentsArray = await Promise.all(commentPromise);
-        const commentsObj = Object.fromEntries(
-          newPosts.map((post, index) => [post.id, commentsArray[index]])
-        );
-
-        setCommentsPosts(commentsObj);
-      }
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    } finally {
-      setRefreshing(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      debouncedLoadMorePosts.cancel();
-    };
-  }, [debouncedLoadMorePosts]);
 
   const handlerFriendPage = (idUser) => {
     if (user.username === idUser.username) {
@@ -256,7 +230,7 @@ const TabViewCommunities = () => {
             </View>
           </View>
         )}
-        onEndReached={debouncedLoadMorePosts}
+        onEndReached={loadMorePosts}
         onEndReachedThreshold={0.1}
         ListFooterComponent={() =>
           isLoadingMore && hasNextPage ? (
