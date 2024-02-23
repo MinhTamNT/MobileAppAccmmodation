@@ -1,57 +1,34 @@
-import React, { useState, useRef } from "react";
-import {
-  View,
-  Image,
-  Text,
-  Dimensions,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { postStyle } from "./PostStyle";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
-import { Feather } from "@expo/vector-icons"; // Make sure to import Feather
+import { Feather } from "@expo/vector-icons";
 import { COLOR } from "../../contants";
 import { useNavigation } from "@react-navigation/native";
-
-const { width } = Dimensions.get("window");
+import { SliderBox } from "react-native-image-slider-box";
 
 export const Item = ({ item }) => {
-  const flatListRef = useRef(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigation = useNavigation();
-  const handleScroll = (event) => {
-    const contentOffset = event.nativeEvent.contentOffset.x;
-    const index = Math.round(contentOffset / width);
-    setCurrentImageIndex(index);
-  };
 
-  const scrollToIndex = (index) => {
-    flatListRef.current.scrollToIndex({ index, animated: true });
-  };
   const navigateToPostDetail = (item) => {
-    navigation.navigate("PostDeatil", { itemPost: item });
+    navigation.navigate("PostDeatil", { item });
+  };
+  const formatToVND = (amount) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
   };
   return (
     <View style={postStyle.posItem}>
-      <FlatList
-        ref={flatListRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={200}
-        data={item.images}
-        keyExtractor={(image, index) => index.toString()}
-        renderItem={({ item: image, index }) => (
-          <Image
-            key={index.toString()}
-            source={{ uri: image.uri }}
-            style={[
-              postStyle.image,
-              { width, height: 200, resizeMode: "cover" },
-            ]}
-          />
-        )}
+      <SliderBox
+        images={item.image.map((img) => img.image)}
+        ImageComponentStyle={{
+          width: 390,
+          resizeMode: "cover",
+          marginRight: 25,
+          marginTop: 10,
+        }}
       />
       <TouchableOpacity onPress={() => navigateToPostDetail(item)}>
         <View style={postStyle.detail}>
@@ -59,15 +36,11 @@ export const Item = ({ item }) => {
             style={{ justifyContent: "space-between", flexDirection: "row" }}
           >
             <Text style={{ color: "white" }}>{item.address}</Text>
-            <Text style={{ color: "white" }}>
-              {currentImageIndex + 1} of {item.images.length} images
-            </Text>
           </View>
         </View>
         <View style={postStyle.descripitonItem}>
-          <View style={StyleDefault.flexBoxRow}>
-            <Text style={StyleDefault.fontSizeSmail}>{item.address}</Text>
-            <Text style={StyleDefault.fontSizeSmail}>{item.province}</Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 2 }}>
+            <Text style={StyleDefault.fontSizeSmail}>{item.city}</Text>
             <Text style={StyleDefault.fontSizeSmail}>{item.district}</Text>
           </View>
           <View
@@ -82,10 +55,12 @@ export const Item = ({ item }) => {
                 { color: COLOR.bg_color_blue_200 },
               ]}
             >
-              {item.price}$
+              {formatToVND(item.rent_cost)}
             </Text>
             <View style={StyleDefault.flexBoxRow}>
-              <Text style={StyleDefault.fontSizeDeault}>{item.people}</Text>
+              <Text style={StyleDefault.fontSizeDeault}>
+                {item.number_of_people}
+              </Text>
               <Feather name="users" size={16} color="black" />
             </View>
           </View>

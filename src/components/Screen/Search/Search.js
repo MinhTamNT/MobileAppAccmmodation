@@ -9,6 +9,7 @@ import {
   Platform,
   ToastAndroid,
   Image,
+  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SearchStyles } from "./SearchStyle";
@@ -33,7 +34,7 @@ const Search = ({ route }) => {
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [isProvinceModalVisible, setProvinceModalVisible] = useState(false);
   const [isDistrictModalVisible, setDistrictModalVisible] = useState(false);
-
+  const [searchText, setSearchText] = useState("");
   const fetchProvinces = async () => {
     try {
       const fetchedProvinces = await fetchGetProvinces();
@@ -105,7 +106,7 @@ const Search = ({ route }) => {
   const headerHeight_translateY = Animated.diffClamp(
     scrollX,
     0,
-    50
+    80
   ).interpolate({
     inputRange: [0, 80],
     outputRange: [0, -80],
@@ -121,7 +122,6 @@ const Search = ({ route }) => {
   return (
     <>
       <SafeAreaView style={SearchStyles.safeAreaView}>
-        <StatusBar barStyle={"light-content"} />
         <Animated.View
           style={[
             SearchStyles.header,
@@ -139,6 +139,8 @@ const Search = ({ route }) => {
             <TextInput
               placeholder="Enter your address"
               style={SearchStyles.InpuStyle}
+              value={searchText}
+              onChangeText={(t) => setSearchText(t)}
               placeholderTextColor={"#333"}
             />
             <AntDesign name="qrcode" size={24} color="black" />
@@ -183,6 +185,7 @@ const Search = ({ route }) => {
           <SuggestPost
             selectedProvince={selectedProvince}
             selectedDistrict={selectedDistrict}
+            searchInput={searchText}
           />
         </Animated.ScrollView>
       </SafeAreaView>

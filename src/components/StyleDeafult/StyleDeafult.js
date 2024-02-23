@@ -4,7 +4,7 @@ export const StyleDefault = StyleSheet.create({
   container: {
     flex: 1,
 
-    backgroundColor: "white",
+    backgroundColor: "#fff",
   },
   fontSizeDeault: {
     fontSize: 14,

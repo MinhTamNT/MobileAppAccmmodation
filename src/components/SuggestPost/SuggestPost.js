@@ -2,58 +2,73 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { postStyle } from "./PostStyle";
 import { Item } from "./Item";
-import { postData } from "./SuggestPostData";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
 import { AntDesign } from "@expo/vector-icons";
 import { Sort } from "iconsax-react-native";
 import ModalSort from "../Modal/ModalSort/ModalSort";
-import { useNavigation } from "@react-navigation/native";
 import { COLOR } from "../../contants";
-import ModalPirceRange from "../Modal/ModalPirceRange";
 import { getAllAccommodation } from "../../Redux/apiRequest";
 import { useDispatch, useSelector } from "react-redux";
-const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [sortOption, setSortOption] = useState(null);
-  const [sortedData, setSortedData] = useState(postData);
-  const disptach = useDispatch();
+
+const SuggestPost = ({ selectedDistrict, searchInput }) => {
   const allAccomoda = useSelector(
     (state) => state?.accommodation?.allAccommodation?.accommodations
   );
+  const dispatch = useDispatch();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [sortOption, setSortOption] = useState(null);
+  const [sortedData, setSortedData] = useState(allAccomoda);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const sortData = (op) => {
-    const sortedResult = [...postData].sort((a, b) =>
-      op === "low" ? a.price - b.price : b.price - a.price
-    );
+    const sortedResult = [...allAccomoda].sort((a, b) => {
+      const priceA = typeof a.rent_cost === "number" ? a.rent_cost : 0;
+      const priceB = typeof b.rent_cost === "number" ? b.rent_cost : 0;
+      return op === "low" ? priceA - priceB : priceB - priceA;
+    });
     setSortOption(op);
-    setSortedData(sortedResult);
+    setSortedData([...sortedResult]);
   };
-
+  console.log(allAccomoda);
   useEffect(() => {
-    let filteredData = [...postData];
+    let filteredData = [...allAccomoda];
 
-    if (selectedDistrict && selectedDistrict.district_name) {
+    if (selectedDistrict?.district_name) {
       const selectedDistrictName = selectedDistrict.district_name.toLowerCase();
-      filteredData = filteredData.filter(
-        (item) =>
-          item.district &&
-          item.district.toLowerCase().includes(selectedDistrictName)
+      filteredData = filteredData.filter((item) =>
+        item.district.toLowerCase().includes(selectedDistrictName)
       );
     }
 
     if (sortOption) {
       filteredData.sort((a, b) =>
-        sortOption === "low" ? a.price - b.price : b.price - a.price
+        sortOption === "low"
+          ? a.rent_cost - b.rent_cost
+          : b.rent_cost - a.rent_cost
+      );
+    }
+
+    if (searchInput) {
+      filteredData = filteredData.filter((item) =>
+        item.address.toLowerCase().includes(searchInput.toLowerCase())
       );
     }
 
     setSortedData(filteredData);
-  }, [selectedDistrict, sortOption]);
+  }, [selectedDistrict, sortOption, searchInput]);
 
-  const renderPostItem = (item, index) => <Item key={index} item={item} />;
   useEffect(() => {
-    getAllAccommodation(disptach);
-  }, [disptach]);
-  console.log(allAccomoda);
+    if (!dataLoaded) {
+      setDataLoaded(true);
+      getAllAccommodation(dispatch);
+    }
+  }, [dispatch, dataLoaded]);
+
+  const renderPostItem = (item, index) => (
+    <TouchableOpacity key={index}>
+      <Item item={item} />
+    </TouchableOpacity>
+  );
+
   return (
     <View style={postStyle.wrapper}>
       <View style={postStyle.wrapperItem}>
@@ -62,7 +77,7 @@ const SuggestPost = ({ selectedDistrict, isVissble, setVissable }) => {
         >
           <TouchableOpacity
             style={postStyle.headerAction}
-            onPress={() => setModalRangPrice(!modalRangePrice)}
+            onPress={() => setModalVisible(!modalVisible)}
           >
             <Text
               style={[

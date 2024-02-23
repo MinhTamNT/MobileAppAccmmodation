@@ -6,7 +6,7 @@ import {
   loginFail,
   loginSuccess,
 } from "./autheslice";
-import Api, { authApi, endpoint } from "../Services/Config/Api";
+import Api, { authApi, endpoint, endpointAdmin } from "../Services/Config/Api";
 import {
   followUserFailed,
   followUserStart,
@@ -30,9 +30,12 @@ import {
   createPostFailed,
   createPostStart,
   createPostSuccess,
+  editPostFailed,
+  editPostStart,
+  editPostSuccess,
 } from "./postSlices";
 import { FIREBASE_AUTH } from "../Services/firebaseConfig";
-
+import { v4 as uuidv4 } from "uuid";
 import {
   addCommentFail,
   addCommentSucess,
@@ -44,12 +47,15 @@ import {
   relyCommentStart,
   relyCommentSuccess,
 } from "./commentSlice";
+
 const auth = FIREBASE_AUTH;
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
   try {
     const response = await Api.post(endpoint["register"], form);
+    const userId = uuidv4();
     dispatch(registerSuccess(response.data));
+
     navigation.navigate("Login");
   } catch (error) {
     console.log(error.message);
@@ -157,6 +163,16 @@ export const commentPost = async (token, newComment, dispatch, postId) => {
   } catch (error) {
     console.error("Axios Error:", error);
     dispatch(addCommentFail());
+  }
+};
+export const verifyPost = async (token, dispatch, postId) => {
+  dispatch(editPostStart());
+  try {
+    await authApi(token).put(endpointAdmin.verifypost(postId));
+    dispatch(editPostSuccess());
+  } catch (error) {
+    console.log(error);
+    dispatch(editPostFailed());
   }
 };
 export const relyCommentPrev = async (

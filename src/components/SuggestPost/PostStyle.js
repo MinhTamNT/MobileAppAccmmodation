@@ -3,9 +3,8 @@ import { COLOR } from "../../contants";
 const { width } = Dimensions.get("window");
 export const postStyle = StyleSheet.create({
   wrapper: {
-    flexDirection: "column",
     backgroundColor: "white",
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     marginTop: 32,
   },
   headerItem: {
@@ -30,21 +29,18 @@ export const postStyle = StyleSheet.create({
   },
   posItem: {
     marginTop: 10,
-    width: 380,
+    width: 400,
     backgroundColor: "#fff",
     borderRadius: 10,
-    overflow: "hidden",
-    ...Platform.select({
-      ios: {
-        shadowColor: "#ccc",
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
+    elevation: 5,
+    
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
     marginBottom: 20,
   },
   image: {
@@ -54,7 +50,7 @@ export const postStyle = StyleSheet.create({
   },
   descripitonItem: {
     paddingVertical: 16,
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
   },
   detail: {
     width: "100%",

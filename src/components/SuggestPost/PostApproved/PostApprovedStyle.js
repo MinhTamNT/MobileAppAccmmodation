@@ -12,6 +12,13 @@ export const postapproved = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 8,
   },
+  imageUser: {
+    width: 50,
+    height: 50,
+    resizeMode: "cover",
+    borderRadius: 50,
+    marginBottom: 10,
+  },
   postImage: {
     width: 200,
     height: 200,

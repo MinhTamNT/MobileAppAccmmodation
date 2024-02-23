@@ -1,29 +1,25 @@
 import {
   View,
+  ScrollView,
+  StyleSheet,
+  RefreshControl,
   Text,
   Image,
-  ScrollView,
-  TouchableOpacity,
-  RefreshControl,
 } from "react-native";
-import { postapproved } from "./PostApprovedStyle";
-import { AntDesign } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
-import Api, { authApi, endpointAdmin } from "../../../Services/Config/Api";
+import React, { useEffect, useState } from "react";
+import { postapproved } from "../../SuggestPost/PostApproved/PostApprovedStyle";
 import { useDispatch, useSelector } from "react-redux";
-import { verifyPost } from "../../../Redux/apiRequest";
-import Toast from "react-native-toast-message";
-
-const PostApproved = () => {
+import Api, { authApi, endpoint } from "../../../Services/Config/Api";
+const PostUser = () => {
   const [postIsApproved, setPostApproved] = useState([]);
   const auth = useSelector((state) => state?.auth?.currentUser);
+  const [reload, setReload] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const dispatch = useDispatch();
-  const [reload, setReload] = useState(false);
   const onRefresh = async () => {
     setRefreshing(true);
     try {
-      const res = await Api.get(endpointAdmin["postIsApproved"]);
+      const res = await authApi(auth?.access_token).get(endpoint["user_post"]);
       setPostApproved(res.data);
     } catch (error) {
       console.log(error);
@@ -34,7 +30,9 @@ const PostApproved = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await Api.get(endpointAdmin["postIsApproved"]);
+        const res = await authApi(auth?.access_token).get(
+          endpoint["user_post"]
+        );
         setPostApproved(res.data);
       } catch (error) {
         console.log(error);
@@ -42,16 +40,7 @@ const PostApproved = () => {
     };
     fetchData();
   }, [reload]);
-
-  const handlerverifyPosts = async (postId) => {
-    await verifyPost(auth?.access_token, dispatch, postId);
-    Toast.show({
-      type: "success",
-      text1: "Verify successfully",
-      position: "top",
-    });
-    setReload(!reload);
-  };
+  console.log(postIsApproved);
   return (
     <ScrollView
       style={postapproved.container}
@@ -85,21 +74,6 @@ const PostApproved = () => {
             <Text style={postapproved.postTitle}>{post.caption}</Text>
             <Text style={postapproved.postTitle}>{post.content}</Text>
             <Text style={postapproved.postContent}>{post.description}</Text>
-            <View style={postapproved.buttonContainer}>
-              <TouchableOpacity
-                style={[postapproved.button, { backgroundColor: "#181818" }]}
-                onPress={() => handlerverifyPosts(post.id)}
-              >
-                <Text style={postapproved.buttonText}>Accept</Text>
-                <AntDesign name="checkcircleo" size={14} color="green" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[postapproved.button, { backgroundColor: "#e62222" }]}
-              >
-                <Text style={postapproved.buttonText}>Delete</Text>
-                <AntDesign name="delete" size={14} color="white" />
-              </TouchableOpacity>
-            </View>
           </View>
         ))
       ) : (
@@ -110,5 +84,5 @@ const PostApproved = () => {
     </ScrollView>
   );
 };
-
-export default PostApproved;
+const style = StyleSheet.create({});
+export default PostUser;

@@ -9,8 +9,6 @@ const userSlice = createSlice({
     otherUser: null,
     loading: false,
     currentUserFollow: null,
-    pending: false,
-    error: false,
   },
   reducers: {
     getUserStart: (state) => {

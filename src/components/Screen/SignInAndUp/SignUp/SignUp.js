@@ -21,6 +21,7 @@ import { registerUser } from "../../../../Redux/apiRequest";
 import InputField from "../../../InputFields/InputField";
 import { Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
+
 const SignUp = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const navigation = useNavigation();
@@ -102,6 +103,7 @@ const SignUp = () => {
             : ToastAndroid.show(`Role ${formValues.role} need avatar`);
           return;
         }
+
         await registerUser(form, dispatch, navigation);
         Toast.show({
           type: "success",
