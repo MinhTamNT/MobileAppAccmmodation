@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,7 +7,6 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { style } from "./HomeStyle";
 import { Feather } from "@expo/vector-icons";
@@ -19,9 +19,6 @@ import InputField from "../../InputFields/InputField";
 import ModalRequire from "../../Modal/ModalRequire";
 import LoadingPage from "../../LoadingPage/LoadingPage";
 import { authApi, endpoint } from "../../../Services/Config/Api";
-import HomeBtn from "./HomeBtn";
-import { getAllAccommodation } from "../../../Redux/apiRequest";
-import { all } from "axios";
 import HomeCards from "./HomeCards";
 import HomeList from "./HomeList";
 
@@ -30,27 +27,30 @@ const HomeScreen = ({ route }) => {
   const [location, setLocation] = useState(null);
   const auth = useSelector((state) => state?.auth?.currentUser);
   const [address, setAddress] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
   const [accommodationUser, setAccommodationUser] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [modalVisible, setModalVisible] = useState(false);
+
   const dispatch = useDispatch();
-  const allAccomodation = useSelector(
-    (state) => state?.accommodation?.allAccommodation?.accommodations
-  );
+
+  const [allAccomodation, setAllAccommodation] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // Thêm state isLoading
 
   const navigation = useNavigation();
+
   useEffect(() => {
     const fetchData = async () => {
-      const res = await authApi(auth?.access_token).get(
-        endpoint["user_accommodation"]
-      );
-      setAccommodationUser(res.data);
+      try {
+        const res = await authApi(auth?.access_token).get(
+          endpoint["user_accommodation"]
+        );
+        setAccommodationUser(res.data);
+      } catch (error) {
+        console.error("Error fetching user accommodations:", error);
+      }
     };
     fetchData();
   }, []);
-  console.log("ádasdasd");
-  useEffect(() => {
-    getAllAccommodation(dispatch);
-  }, [dispatch]);
 
   useEffect(() => {
     const getPermission = async () => {
@@ -88,14 +88,37 @@ const HomeScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    if (currentUser?.role === "HOST" && accommodationUser.length === 0) {
-      setModalVisible(true);
+    if (location?.coords?.latitude && location?.coords?.longitude) {
+      const fetchData = async () => {
+        try {
+          const res = await authApi(auth?.access_token).get(
+            endpoint.current_accommodation(
+              currentPage,
+              location.coords.latitude,
+              location.coords.longitude
+            )
+          );
+          setAllAccommodation(res.data.results);
+        } catch (error) {
+          console.error("Error fetching accommodations:", error);
+        } finally {
+          // Dữ liệu đã được tải, set isLoading thành false
+          setIsLoading(false);
+        }
+      };
+      fetchData();
     }
-  }, [currentUser, accommodationUser]);
+  }, [
+    location?.coords?.latitude,
+    location?.coords?.longitude,
+    currentPage,
+    auth?.access_token,
+  ]);
 
-  if (!currentUser) {
-    <LoadingPage />;
+  if (isLoading) {
+    return <LoadingPage />;
   }
+
   return (
     <SafeAreaView style={style.container}>
       <View style={style.content_header}>
@@ -141,24 +164,6 @@ const HomeScreen = ({ route }) => {
               navigation.navigate("Search", { locationUser: location })
             }
           />
-        </View>
-        <View>
-          <FlatList
-            horizontal={true}
-            data={[
-              "Hồ Chí Minh",
-              "Hà Nội",
-              "Vũng Tàu",
-              "Phan Thiết",
-              "Đà Nẵng",
-              "Nha Trang",
-            ]}
-            renderItem={({ item }) => {
-              return <HomeBtn name={item} />;
-            }}
-            showsHorizontalScrollIndicator={false}
-            style={[style.pl_14, { marginBottom: 18 }]}
-          ></FlatList>
         </View>
         <View style={[{ paddingTop: 15 }]}>
           <View style={[style.flex_row, style.pH_14, { marginBottom: 20 }]}>

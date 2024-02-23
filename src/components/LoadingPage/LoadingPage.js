@@ -9,10 +9,10 @@ const LoadingPage = () => {
     <SafeAreaView style={[StyleDefault.container, styles.container]}>
       <View style={StyleDefault.flexBoxCol}>
         <Image
-          source={require("../../assets/image/loading.gif")}
+          source={require("../../assets/image/houseanimation.gif")}
           style={styles.loadingImage}
         />
-        <Text style={styles.loadingText}>Accessing the app...</Text>
+        <Text style={styles.loadingText}>App</Text>
       </View>
     </SafeAreaView>
   );
