@@ -236,10 +236,7 @@ const TabViewCommunities = () => {
           isLoadingMore && hasNextPage ? (
             <ActivityIndicator size="small" color="#0000ff" />
           ) : (
-            <>
-              <Text style={{ textAlign: "center" }}>End Post Day</Text>
-              <ActivityIndicator size="small" color="#0000ff" />
-            </>
+            <></>
           )
         }
         refreshControl={

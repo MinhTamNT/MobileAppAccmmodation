@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { style } from "./HomeStyle";
@@ -33,8 +34,8 @@ const HomeScreen = ({ route }) => {
 
   const dispatch = useDispatch();
 
-  const [allAccomodation, setAllAccommodation] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Thêm state isLoading
+  const [allAccommodation, setAllAccommodation] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigation = useNavigation();
 
@@ -87,6 +88,10 @@ const HomeScreen = ({ route }) => {
     }
   };
 
+  const handleSeeMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
   useEffect(() => {
     if (location?.coords?.latitude && location?.coords?.longitude) {
       const fetchData = async () => {
@@ -98,11 +103,17 @@ const HomeScreen = ({ route }) => {
               location.coords.longitude
             )
           );
-          setAllAccommodation(res.data.results);
+          if (res.data && res.data.results) {
+            setAllAccommodation((prevData) => [
+              ...prevData,
+              ...res.data.results,
+            ]);
+          } else {
+            console.log("No more data");
+          }
         } catch (error) {
           console.error("Error fetching accommodations:", error);
         } finally {
-          // Dữ liệu đã được tải, set isLoading thành false
           setIsLoading(false);
         }
       };
@@ -163,21 +174,17 @@ const HomeScreen = ({ route }) => {
             onPressIn={() =>
               navigation.navigate("Search", { locationUser: location })
             }
+            editable={false} // Set this prop to make the input non-editable
           />
         </View>
         <View style={[{ paddingTop: 15 }]}>
           <View style={[style.flex_row, style.pH_14, { marginBottom: 20 }]}>
             <Text style={style.text_HomeCrad}>Near from you</Text>
-            <Text
-              style={style.text_2}
-              onPress={() => {
-                console.log("See more");
-              }}
-            >
+            <Text style={style.text_2} onPress={handleSeeMore}>
               See more
             </Text>
           </View>
-          <HomeCards allAccommodation={allAccomodation} />
+          <HomeCards allAccommodation={allAccommodation} />
         </View>
         <View style={[{ marginTop: -30 }, style.pH_14]}>
           <View style={[style.flex_row, { marginBottom: 20 }]}>
@@ -192,7 +199,8 @@ const HomeScreen = ({ route }) => {
             </Text>
           </View>
           <FlatList
-            data={allAccomodation}
+            data={allAccommodation}
+            keyExtractor={(item) => item.id.toString()} // Assuming 'id' is unique
             renderItem={(item) => {
               return <HomeList item={item.item} />;
             }}

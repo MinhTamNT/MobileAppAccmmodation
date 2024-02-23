@@ -21,6 +21,7 @@ const InputField = ({
   onPressIn,
   icon, // Thêm prop icon
   OnPressIncon,
+  editable,
 }) => {
   const combinedStyle = StyleSheet.compose(styleFields.inputForm, style);
 
@@ -43,6 +44,7 @@ const InputField = ({
         keyboardType={keyboardType}
         value={value}
         onPressIn={onPressIn}
+        editable={editable}
       />
       {error && <Text style={styleFields.errorText}>{error}</Text>}
     </View>
