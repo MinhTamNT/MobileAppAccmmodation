@@ -9,15 +9,33 @@ import { COLOR } from "../../contants";
 import { useDispatch, useSelector } from "react-redux";
 import { authApi, endpoint } from "../../Services/Config/Api";
 import ModalSort from "../Modal/ModalSort";
+import ModalRangPrice from "../Modal/ModalRangPrice";
+import ModalNumberPeople from "../Modal/ModalNumberPeople";
 
 const SuggestPost = ({ selectedDistrict, searchInput }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalRangPrice, setModalRangPrice] = useState(false);
+  const [modalPeople, setModalPeople] = useState(false);
   const [sortOption, setSortOption] = useState(null);
   const [allAccomoda, setAllAccommodation] = useState([]);
   const [pageNumber, setPageNumer] = useState(1);
   const [sortDatas, setSordata] = useState(allAccomoda);
+  const [selectedPriceRange, setSelectedPriceRange] = useState(null);
+  const [selectPeople, setSelectPeole] = useState(null);
   const [limit, setLimit] = useState(20);
   const auth = useSelector((state) => state?.auth?.currentUser);
+  function arraysAreEqual(arr1, arr2) {
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   useEffect(() => {
     const fecthAccommodation = async () => {
       try {
@@ -26,7 +44,7 @@ const SuggestPost = ({ selectedDistrict, searchInput }) => {
         );
         console.log("API Response:", res.data);
         setAllAccommodation(res.data.results);
-        setSordata(res.data.results)
+        setSordata(res.data.results);
       } catch (error) {
         console.error("Error fetching accommodations:", error);
       }
@@ -43,7 +61,6 @@ const SuggestPost = ({ selectedDistrict, searchInput }) => {
     setSortOption(op);
     setSordata([...sortedResult]);
   };
-  console.log(allAccomoda);
   useEffect(() => {
     let filteredData = [...allAccomoda];
 
@@ -61,16 +78,42 @@ const SuggestPost = ({ selectedDistrict, searchInput }) => {
           : b.rent_cost - a.rent_cost
       );
     }
-
+    if (!arraysAreEqual(filteredData, sortDatas)) {
+      setSordata(filteredData);
+    }
+    if (selectedPriceRange) {
+      filteredData = filteredData.filter((item) => {
+        const rentCost =
+          typeof item.rent_cost === "number" ? item.rent_cost : 0;
+        return (
+          rentCost >= selectedPriceRange.min &&
+          rentCost <= selectedPriceRange.max
+        );
+      });
+    }
     if (searchInput) {
       filteredData = filteredData.filter((item) =>
         item.address.toLowerCase().includes(searchInput.toLowerCase())
       );
     }
-
+    if (selectPeople !== null) {
+      filteredData = filteredData.filter(
+        (item) => item.number_of_people === selectPeople
+      );
+    }
     setSordata(filteredData);
-  }, [selectedDistrict, sortOption, searchInput]);
-
+  }, [
+    selectedDistrict,
+    sortOption,
+    searchInput,
+    selectedPriceRange,
+    selectPeople,
+  ]);
+  const handlePriceRangeChange = (selectedValue) => {
+    console.log("Selected Price Range: ", selectedValue);
+    setSelectedPriceRange(selectedValue);
+    sortData(selectedValue);
+  };
   const renderPostItem = (item, index) => (
     <TouchableOpacity key={index}>
       <Item item={item} />
@@ -78,76 +121,100 @@ const SuggestPost = ({ selectedDistrict, searchInput }) => {
   );
 
   return (
-    <View style={postStyle.wrapper}>
-      <View style={postStyle.wrapperItem}>
-        <View
-          style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
-        >
-          <TouchableOpacity
-            style={postStyle.headerAction}
-            onPress={() => setModalVisible(!modalVisible)}
+    <>
+      <View style={postStyle.wrapper}>
+        <View style={postStyle.wrapperItem}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
           >
-            <Text
-              style={[
-                StyleDefault.FontSizeMedium,
-                { color: COLOR.text_weak_color },
-              ]}
-            >
-              Price Range
-            </Text>
-            <AntDesign name="down" size={12} color={COLOR.text_weak_color} />
-          </TouchableOpacity>
-          <TouchableOpacity style={postStyle.headerAction}>
-            <Text
-              style={[
-                StyleDefault.FontSizeMedium,
-                { color: COLOR.text_weak_color },
-              ]}
-            >
-              Number People
-            </Text>
-            <AntDesign name="down" size={12} color={COLOR.text_weak_color} />
-          </TouchableOpacity>
-        </View>
-        <View style={postStyle.headerItem}>
-          <View style={postStyle.headerItem_content}>
-            <Text style={{ fontSize: 18 }}>
-              There are {sortDatas.length} results
-            </Text>
             <TouchableOpacity
-              style={[StyleDefault.flexBoxRow]}
-              onPress={() => setModalVisible(!modalVisible)}
+              style={postStyle.headerAction}
+              onPress={() => setModalRangPrice(!modalRangPrice)}
             >
-              <Text>Filter</Text>
-              <Sort size="32" color="#2ccce4" />
+              <Text
+                style={[
+                  StyleDefault.FontSizeMedium,
+                  { color: COLOR.text_weak_color },
+                ]}
+              >
+                Price Range
+              </Text>
+              <AntDesign name="down" size={12} color={COLOR.text_weak_color} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={postStyle.headerAction}
+              onPress={() => setModalPeople(!modalPeople)}
+            >
+              <Text
+                style={[
+                  StyleDefault.FontSizeMedium,
+                  { color: COLOR.text_weak_color },
+                ]}
+              >
+                Number People
+              </Text>
+              <AntDesign name="down" size={12} color={COLOR.text_weak_color} />
             </TouchableOpacity>
           </View>
-        </View>
-        <ModalSort
-          isModal={modalVisible}
-          setModal={setModalVisible}
-          onSort={sortData}
-        />
-        {sortDatas.length > 0 ? (
-          sortDatas.map(renderPostItem)
-        ) : (
-          <View
-            style={[
-              StyleDefault.flexBoxCol,
-              { justifyContent: "center", backgroundColor: "#fff" },
-            ]}
-          >
-            <Image
-              source={require("../../assets/image/notFind.gif")}
-              style={{ width: 300, height: 300 }}
-            />
-            <Text style={[StyleDefault.FontSizeMedium, { fontWeight: "700" }]}>
-              Results not found
-            </Text>
+          <View style={postStyle.headerItem}>
+            <View style={postStyle.headerItem_content}>
+              <Text style={{ fontSize: 18 }}>
+                There are {sortDatas.length} results
+              </Text>
+              <TouchableOpacity
+                style={[StyleDefault.flexBoxRow]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text>Filter</Text>
+                <Sort size="32" color="#2ccce4" />
+              </TouchableOpacity>
+            </View>
           </View>
-        )}
+          <ModalSort
+            isModal={modalVisible}
+            setModal={setModalVisible}
+            onSort={sortData}
+          />
+          {sortDatas.length > 0 ? (
+            sortDatas.map(renderPostItem)
+          ) : (
+            <View
+              style={[
+                StyleDefault.flexBoxCol,
+                { justifyContent: "center", backgroundColor: "#fff" },
+              ]}
+            >
+              <Image
+                source={require("../../assets/image/notFind.gif")}
+                style={{ width: 300, height: 300 }}
+              />
+              <Text
+                style={[StyleDefault.FontSizeMedium, { fontWeight: "700" }]}
+              >
+                Results not found
+              </Text>
+            </View>
+          )}
+        </View>
       </View>
-    </View>
+      {modalRangPrice && (
+        <ModalRangPrice
+          isVisible={modalRangPrice}
+          onPriceRangeChange={handlePriceRangeChange}
+          setModalRangPrice={setModalRangPrice}
+        />
+      )}
+      {modalPeople && (
+        <ModalNumberPeople
+          isVisible={modalPeople}
+          onClose={() => setModalPeople(false)}
+          onSelectNumberPeople={(selectedPeople) => {
+            setSelectPeole(selectedPeople); 
+            sortData(selectedPeople); 
+          }}
+        />
+      )}
+    </>
   );
 };
 

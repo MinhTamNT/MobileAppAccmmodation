@@ -171,7 +171,6 @@ const HomeScreen = ({ route }) => {
             onPressIn={() =>
               navigation.navigate("Search", { locationUser: location })
             }
-            editable={false}
           />
         </View>
         <View style={[{ paddingTop: 15 }]}>
