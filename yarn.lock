@@ -1623,7 +1623,18 @@
     "@firebase/util" "1.9.3"
     tslib "^2.1.0"
 
-"@firebase/app-compat@0.2.26", "@firebase/app-compat@0.x":
+"@firebase/app-compat@0.2.25":
+  version "0.2.25"
+  resolved "https://registry.npmjs.org/@firebase/app-compat/-/app-compat-0.2.25.tgz"
+  integrity sha512-B/JtCp1FsTuzlh1tIGQpYM2AXps21/zlzpFsk5LRsROOTRhBcR2N45AyaONPFD06C0yS0Tw19foxADzHyOSC3A==
+  dependencies:
+    "@firebase/app" "0.9.25"
+    "@firebase/component" "0.6.4"
+    "@firebase/logger" "0.4.0"
+    "@firebase/util" "1.9.3"
+    tslib "^2.1.0"
+
+"@firebase/app-compat@0.x":
   version "0.2.26"
   resolved "https://registry.npmjs.org/@firebase/app-compat/-/app-compat-0.2.26.tgz"
   integrity sha512-tVNOYvB3lIFkN3RmcTieo5qYRIkYak9iC6E7dZMxax52uMIUJiIKKtPkarbwZh6EnUxru5hJRo8tfUZGuaQDQw==
@@ -1638,6 +1649,17 @@
   version "0.9.0"
   resolved "https://registry.npmjs.org/@firebase/app-types/-/app-types-0.9.0.tgz"
   integrity sha512-AeweANOIo0Mb8GiYm3xhTEBVCmPwTYAu9Hcd2qSkLuga/6+j9b1Jskl5bpiSQWy9eJ/j5pavxj6eYogmnuzm+Q==
+
+"@firebase/app@0.9.25":
+  version "0.9.25"
+  resolved "https://registry.npmjs.org/@firebase/app/-/app-0.9.25.tgz"
+  integrity sha512-fX22gL5USXhOK21Hlh3oTeOzQZ6th6S2JrjXNEpBARmwzuUkqmVGVdsOCIFYIsLpK0dQE3o8xZnLrRg5wnzZ/g==
+  dependencies:
+    "@firebase/component" "0.6.4"
+    "@firebase/logger" "0.4.0"
+    "@firebase/util" "1.9.3"
+    idb "7.1.1"
+    tslib "^2.1.0"
 
 "@firebase/app@0.9.26", "@firebase/app@0.x":
   version "0.9.26"
@@ -1724,13 +1746,13 @@
     faye-websocket "0.11.4"
     tslib "^2.1.0"
 
-"@firebase/firestore-compat@0.3.24":
-  version "0.3.24"
-  resolved "https://registry.npmjs.org/@firebase/firestore-compat/-/firestore-compat-0.3.24.tgz"
-  integrity sha512-Wj5cgqmQwTnqHS4KabOpXCNIaSTtVDP1NitnhjXff04Q4QK0aeIbeO1TPlSSTmUb6S7KzoKD4XR99hfKZDYbfA==
+"@firebase/firestore-compat@0.3.23":
+  version "0.3.23"
+  resolved "https://registry.npmjs.org/@firebase/firestore-compat/-/firestore-compat-0.3.23.tgz"
+  integrity sha512-uUTBiP0GLVBETaOCfB11d33OWB8x1r2G1Xrl0sRK3Va0N5LJ/GRvKVSGfM7VScj+ypeHe8RpdwKoCqLpN1e+uA==
   dependencies:
     "@firebase/component" "0.6.4"
-    "@firebase/firestore" "4.4.1"
+    "@firebase/firestore" "4.4.0"
     "@firebase/firestore-types" "3.0.0"
     "@firebase/util" "1.9.3"
     tslib "^2.1.0"
@@ -1740,10 +1762,10 @@
   resolved "https://registry.npmjs.org/@firebase/firestore-types/-/firestore-types-3.0.0.tgz"
   integrity sha512-Meg4cIezHo9zLamw0ymFYBD4SMjLb+ZXIbuN7T7ddXN6MGoICmOTq3/ltdCGoDCS2u+H1XJs2u/cYp75jsX9Qw==
 
-"@firebase/firestore@4.4.1":
-  version "4.4.1"
-  resolved "https://registry.npmjs.org/@firebase/firestore/-/firestore-4.4.1.tgz"
-  integrity sha512-LCWZZ+rgNET1qw3vpugmGCJZVbz7c5NkgKect5pZn36gaBzGVb8+pRQ8WSZ1veYVMOK6SKrBkS1Rw6EqcmPnyw==
+"@firebase/firestore@4.4.0":
+  version "4.4.0"
+  resolved "https://registry.npmjs.org/@firebase/firestore/-/firestore-4.4.0.tgz"
+  integrity sha512-VeDXD9PUjvcWY1tInBOMTIu2pijR3YYy+QAe5cxCo1Q1vW+aA/mpQHhebPM1J6b4Zd1MuUh8xpBRvH9ujKR56A==
   dependencies:
     "@firebase/component" "0.6.4"
     "@firebase/logger" "0.4.0"
@@ -2341,18 +2363,13 @@
   resolved "https://registry.npmjs.org/@react-native-community/slider/-/slider-4.5.0.tgz"
   integrity sha512-pyUvNTvu5IfCI5abzqRfO/dd3A009RC66RXZE6t0gyOwI/j0QDlq9VZRv3rjkpuIvNTnsYj+m5BHlh0DkSYUyA==
 
-"@react-native-firebase/app@^18.8.0", "@react-native-firebase/app@18.8.0":
-  version "18.8.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-18.8.0.tgz"
-  integrity sha512-bVwjop3zLKV1G+ZxyxrdSXVutdSHSM9mngk3qG9W1swmAdeTjvWWIFpyJBf6KlkbKzWbDmLeK7Q+Yc+HLJlg7A==
+"@react-native-firebase/app@^18.8.0":
+  version "18.9.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-18.9.0.tgz"
+  integrity sha512-kMY4HVWxfz0YjQ5n9oyW9uifI5CkQfLfj2FEeQrI9mCwaCNuRw04x9Yc8LeFpew7NPEDVfty7tlL3WEjDpvNEw==
   dependencies:
     opencollective-postinstall "^2.0.3"
     superstruct "^0.6.2"
-
-"@react-native-firebase/firestore@^18.8.0":
-  version "18.8.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-18.8.0.tgz"
-  integrity sha512-tB8ZhIYuFoTO4kYXdh5Q+LSPIXxJ5WPrVxxIxdc+qeaF7SudIojO6w/g8tTxbFdPEos8+JWhBIFAb+o0L3RbBQ==
 
 "@react-native-picker/picker@^2.4.0", "@react-native-picker/picker@^2.6.1":
   version "2.6.1"
@@ -4245,24 +4262,24 @@ find-yarn-workspace-root@~2.0.0:
   dependencies:
     micromatch "^4.0.2"
 
-firebase@^10.7.2:
-  version "10.7.2"
-  resolved "https://registry.npmjs.org/firebase/-/firebase-10.7.2.tgz"
-  integrity sha512-zED3kAJyf+Xx5tXpC3vjmlWTm/SIVoJJ6MOLuXYJkqKAUJLG7Q1Jxy6l1DxCzGgBqZHxc0Jh6q+qG++9kimHsw==
+firebase@^10.7.1:
+  version "10.7.1"
+  resolved "https://registry.npmjs.org/firebase/-/firebase-10.7.1.tgz"
+  integrity sha512-Mlt7y7zQ43FtKp4SCyYie3tnrOL3UMF2XXiV4ZXMrC0d0wtcOYmABuybhkJpJCKILpdekxr39wjnaai0DZlWFg==
   dependencies:
     "@firebase/analytics" "0.10.0"
     "@firebase/analytics-compat" "0.2.6"
-    "@firebase/app" "0.9.26"
+    "@firebase/app" "0.9.25"
     "@firebase/app-check" "0.8.1"
     "@firebase/app-check-compat" "0.3.8"
-    "@firebase/app-compat" "0.2.26"
+    "@firebase/app-compat" "0.2.25"
     "@firebase/app-types" "0.9.0"
     "@firebase/auth" "1.5.1"
     "@firebase/auth-compat" "0.5.1"
     "@firebase/database" "1.0.2"
     "@firebase/database-compat" "1.0.2"
-    "@firebase/firestore" "4.4.1"
-    "@firebase/firestore-compat" "0.3.24"
+    "@firebase/firestore" "4.4.0"
+    "@firebase/firestore-compat" "0.3.23"
     "@firebase/functions" "0.11.0"
     "@firebase/functions-compat" "0.3.6"
     "@firebase/installations" "0.6.4"

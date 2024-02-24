@@ -13,7 +13,6 @@
     "@react-native-async-storage/async-storage": "^1.21.0",
     "@react-native-community/slider": "^4.5.0",
     "@react-native-firebase/app": "^18.8.0",
-    "@react-native-firebase/firestore": "^18.8.0",
     "@react-native-picker/picker": "^2.6.1",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/material-top-tabs": "^6.6.5",
@@ -29,7 +28,7 @@
     "expo-image-picker": "~14.7.1",
     "expo-location": "~16.5.3",
     "expo-status-bar": "~1.11.1",
-    "firebase": "^10.7.2",
+    
     "formik": "^2.4.5",
     "iconsax-react": "^0.0.8",
     "iconsax-react-native": "^0.0.8",

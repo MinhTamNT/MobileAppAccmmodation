@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Platform,
   ToastAndroid,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -26,6 +27,7 @@ const SignUp = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const navigation = useNavigation();
   const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
+  const [isloading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState({
     first_name: "",
     last_name: "",
@@ -80,6 +82,7 @@ const SignUp = () => {
   };
 
   const handleRegister = async () => {
+    setIsLoading(true);
     if (validateForm()) {
       try {
         const form = new FormData();
@@ -105,6 +108,7 @@ const SignUp = () => {
         }
 
         await registerUser(form, dispatch, navigation);
+
         Toast.show({
           type: "success",
           position: "top",
@@ -322,16 +326,20 @@ const SignUp = () => {
                   <Text style={style.textContent}>Back</Text>
                 </TouchableOpacity>
               )}
-
               {currentStep === steps.length - 1 ? (
-                <TouchableOpacity
-                  style={style.btnRegister_action}
-                  onPress={handleRegister}
-                >
-                  <Text style={{ textAlign: "center", color: "white" }}>
-                    Create an account
-                  </Text>
-                </TouchableOpacity>
+                <>
+                  <TouchableOpacity
+                    style={style.btnRegister_action}
+                    onPress={handleRegister}
+                  >
+                    <Text style={{ textAlign: "center", color: "white" }}>
+                      Create an account
+                    </Text>
+                  </TouchableOpacity>
+                  {isloading && (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                  )}
+                </>
               ) : (
                 <TouchableOpacity
                   onPress={handleNext}

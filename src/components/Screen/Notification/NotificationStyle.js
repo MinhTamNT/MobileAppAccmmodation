@@ -13,7 +13,7 @@ export const NotiStyle = StyleSheet.create({
     color: COLOR.bg_color_blue_200,
   },
   imageNoti: { width: "100%", height: 350 },
-  message: { fontSize: 16, fontWeight: "500" },
+  message: { fontSize: 16, fontWeight: "500", textAlign: "center" },
   notificationBadge: {
     position: "absolute",
     right: -3,

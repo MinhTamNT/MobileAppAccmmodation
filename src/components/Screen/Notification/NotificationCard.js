@@ -1,21 +1,45 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
+import React, { useRef } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  Animated,
+  TouchableOpacity,
+} from "react-native";
 
 const { width: screenWidth } = Dimensions.get("window");
 import moment from "moment";
-const NotificationCard = ({ item }) => {
+const NotificationCard = ({ item,markAsRead }) => {
+  const fadeOut = useRef(new Animated.Value(1)).current;
+
+  const handlePress = () => {
+    Animated.timing(fadeOut, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      markAsRead(item.id); // Pass the notification ID to the parent component
+    });
+  };
+  const animatedStyle = {
+    opacity: fadeOut,
+  };
   return (
-    <View style={{ ...style.container, elevation: 5 }}>
-      <Image source={{ uri: item.sender.avatar_user }} style={style.avatar} />
-      <View style={style.content}>
-        <View style={style.row}>
-          <Text style={style.user}>{item.sender.username}</Text>
-          <Text>{moment(item.created_at).fromNow()}</Text>
+    <TouchableOpacity onPress={handlePress}>
+      <Animated.View style={{ ...style.container, ...animatedStyle }}>
+        <Image source={{ uri: item.sender.avatar_user }} style={style.avatar} />
+        <View style={style.content}>
+          <View style={style.row}>
+            <Text style={style.user}>{item.sender.username}</Text>
+            <Text>{moment(item.created_at).fromNow()}</Text>
+          </View>
+          <View style={style.dash}></View>
+          <Text style={style.notify}>{item.notice}</Text>
         </View>
-        <View style={style.dash}></View>
-        <Text style={style.notify}>{item.notice}</Text>
-      </View>
-    </View>
+      </Animated.View>
+    </TouchableOpacity>
   );
 };
 

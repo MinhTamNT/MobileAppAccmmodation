@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "45065821962",
-    "project_id": "appchatrealtime-ed820",
-    "storage_bucket": "appchatrealtime-ed820.appspot.com"
+    "project_number": "167783686383",
+    "project_id": "appchat-418a5",
+    "storage_bucket": "appchat-418a5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:45065821962:android:ef7bfbda12ec78fb4d64f3",
+        "mobilesdk_app_id": "1:167783686383:android:9ff53156a794f3284ffb1a",
         "android_client_info": {
           "package_name": "com.minhtam78945.AppAccommodation"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAMVuJKhz7QOIPj4jWEoupfciQIM520lew"
+          "current_key": "AIzaSyDtplUAInOFEm3IT3CSAzKOOZDUjOlePX8"
         }
       ],
       "services": {

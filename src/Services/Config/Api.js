@@ -23,6 +23,7 @@ export const endpoint = {
   map_accommodation: (latitude, longitude) =>
     `/accommodation/?latitude=${latitude}&longitude=${longitude}&limit=20`,
   notifcation_uer: "/notification/notification_user/",
+  mark_notification_read: (notiId) => `/notification/${notiId}/mark_as_read/`,
 };
 export const endpointAdmin = {
   postIsApproved: "/post/not_approved/",

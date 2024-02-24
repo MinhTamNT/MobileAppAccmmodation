@@ -1,5 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     ext {
         buildToolsVersion = findProperty('android.buildToolsVersion') ?: '34.0.0'
@@ -8,16 +6,16 @@ buildscript {
         targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '34')
         kotlinVersion = findProperty('android.kotlinVersion') ?: '1.8.10'
         ndkVersion = "25.1.8937393"
+        gradleVersion = '7.3.3' // Use a consistent version
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath('com.android.tools.build:gradle')
-        classpath('com.facebook.react:react-native-gradle-plugin')
-        classpath("com.android.tools.build:gradle:8.2.0")
-         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath('com.android.tools.build:gradle:' + gradleVersion)
+        classpath 'com.facebook.react:react-native-gradle-plugin'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }

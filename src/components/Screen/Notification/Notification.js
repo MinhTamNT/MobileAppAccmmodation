@@ -26,13 +26,14 @@ const Notification = ({ route }) => {
         const res = await authApi(auth?.access_token).get(
           endpoint["notifcation_uer"]
         );
-        setNotifications(res.data);
+        const filerNoti = res.data.filter((noti) => noti.is_read === false);
+        setNotifications(filerNoti);
       } catch (error) {
         console.log(error);
       }
     };
     fetchNotifications();
-  }, []);
+  }, [notifications]);
 
   const markAsRead = async (notificationId) => {
     try {
