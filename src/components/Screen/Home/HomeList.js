@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Image, Text } from "react-native";
-
 const HomeList = ({ item }) => {
   const formatToVND = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -8,17 +8,17 @@ const HomeList = ({ item }) => {
     }).format(amount);
   };
   return (
-    <View style={style.container}>
+    <View style={styles.container}>
       <Image
         source={{
           uri: item.image[0].image,
         }}
-        style={style.image}
+        style={styles.image}
       />
-      <View style={style.content}>
-        <Text style={style.title}>{item.address}</Text>
-        <View style={style.dash}></View>
-        <Text style={style.Rp}>
+      <View style={styles.content}>
+        <Text style={styles.title}>{item.address}</Text>
+        <View style={styles.dash}></View>
+        <Text style={styles.Rp}>
           Rent price: {formatToVND(item.rent_cost)}/month
         </Text>
       </View>
@@ -26,7 +26,7 @@ const HomeList = ({ item }) => {
   );
 };
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     height: 150,
     flexDirection: "row",
@@ -54,7 +54,6 @@ const style = StyleSheet.create({
     marginVertical: 5,
     fontWeight: "bold",
   },
-
   Rp: {
     fontSize: 14,
     marginVertical: 5,

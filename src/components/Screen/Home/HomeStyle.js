@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { COLOR } from "../../../contants";
 
-export const style = StyleSheet.create({
+export const Homestyle = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
@@ -59,26 +59,37 @@ export const style = StyleSheet.create({
     backgroundColor: COLOR.offWhite,
     marginTop: 10,
   },
-  pl_14:{
+  pl_14: {
     paddingLeft: 14,
   },
-  pr_14:{
+  pr_14: {
     paddingRight: 14,
   },
-  pH_14:{
-    paddingHorizontal:14
+  pH_14: {
+    paddingHorizontal: 14,
   },
   flex_row: {
     flexDirection: "row",
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
 
   text_HomeCrad: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   text_2: {
     fontSize: 18,
-    opacity: 0.2
-  }
+    opacity: 0.2,
+  },
+  unreadCountContainer: {
+    position: "absolute",
+    right: 0,
+    top: -10,
+    backgroundColor: COLOR.PRIMARY,
+    paddingHorizontal: 3,
+    borderRadius: 10,
+  },
+  unreadCountText: {
+    color: "white",
+  },
 });

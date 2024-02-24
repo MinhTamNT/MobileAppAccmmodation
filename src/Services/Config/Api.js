@@ -22,11 +22,12 @@ export const endpoint = {
   user_post: "/post/post_of_user/",
   map_accommodation: (latitude, longitude) =>
     `/accommodation/?latitude=${latitude}&longitude=${longitude}&limit=20`,
+  notifcation_uer: "/notification/notification_user/",
 };
 export const endpointAdmin = {
   postIsApproved: "/post/not_approved/",
   accommodationIsVerify: "/accommodation/not_verified/",
-  verifypost: (postId) => `/post/${postId}/edit_Approved/`,
+  verifypost: (postId) => `/post/${postId}/edit_approved/`,
 };
 export const authApi = (accessToken) =>
   axios.create({

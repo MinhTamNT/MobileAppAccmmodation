@@ -12,24 +12,17 @@ export const tabs = [
     screen: "HomeScreen",
     Component: HomeScreen,
   },
+
   {
     id: 2,
-    title: "Notification",
-    name: "Notification",
-    icon: "bell",
-    screen: "Notification",
-    Component: Notification,
-  },
-  {
-    id: 3,
     title: "Message",
     name: "MessageScreen",
-    icon: "message-text-outline",
+    icon: "earth",
     screen: "MessageScreen",
     Component: MessageScreen,
   },
   {
-    id: 4,
+    id: 3,
     name: "ProfileScreen",
     title: "Profile",
     icon: "user",

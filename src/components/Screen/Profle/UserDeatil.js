@@ -76,7 +76,9 @@ const UserDeatil = () => {
             {user.last_name} {user.first_name}
           </Text>
           <Text style={styleProfile.headerText}>Role : {user.role}</Text>
-          <Text style={styleProfile.headerText}>Followers : 20</Text>
+          <Text style={styleProfile.headerText}>
+            Followers : {user.followers}
+          </Text>
         </View>
       </View>
       <View style={{ flex: 1 }}>

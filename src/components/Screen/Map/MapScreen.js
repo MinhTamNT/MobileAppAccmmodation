@@ -168,7 +168,9 @@ export default ({ route }) => {
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
+  const handlerAccommodationDeatil = (accommodationId) => {
 
+  }
   return (
     <View style={MapStyle.container}>
       <MapView

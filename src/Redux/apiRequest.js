@@ -48,12 +48,10 @@ import {
   relyCommentSuccess,
 } from "./commentSlice";
 
-const auth = FIREBASE_AUTH;
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
   try {
     const response = await Api.post(endpoint["register"], form);
-    const userId = uuidv4();
     dispatch(registerSuccess(response.data));
 
     navigation.navigate("Login");

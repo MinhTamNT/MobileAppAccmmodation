@@ -1,16 +1,55 @@
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, FlatList } from "react-native";
-import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { NotiStyle } from "./NotificationStyle";
 import { AntDesign } from "@expo/vector-icons";
 import { AlignBottom } from "iconsax-react-native";
-import { useNavigation } from "@react-navigation/native"; // Import the hook
+import { useNavigation } from "@react-navigation/native";
+import NotificationCard from "./NotificationCard";
+import { useSelector } from "react-redux";
+import { authApi, endpoint } from "../../../Services/Config/Api";
 
 const Notification = ({ route }) => {
-  const navigation = useNavigation(); // Use the hook to get the navigation object
+  const navigation = useNavigation();
+  const auth = useSelector((state) => state?.auth?.currentUser);
+  const [notifications, setNotifications] = useState([]);
 
-  const [notification, setNotification] = useState([]);
+  // Count unread messages
+  const unreadMessagesCount = notifications.filter(
+    (notification) => !notification.is_read
+  ).length;
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const res = await authApi(auth?.access_token).get(
+          endpoint["notifcation_uer"]
+        );
+        setNotifications(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchNotifications();
+  }, []);
+
+  const markAsRead = async (notificationId) => {
+    try {
+      await authApi(auth?.access_token).put(
+        endpoint.mark_notification_read(notificationId)
+      );
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification.id === notificationId
+            ? { ...notification, is_read: true }
+            : notification
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <SafeAreaView style={StyleDefault.container}>
@@ -21,15 +60,23 @@ const Notification = ({ route }) => {
         <Text style={NotiStyle.header_title}>Notification</Text>
         <AlignBottom size="32" color="#697689" />
       </View>
-      <View style={{ flex: 1, alignItems: "center" }}>
-        {notification.length > 0 ? (
+      <View style={{ flex: 1, paddingHorizontal: 14 }}>
+        <View style={NotiStyle.unreadMessagesContainer}>
+          <Text style={NotiStyle.unreadMessagesText}>
+            {unreadMessagesCount > 0
+              ? `Unread messages: ${unreadMessagesCount}`
+              : "All messages are read"}
+          </Text>
+        </View>
+        {notifications.length > 0 ? (
           <FlatList
-            data={notification}
+            data={notifications}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <View>
-                <Text>{item.message}</Text>
-              </View>
+              <NotificationCard
+                item={item}
+                markAsRead={() => markAsRead(item.id)}
+              />
             )}
           />
         ) : (

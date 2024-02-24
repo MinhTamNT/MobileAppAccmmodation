@@ -11,7 +11,7 @@ const BottomNavigation = () => {
       initialRouteName="HomeScreen"
     >
       {tabs.map((tab) => (
-        <Tab.Screen
+      <Tab.Screen 
           key={tab.id}
           name={tab.screen}
           component={tab.Component}

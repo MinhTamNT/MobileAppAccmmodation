@@ -52,6 +52,13 @@ export default function App() {
                 </RequireUsers>
               )}
             </Stack.Screen>
+            <Stack.Screen name="Notifaction">
+              {({ navigation, route }) => (
+                <RequireUsers navigation={navigation} route={route}>
+                  <Notification />
+                </RequireUsers>
+              )}
+            </Stack.Screen>
             <Stack.Screen name="MapScreen">
               {({ navigation, route }) => (
                 <RequireUsers navigation={navigation} route={route}>

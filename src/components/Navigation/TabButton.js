@@ -1,10 +1,8 @@
-import { View, Text, Animated, TouchableOpacity } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import {  Animated, TouchableOpacity } from "react-native";
+import React, { useEffect, useRef,  } from "react";
 import { style } from "./StyleNavigation";
 import Material from "react-native-vector-icons/MaterialCommunityIcons";
-import { tabs } from "./screenData";
 import { AntDesign } from "@expo/vector-icons";
-import { Fontisto } from '@expo/vector-icons';
 const TabButton = ({ item, accessibilityState, onPress }) => {
   const animatedValue = {
     translate: useRef(new Animated.Value(0)).current,
@@ -56,9 +54,8 @@ const TabButton = ({ item, accessibilityState, onPress }) => {
     ],
   };
 
-  const isProfileTab = item.id === 4;
+  const isProfileTab = item.id === 3;
   const isBellTab = item.id === 2;
-
   return (
     <TouchableOpacity style={style.container} onPress={onPress}>
       <Animated.View style={[style.btn, translateStyles]}>
@@ -76,27 +73,24 @@ const TabButton = ({ item, accessibilityState, onPress }) => {
             scaleStyles,
           ]}
         />
-         {isProfileTab ? (
+        {isProfileTab ? (
+          <AntDesign
+            name={item.icon}
+            size={24}
+            color={accessibilityState.selected ? "#fff" : "#697689"}
+          />
+        ) : isBellTab ? (
           <AntDesign
             name={item.icon}
             size={24}
             color={accessibilityState.selected ? "#fff" : "#697689"}
           />
         ) : (
-          isBellTab ? (
-            // Use a different icon for the "bell" tab
-            <Fontisto
-              name={item.icon}
-              color={accessibilityState.selected ? "#fff" : "#697689"}
-              size={22}
-            />
-          ) : (
-            <Material
-              name={item.icon}
-              color={accessibilityState.selected ? "#fff" : "#697689"}
-              size={22}
-            />
-          )
+          <Material
+            name={item.icon}
+            color={accessibilityState.selected ? "#fff" : "#697689"}
+            size={22}
+          />
         )}
       </Animated.View>
       <Animated.Text style={[style.title, { opacity: scale }]}>
