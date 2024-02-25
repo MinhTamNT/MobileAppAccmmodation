@@ -3,6 +3,7 @@ import { View, Text, Modal, TouchableOpacity } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
 import { COLOR } from "../../contants";
+import { CloseCircle } from "iconsax-react-native";
 
 const ModalRangePrice = ({
   isVisible,
@@ -19,31 +20,34 @@ const ModalRangePrice = ({
 
     return formatter.format(number);
   };
+
   const handlerClose = () => {
     setModalRangPrice(false);
   };
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+
   const [items, setItems] = useState([
     {
       label: `Under ${formatVND(1000000)}`,
-      value: { min: 0, max: 1000000 },
-      key: 1,
+      value: [0, 1000000],
+      key: "under_1m",
     },
     {
       label: `${formatVND(1000000)} - ${formatVND(2000000)}`,
-      value: { min: 1000000, max: 2000000 },
-      key: 2,
+      value: [1000000, 2000000],
+      key: "1m_to_2m",
     },
     {
       label: `${formatVND(2000000)} - ${formatVND(3000000)}`,
-      value: { min: 2000000, max: 3000000 },
-      key: 3,
+      value: [2000000, 3000000],
+      key: "2m_to_3m",
     },
     {
       label: `Over ${formatVND(3000000)}`,
-      value: { min: 3000000, max: 550000 },
-      key: 4,
+      value: [3000000, 550000],
+      key: "over_3m",
     },
   ]);
 
@@ -65,15 +69,21 @@ const ModalRangePrice = ({
             padding: 10,
           }}
         >
-          <Text style={StyleDefault.FontSizeMedium}>Price Range</Text>
+          <View
+            style={[
+              StyleDefault.flexBoxRow,
+              { justifyContent: "space-between" },
+            ]}
+          >
+            <Text style={StyleDefault.FontSizeMedium}>Price Range</Text>
+            <TouchableOpacity onPress={handlerClose}>
+              <CloseCircle size="24" color="#d9e3f0" />
+            </TouchableOpacity>
+          </View>
           <DropDownPicker
             open={open}
             value={value}
-            items={items.map((item, index) => ({
-              label: item.label,
-              value: item.value,
-              key: index,
-            }))}
+            items={items}
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
@@ -98,7 +108,7 @@ const ModalRangePrice = ({
               }
             }}
             style={{
-              backgroundColor: "#2ccce4",
+              backgroundColor: "#333",
               padding: 10,
               borderRadius: 5,
               marginTop: 10,

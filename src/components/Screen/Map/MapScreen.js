@@ -18,6 +18,7 @@ import {
   Clock,
   User,
   ArrowLeft2,
+  CloseCircle,
 } from "iconsax-react-native";
 import { MAP_KEY } from "@env";
 import { useSelector } from "react-redux";
@@ -25,21 +26,10 @@ import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { authApi, endpoint } from "../../../Services/Config/Api";
+import ModalNumberPeople from "../../Modal/ModalNumberPeople";
+import ModalRangePrice from "../../Modal/ModalRangPrice";
 
 export default ({ route }) => {
-  const actions = [
-    {
-      name: "According to price",
-      icon: <Moneys size="18" color="#697689" style={MapStyle.chipsIcon} />,
-      handler: () => setModalVisible(true),
-    },
-    {
-      name: "Number of residents",
-      icon: (
-        <Profile2User size="18" color="#697689" style={MapStyle.chipsIcon} />
-      ),
-    },
-  ];
   const mapRef = useRef(null);
   const { locationPresent } = route?.params;
   const [modalVisible, setModalVisible] = useState(false);
@@ -54,8 +44,27 @@ export default ({ route }) => {
   const [currentLocationMarker, setCurrentLocationMarker] = useState(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [selectedAccommodation, setSelectedAccommodation] = useState(null);
+  const [modalPeople, setModalPeople] = useState(false);
+  const [filterAccommodation, setFilterAccommodation] = useState(allAccomoda);
+  const [selectPeople, setSelectPeole] = useState(null);
+  const [selectRangePrice, setSelectRangePrice] = useState(null);
   const navigation = useNavigation();
 
+  const actions = [
+    {
+      name: "According to price",
+      icon: <Moneys size="18" color="#697689" style={MapStyle.chipsIcon} />,
+      handler: () => setModalVisible(true),
+    },
+    {
+      name: "Number of residents",
+      icon: (
+        <Profile2User size="18" color="#697689" style={MapStyle.chipsIcon} />
+      ),
+      handler: () => setModalPeople(true),
+    },
+  ];
+  console.log(modalPeople);
   const handleReturnToCurrentLocation = () => {
     if (mapRef.current) {
       mapRef.current.animateToRegion({
@@ -131,6 +140,24 @@ export default ({ route }) => {
       setIsLoading(false);
     }
   }, [latitude, longitude]);
+  useEffect(() => {
+    let filterData = [...allAccomoda];
+    if (selectPeople !== null) {
+      filterData = filterData.filter(
+        (item) => item.number_of_people === selectPeople
+      );
+    }
+    if (selectRangePrice) {
+      filterData = filterData.filter((item) => {
+        const rentCost =
+          typeof item.rent_cost === "number" ? item.rent_cost : 0;
+        return (
+          rentCost >= selectRangePrice[0] && rentCost <= selectRangePrice[1]
+        );
+      });
+    }
+    setFilterAccommodation(filterData); // Use setFilterAccommodation here
+  }, [selectPeople, allAccomoda, selectRangePrice]);
 
   const handleAddressSelect = async (selectedAddress) => {
     try {
@@ -168,9 +195,7 @@ export default ({ route }) => {
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
-  const handlerAccommodationDeatil = (accommodationId) => {
 
-  }
   return (
     <View style={MapStyle.container}>
       <MapView
@@ -220,7 +245,7 @@ export default ({ route }) => {
           </>
         )}
 
-        {allAccomoda.map((accommodation, index) => (
+        {filterAccommodation.map((accommodation, index) => (
           <Marker
             key={index}
             coordinate={{
@@ -308,6 +333,7 @@ export default ({ route }) => {
       >
         <ArrowLeft2 size="30" color="white" />
       </TouchableOpacity>
+
       <Animated.ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -317,36 +343,57 @@ export default ({ route }) => {
         ]}
       >
         {selectedAccommodation && (
-          <View style={MapStyle.card}>
-            <Image
-              source={{ uri: selectedAccommodation.image[0].image }}
-              style={MapStyle.cardImage}
-            />
-            <View style={MapStyle.textContent}>
-              <Text numberOfLines={1}>
-                {selectedAccommodation.address} {selectedAccommodation.district}
-              </Text>
-              <View>
-                <View
-                  style={[
-                    StyleDefault.flexBoxRow,
-                    { justifyContent: "space-between" },
-                  ]}
-                >
-                  <View style={StyleDefault.flexBoxRow}>
-                    <Text>{selectedAccommodation.rent_cost}VND</Text>
-                    <Text style={StyleDefault.FontSizeMedium}>
-                      {selectedAccommodation.number_of_people}
-                    </Text>
-                    <User size="15" color="#697689" />
+          <>
+            <View style={MapStyle.card}>
+              <Image
+                source={{ uri: selectedAccommodation.image[0].image }}
+                style={MapStyle.cardImage}
+              />
+              <View style={MapStyle.textContent}>
+                <Text numberOfLines={1}>
+                  {selectedAccommodation.address}{" "}
+                  {selectedAccommodation.district}
+                </Text>
+                <View>
+                  <View
+                    style={[
+                      StyleDefault.flexBoxRow,
+                      { justifyContent: "space-between" },
+                    ]}
+                  >
+                    <View style={StyleDefault.flexBoxRow}>
+                      <Text>{selectedAccommodation.rent_cost}VND</Text>
+                      <Text style={StyleDefault.FontSizeMedium}>
+                        {selectedAccommodation.number_of_people}
+                      </Text>
+                      <User size="15" color="#697689" />
+                    </View>
+                    <TouchableOpacity
+                      style={MapStyle.actionDetail}
+                      onPress={() =>
+                        navigation.navigate("PostDeatil", {
+                          item: selectedAccommodation,
+                        })
+                      }
+                    >
+                      <Text style={{ color: "white" }}>Detail</Text>
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity style={MapStyle.actionDetail}>
-                    <Text style={{ color: "white" }}>Detail</Text>
-                  </TouchableOpacity>
                 </View>
               </View>
             </View>
-          </View>
+            <TouchableOpacity
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 12,
+                zIndex: 99,
+              }}
+              onPress={() => setSelectedAccommodation(null)}
+            >
+              <CloseCircle size="32" color="#FF8A65" />
+            </TouchableOpacity>
+          </>
         )}
       </Animated.ScrollView>
 
@@ -379,6 +426,29 @@ export default ({ route }) => {
             ))}
           </ScrollView>
         </View>
+      )}
+      {modalPeople && (
+        <ModalNumberPeople
+          isVisible={modalPeople}
+          onClose={() => setModalPeople(false)}
+          onSelectNumberPeople={(selectPeople) => {
+            setSelectPeole(selectPeople);
+            const filteredAccommodation = allAccomoda.filter(
+              (item) => item.number_of_people === selectPeople
+            );
+            setFilterAccommodation(filteredAccommodation);
+          }}
+        />
+      )}
+      {modalVisible && (
+        <ModalRangePrice
+          isVisible={modalVisible}
+          onPriceRangeChange={(selectedValue) => {
+            console.log("Selected Price Range: ", selectedValue);
+            setSelectRangePrice(selectedValue);
+          }}
+          setModalRangPrice={setModalVisible}
+        />
       )}
     </View>
   );

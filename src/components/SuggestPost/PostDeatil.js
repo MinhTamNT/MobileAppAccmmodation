@@ -26,21 +26,27 @@ import {
   Call,
 } from "iconsax-react-native";
 import { COLOR, SHADOWS } from "../../contants";
-import { useSelector } from "react-redux";
 import InputField from "../InputFields/InputField";
 import { styleFields } from "../InputFields/InputFieldStyle";
 import CommentPosts from "../Comment/CommentPots";
 const PostDetail = ({ route }) => {
   const { item } = route.params;
-  console.log(item);
   const navigation = useNavigation();
   const [comments, setComments] = useState([]);
   const [showFullDescription, setShowFullDescription] = useState(false);
-
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
-  const makePhoneCall = () => {};
+  const makePhoneCall = () => {
+    const phoneNumber = item.owner.phone;
+    const phoneUrl = `tel:${phoneNumber}`;
+
+    if (Linking.canOpenURL(phoneUrl)) {
+      Linking.openURL(phoneUrl);
+    } else {
+      console.error("Phone call is not supported on this device.");
+    }
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -146,14 +152,17 @@ const PostDetail = ({ route }) => {
                   <Text
                     style={postStyle.postDescriptionCollapsed}
                     numberOfLines={showFullDescription ? 0 : 3}
-                  ></Text>
-                  {/* {itemPost.description.length > 100 && (
-                    <TouchableOpacity onPress={toggleDescription}>
-                      <Text style={postStyle.postDescriptionToggle}>
-                        {showFullDescription ? "See less" : "See more"}
-                      </Text>
-                    </TouchableOpacity>
-                  )} */}
+                  >
+                    {item.description}
+                  </Text>
+                  {item?.description?.length > 100 &&
+                    item?.description !== null && (
+                      <TouchableOpacity onPress={toggleDescription}>
+                        <Text style={postStyle.postDescriptionToggle}>
+                          {showFullDescription ? "See less" : "See more"}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
                 </View>
                 <View
                   style={[

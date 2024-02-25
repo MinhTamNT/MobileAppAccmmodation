@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   Animated,
-  StatusBar,
   Platform,
   ToastAndroid,
   Image,

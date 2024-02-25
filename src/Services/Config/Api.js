@@ -22,7 +22,7 @@ export const endpoint = {
   user_post: "/post/post_of_user/",
   map_accommodation: (latitude, longitude) =>
     `/accommodation/?latitude=${latitude}&longitude=${longitude}&limit=20`,
-  notifcation_uer: "/notification/notification_user/",
+  notifcation_user: "/notification/notification_user/",
   mark_notification_read: (notiId) => `/notification/${notiId}/mark_as_read/`,
 };
 export const endpointAdmin = {

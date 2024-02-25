@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
   Image,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Homestyle } from "./HomeStyle";
@@ -34,6 +35,7 @@ const HomeScreen = ({ route }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -54,7 +56,7 @@ const HomeScreen = ({ route }) => {
     const fetchNotifications = async () => {
       try {
         const res = await authApi(auth?.access_token).get(
-          endpoint["notifcation_uer"]
+          endpoint["notifcation_user"]
         );
         setNotifications(res.data);
 
@@ -141,7 +143,49 @@ const HomeScreen = ({ route }) => {
       setModalVisible(true);
     }
   }, [currentUser?.role, accommodationUser]);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
 
+    const fetchData = async () => {
+      try {
+        const notificationsRes = await authApi(auth?.access_token).get(
+          endpoint["notifcation_uer"]
+        );
+
+        setNotifications(notificationsRes.data);
+
+        if (Array.isArray(notificationsRes.data)) {
+          setNotifications(notificationsRes.data);
+
+          const unreadNotifications = notificationsRes.data.filter(
+            (notif) => !notif.is_read
+          );
+          setUnreadCount(unreadNotifications.length);
+        }
+
+        if (location?.coords?.latitude && location?.coords?.longitude) {
+          const res = await authApi(auth?.access_token).get(
+            endpoint.current_accommodation(
+              currentPage,
+              location.coords.latitude,
+              location.coords.longitude
+            )
+          );
+          if (res.data && res.data.results) {
+            setAllAccommodation(res.data.results);
+          } else {
+            console.log("No more data");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setRefreshing(false);
+      }
+    };
+
+    fetchData();
+  }, [auth, location, currentPage]);
   if (isLoading) {
     return <LoadingPage />;
   }
@@ -193,7 +237,11 @@ const HomeScreen = ({ route }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <Carousel />
         <View style={Homestyle.action_search}>
           <InputField
