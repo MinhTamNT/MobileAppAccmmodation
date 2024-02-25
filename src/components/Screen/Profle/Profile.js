@@ -17,6 +17,7 @@ import {
 import { COLOR } from "../../../contants";
 import { FacebookLogo, GoogleLogo } from "../../../assets/image/image";
 import { logout } from "../../../Redux/store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile = ({ navigation }) => {
   const current_user = useSelector((state) => state?.user?.currentUser);
@@ -24,8 +25,13 @@ const Profile = ({ navigation }) => {
   const token = auth?.access_token;
   const dispatch = useDispatch();
   const handlerLogout = async () => {
-    dispatch(logout());
-    navigation.navigate("Login");
+    try {
+      await AsyncStorage.removeItem("access-token");
+      dispatch(logout());
+      navigation.navigate("Login");
+    } catch (error) {
+      console.error("Error clearing access token:", error);
+    }
   };
   const handlerNavigate = () => {
     navigation.navigate("UserDeatil");

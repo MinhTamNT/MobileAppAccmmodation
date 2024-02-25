@@ -30,7 +30,7 @@ const HomeCards = ({ allAccommodation }) => {
       <>
         <View style={style.item}>
           <ParallaxImage
-            source={{ uri: item.image[1].image }}
+            source={{ uri: item?.image[1]?.image }}
             containerStyle={style.imageContainer}
             style={style.image}
             parallaxFactor={0.4}

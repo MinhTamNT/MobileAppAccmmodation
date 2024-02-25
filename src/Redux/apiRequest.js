@@ -19,6 +19,8 @@ import {
   updateSuccess,
 } from "./userSlice";
 import {
+  commentAccommodationFail,
+  commentAccommodationSuccess,
   createAccommodationFailed,
   createAccommodationStart,
   createAccommodationSuccess,
@@ -47,6 +49,7 @@ import {
   relyCommentStart,
   relyCommentSuccess,
 } from "./commentSlice";
+import Toast from "react-native-toast-message";
 
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
@@ -61,13 +64,16 @@ export const registerUser = async (form, dispatch, navigation) => {
   }
 };
 
-export const LoginUser = async (users, dispatch, navigation) => {
+export const LoginUser = async (users, dispatch, navigation, showToast) => {
   dispatch(loginStart());
   dispatch(updateStart());
 
   try {
     let response = await Api.post(endpoint["login"], users);
     dispatch(loginSuccess(response.data));
+    if (response.status === 400) {
+      showToast("Check username or password");
+    }
     navigation.navigate("Home");
   } catch (error) {
     dispatch(loginFail(error.response.data.message));
@@ -117,6 +123,23 @@ export const createAccommodation = async (dispatch, accommodation, token) => {
   } catch (error) {
     console.log(error);
     dispatch(createAccommodationFailed());
+  }
+};
+export const commentAccommodation = async (
+  dispatch,
+  token,
+  newComent,
+  commentId
+) => {
+  dispatch(commentAccommodationSuccess());
+  try {
+    await authApi(token).post(
+      endpoint.comment_Accommodation(commentId),
+      newComent
+    );
+  } catch (error) {
+    console.log(error);
+    dispatch(commentAccommodationFail());
   }
 };
 export const createPost = async (dispatch, newPost, token) => {

@@ -1,5 +1,5 @@
 // PostDetail.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -29,13 +29,42 @@ import { COLOR, SHADOWS } from "../../contants";
 import InputField from "../InputFields/InputField";
 import { styleFields } from "../InputFields/InputFieldStyle";
 import CommentPosts from "../Comment/CommentPots";
+import { commentAccommodation } from "../../Redux/apiRequest";
+import { useDispatch, useSelector } from "react-redux";
+import { authApi, endpoint } from "../../Services/Config/Api";
+import Comment from "../Comment/Comment";
 const PostDetail = ({ route }) => {
+  const auth = useSelector((state) => state?.auth?.currentUser);
   const { item } = route.params;
   const navigation = useNavigation();
   const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState("");
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
+  const [comment, setComment] = useState([]);
+  const dispatch = useDispatch();
+  const formatToVND = (amount) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  };
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
+  };
+  const hanlerComment = async (commentAccommodationId) => {
+    const form = new FormData();
+    const newComment = {
+      text: commentText,
+    };
+    form.append("text", newComment.text);
+    await commentAccommodation(
+      dispatch,
+      auth?.access_token,
+      form,
+      commentAccommodationId
+    );
+    setCommentText("");
   };
   const makePhoneCall = () => {
     const phoneNumber = item.owner.phone;
@@ -47,6 +76,16 @@ const PostDetail = ({ route }) => {
       console.error("Phone call is not supported on this device.");
     }
   };
+  useEffect(() => {
+    const getAccommodationComment = async () => {
+      const res = await authApi(auth?.access_token).get(
+        endpoint.getcomment_accommodation(item?.id)
+      );
+      setComments(res.data);
+    };
+    getAccommodationComment();
+  }, []);
+  console.log("commment", comments);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -126,13 +165,11 @@ const PostDetail = ({ route }) => {
                   placeholder={"Comment the post"}
                   style={styleFields.formEdit}
                   icon={"send"}
-                  OnPressIncon={() => alert("Chao")}
+                  value={commentText}
+                  onChangeText={(text) => setCommentText(text)}
+                  OnPressIncon={() => hanlerComment(item.id)}
                 />
-                {comments.map((comment, index) => (
-                  <View key={index}>
-                    <CommentPosts comment={comment} setComments={setComments} />
-                  </View>
-                ))}
+                <Comment />
               </View>
               <View>
                 <View
@@ -194,7 +231,9 @@ const PostDetail = ({ route }) => {
                 StyleDefault.FontSizeMedium,
                 { color: COLOR.bg_color_blue_200 },
               ]}
-            ></Text>
+            >
+              {formatToVND(item.rent_cost)}
+            </Text>
             <TouchableOpacity
               style={[StyleDefault.flexBoxRow, postStyle.btnAction]}
               onPress={makePhoneCall}

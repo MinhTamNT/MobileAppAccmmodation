@@ -18,6 +18,9 @@ export const accommodationSlice = createSlice({
       accommodation: [],
       error: false,
     },
+    pending: false,
+    error: false,
+    success: false,
   },
   reducers: {
     createAccommodationStart: (state) => {
@@ -42,6 +45,17 @@ export const accommodationSlice = createSlice({
     getAllAccommodationFail: (state) => {
       state.allAccommodation.error = true;
     },
+    commentAccommodationStart: (state) => {
+      state.pending = true;
+    },
+    commentAccommodationSuccess: (state) => {
+      state.pending = false;
+      state.error = false;
+      state.success = true;
+    },
+    commentAccommodationFail: (state) => {
+      state.error = true;
+    },
   },
 });
 export const {
@@ -51,5 +65,8 @@ export const {
   getAllAccommodationFail,
   getAllAccommodationSuccess,
   getAllAccommodationStart,
+  commentAccommodationFail,
+  commentAccommodationStart,
+  commentAccommodationSuccess,
 } = accommodationSlice.actions;
 export default accommodationSlice.reducer;

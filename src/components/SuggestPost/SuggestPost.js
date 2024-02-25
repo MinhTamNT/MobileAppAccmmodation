@@ -6,12 +6,11 @@ import { StyleDefault } from "../StyleDeafult/StyleDeafult";
 import { AntDesign } from "@expo/vector-icons";
 import { Sort } from "iconsax-react-native";
 import { COLOR } from "../../contants";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { authApi, endpoint } from "../../Services/Config/Api";
 import ModalSort from "../Modal/ModalSort";
 import ModalRangPrice from "../Modal/ModalRangPrice";
 import ModalNumberPeople from "../Modal/ModalNumberPeople";
-
 const SuggestPost = ({ selectedDistrict, searchInput }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalRangPrice, setModalRangPrice] = useState(false);
@@ -22,7 +21,7 @@ const SuggestPost = ({ selectedDistrict, searchInput }) => {
   const [sortDatas, setSordata] = useState(allAccomoda);
   const [selectedPriceRange, setSelectedPriceRange] = useState(null);
   const [selectPeople, setSelectPeole] = useState(null);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(200);
   const auth = useSelector((state) => state?.auth?.currentUser);
   function arraysAreEqual(arr1, arr2) {
     if (arr1.length !== arr2.length) {
@@ -209,8 +208,8 @@ const SuggestPost = ({ selectedDistrict, searchInput }) => {
           isVisible={modalPeople}
           onClose={() => setModalPeople(false)}
           onSelectNumberPeople={(selectedPeople) => {
-            setSelectPeole(selectedPeople); 
-            sortData(selectedPeople); 
+            setSelectPeole(selectedPeople);
+            sortData(selectedPeople);
           }}
         />
       )}

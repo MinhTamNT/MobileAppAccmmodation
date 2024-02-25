@@ -11,7 +11,7 @@ const HomeList = ({ item }) => {
     <View style={styles.container}>
       <Image
         source={{
-          uri: item.image[0].image,
+          uri: item?.image[0]?.image,
         }}
         style={styles.image}
       />

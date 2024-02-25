@@ -236,7 +236,9 @@ const TabViewCommunities = () => {
           isLoadingMore && hasNextPage ? (
             <ActivityIndicator size="small" color="#0000ff" />
           ) : (
-            <></>
+            <>
+              <ActivityIndicator size="small" color="#0000ff" />
+            </>
           )
         }
         refreshControl={

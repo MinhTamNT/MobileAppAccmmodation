@@ -1,4 +1,4 @@
-import { Text, View, Image, ScrollView } from "react-native";
+import { Text, View, Image } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styleProfile } from "./StyleProfile";
@@ -9,7 +9,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import ModalEdit from "../../Modal/ModalEdit";
 import DropDownPicker from "react-native-dropdown-picker";
-import { TabViewBottom } from "../../TabViewTop/TabViewBottom";
 import PostUser from "../../TabViewTop/TabViewUser/PostUser";
 const UserDeatil = () => {
   const navigation = useNavigation();
@@ -24,7 +23,6 @@ const UserDeatil = () => {
   const handlerEdit = () => {
     setVissable(!isVissable);
   };
-
   return (
     <SafeAreaView style={StyleDefault.container}>
       <View style={styleProfile.HeaderDeatil}>
@@ -76,9 +74,16 @@ const UserDeatil = () => {
             {user.last_name} {user.first_name}
           </Text>
           <Text style={styleProfile.headerText}>Role : {user.role}</Text>
-          <Text style={styleProfile.headerText}>
-            Followers : {user.followers}
-          </Text>
+          <View>
+            <Text style={styleProfile.headerText}>
+              Followers : {user.followers}
+            </Text>
+          </View>
+          <View>
+            <Text style={styleProfile.headerText}>
+              Following : {user.following}
+            </Text>
+          </View>
         </View>
       </View>
       <View style={{ flex: 1 }}>

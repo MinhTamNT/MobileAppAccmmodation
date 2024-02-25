@@ -21,14 +21,13 @@ import LoadingPage from "../../LoadingPage/LoadingPage";
 import { authApi, endpoint } from "../../../Services/Config/Api";
 import HomeCards from "./HomeCards";
 import HomeList from "./HomeList";
-import { Notification } from "iconsax-react-native";
+import { Add, Notification } from "iconsax-react-native";
 
 const HomeScreen = ({ route }) => {
   const currentUser = useSelector((state) => state?.user?.currentUser);
   const [location, setLocation] = useState(null);
   const auth = useSelector((state) => state?.auth?.currentUser);
   const [address, setAddress] = useState(null);
-  const [accommodationUser, setAccommodationUser] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [modalVisible, setModalVisible] = useState(false);
   const [allAccommodation, setAllAccommodation] = useState([]);
@@ -37,20 +36,6 @@ const HomeScreen = ({ route }) => {
   const [notifications, setNotifications] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await authApi(auth?.access_token).get(
-          endpoint["user_accommodation"]
-        );
-        setAccommodationUser(res.data.results);
-      } catch (error) {
-        console.error("Error fetching user accommodations:", error);
-      }
-    };
-    fetchData();
-  }, []);
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -138,11 +123,6 @@ const HomeScreen = ({ route }) => {
     }
   }, [location?.coords?.latitude, location?.coords?.longitude, currentPage]);
 
-  useEffect(() => {
-    if (currentUser?.role === "HOST" && accommodationUser.length === 0) {
-      setModalVisible(true);
-    }
-  }, [currentUser?.role, accommodationUser]);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
 
@@ -186,6 +166,7 @@ const HomeScreen = ({ route }) => {
 
     fetchData();
   }, [auth, location, currentPage]);
+
   if (isLoading) {
     return <LoadingPage />;
   }
@@ -208,12 +189,22 @@ const HomeScreen = ({ route }) => {
                   color: COLOR.text_weak_color,
                 }}
               >
-                {address.subregion} {address.region}
+                {address?.subregion} {address?.region}
               </Text>
             )}
           </View>
         </View>
         <View style={Homestyle.header_action}>
+          {currentUser?.role === "HOST" && (
+            <TouchableOpacity
+              style={Homestyle.createAccommodationButton}
+              onPress={() => {
+                setModalVisible(true);
+              }}
+            >
+              <Add size="32" color="#d9e3f0" />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity onPress={() => navigation.navigate("Notifaction")}>
             <View style={Homestyle.notificationIconContainer}>
               <Notification color="#697689" />
@@ -282,7 +273,7 @@ const HomeScreen = ({ route }) => {
           ))}
         </View>
       </ScrollView>
-      {modalVisible && accommodationUser.length < 0 && (
+      {modalVisible && (
         <ModalRequire setModalVisible={setModalVisible} location={location} />
       )}
     </SafeAreaView>
