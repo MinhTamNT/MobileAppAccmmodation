@@ -1,6 +1,5 @@
 import { View, Text, Image, Linking, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { TouchableOpacity } from "react-native-gesture-handler";

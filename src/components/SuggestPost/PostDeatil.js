@@ -1,4 +1,3 @@
-// PostDetail.js
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -10,8 +9,7 @@ import {
   Platform,
 } from "react-native";
 import { postStyle } from "./PostStyle";
-import { Ionicons } from "@expo/vector-icons";
-import { EvilIcons } from "@expo/vector-icons";
+import { Ionicons, EvilIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { SliderBox } from "react-native-image-slider-box";
@@ -29,10 +27,14 @@ import { COLOR, SHADOWS } from "../../contants";
 import InputField from "../InputFields/InputField";
 import { styleFields } from "../InputFields/InputFieldStyle";
 import CommentPosts from "../Comment/CommentPots";
-import { commentAccommodation } from "../../Redux/apiRequest";
+import {
+  commentAccommodation,
+  deletedCommentAccomodation,
+} from "../../Redux/apiRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { authApi, endpoint } from "../../Services/Config/Api";
 import Comment from "../Comment/Comment";
+import Toast from "react-native-toast-message";
 const PostDetail = ({ route }) => {
   const auth = useSelector((state) => state?.auth?.currentUser);
   const { item } = route.params;
@@ -41,7 +43,6 @@ const PostDetail = ({ route }) => {
   const [commentText, setCommentText] = useState("");
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [isloading, setIsLoading] = useState(false);
-  const [comment, setComment] = useState([]);
   const dispatch = useDispatch();
   const formatToVND = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -65,6 +66,14 @@ const PostDetail = ({ route }) => {
       commentAccommodationId
     );
     setCommentText("");
+  };
+  const handlerDeleted = async (commentID) => {
+    await deletedCommentAccomodation(auth?.access_token, dispatch, commentID);
+    Toast.show({
+      type: "success",
+      text1: "Success Comment",
+      position: "top",
+    });
   };
   const makePhoneCall = () => {
     const phoneNumber = item.owner.phone;
@@ -169,7 +178,10 @@ const PostDetail = ({ route }) => {
                   onChangeText={(text) => setCommentText(text)}
                   OnPressIncon={() => hanlerComment(item.id)}
                 />
-                <Comment />
+                <Comment
+                  comment={comments}
+                  currentUserId={comments?.user_comment?.id}
+                />
               </View>
               <View>
                 <View

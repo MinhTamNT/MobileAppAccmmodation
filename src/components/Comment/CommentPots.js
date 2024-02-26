@@ -11,6 +11,7 @@ import Toast from "react-native-toast-message";
 const CommentPosts = ({ comment, setComments, currentUserId }) => {
   const [replyText, setReplyText] = useState("");
   const auth = useSelector((state) => state?.auth?.currentUser);
+  console.log(currentUserId);
   const dispatch = useDispatch();
   const [isReplying, setIsReplying] = useState(null);
 

@@ -11,7 +11,7 @@ const Comment = ({ comment, currentUserId, onDeleteComment, onSendReply }) => {
   const [replyText, setReplyText] = useState("");
   const dispatch = useDispatch();
   const [isReplying, setIsReplying] = useState(null);
-
+  console.log("Componets comment", comment);
   const handleSendReply = async (commentId, replyId) => {
     const form = new FormData();
     const relyComment = {
@@ -70,7 +70,7 @@ const Comment = ({ comment, currentUserId, onDeleteComment, onSendReply }) => {
                 </TouchableOpacity>
               </View>
             </View>
-            {currentUserId === reply.user_comment.id && (
+            {currentUserId === reply.user_comment.id  && (
               <TouchableOpacity
                 style={{ position: "absolute", right: -160 }}
                 onPress={() => handleDeleteComment(reply.id)}

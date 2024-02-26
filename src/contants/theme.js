@@ -1,4 +1,3 @@
-import { Dimensions } from "react-native";
 
 const COLOR = {
   PRIMARY: "#fe2c55",

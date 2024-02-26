@@ -5,7 +5,6 @@ import {
   Image,
   StyleSheet,
   ScrollView,
-  FlatList,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { authApi, endpoint } from "../../../Services/Config/Api";

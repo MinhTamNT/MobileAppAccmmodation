@@ -14,7 +14,6 @@ import ModalPost from "../../Modal/ModalPost";
 import Api, { endpoint } from "../../../Services/Config/Api";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { useNavigation } from "@react-navigation/native";
-import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { commentPost } from "../../../Redux/apiRequest";
 import moment from "moment";
@@ -29,9 +28,9 @@ const TabViewCommunities = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [comments, setComments] = useState([]);
-  const [commentPosts, setCommentsPosts] = useState([]);
-  const [isComment, setIsComent] = useState(false);
+  const [comments, setComments] = useState({});
+  const [commentPosts, setCommentsPosts] = useState({});
+  const [isComment, setIsComment] = useState(false);
   const [openCommentPostId, setOpenCommentPostId] = useState(null);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state?.auth?.currentUser);
@@ -48,8 +47,9 @@ const TabViewCommunities = () => {
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
+
   const openComment = (postId) => {
-    setIsComent(true)
+    setIsComment(true);
     setOpenCommentPostId(postId);
   };
 
@@ -61,7 +61,7 @@ const TabViewCommunities = () => {
     form.append("text", newComment.text);
     await commentPost(auth?.access_token, form, dispatch, postId);
     setComments((prevComments) => {
-      const updatedComments = [...prevComments];
+      const updatedComments = { ...prevComments };
       updatedComments[postId] = ""; // Clear the comment for the current post
       return updatedComments;
     });
@@ -71,6 +71,34 @@ const TabViewCommunities = () => {
     setRefreshing(true);
     try {
       setCurrentPage(1);
+
+      // Fetch posts
+      const res = await Api.get(endpoint.all_post(1));
+      const newPosts = res.data.results.filter(
+        (post) => post.is_approved === true
+      );
+      setPostPresent(newPosts);
+
+      // Fetch comments for each post
+      const commentPromise = newPosts.map(async (post) => {
+        const commentRes = await Api.get(endpoint.comment_of_post(post.id));
+        return commentRes.data;
+      });
+
+      const commentsArray = await Promise.all(commentPromise);
+      const commentsObj = Object.fromEntries(
+        newPosts.map((post, index) => [post.id, commentsArray[index]])
+      );
+
+      setCommentsPosts(commentsObj);
+
+      if (res.data.next !== null) {
+        setHasNextPage(true);
+      } else {
+        setHasNextPage(false);
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
     } finally {
       setRefreshing(false);
     }
@@ -88,10 +116,15 @@ const TabViewCommunities = () => {
 
         if (newPosts.length > 0) {
           setPostPresent((prevPosts) => [...prevPosts, ...newPosts]);
-          setComments((prevComments) => [
-            ...prevComments,
-            ...new Array(newPosts.length).fill(""),
-          ]);
+          setComments((prevComments) => {
+            const updatedComments = { ...prevComments };
+            newPosts.forEach((post) => {
+              if (!updatedComments[post.id]) {
+                updatedComments[post.id] = "";
+              }
+            });
+            return updatedComments;
+          });
 
           const commentPromise = newPosts.map(async (post) => {
             const commentRes = await Api.get(endpoint.comment_of_post(post.id));
@@ -190,7 +223,7 @@ const TabViewCommunities = () => {
                   <View style={styleTab.addCommentContainer}>
                     <TouchableOpacity
                       style={styleTab.btnCloseActionComment}
-                      onPress={() => setIsComent(false)}
+                      onPress={() => setIsComment(false)}
                     >
                       <AntDesign name="close" size={22} color="#697689" />
                     </TouchableOpacity>
@@ -200,7 +233,7 @@ const TabViewCommunities = () => {
                       value={comments[item.id]}
                       onChangeText={(text) =>
                         setComments((prevComments) => {
-                          const updatedComments = [...prevComments];
+                          const updatedComments = { ...prevComments };
                           updatedComments[item.id] = text;
                           return updatedComments;
                         })
@@ -223,11 +256,11 @@ const TabViewCommunities = () => {
                   </TouchableOpacity>
                 )}
               </View>
-              {openCommentPostId === item.id  ? (
+              {openCommentPostId === item.id ? (
                 <CommentPosts
                   comment={commentPosts[item.id]}
                   setComments={setComments}
-                  currentUserId={user?.id}
+                  currentUserId={comments.user_comment}
                 />
               ) : (
                 <></>
@@ -240,11 +273,7 @@ const TabViewCommunities = () => {
         ListFooterComponent={() =>
           isLoadingMore && hasNextPage ? (
             <ActivityIndicator size="small" color="#0000ff" />
-          ) : (
-            <>
-              <ActivityIndicator size="small" color="#0000ff" />
-            </>
-          )
+          ) : null
         }
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

@@ -1,7 +1,6 @@
 import {
   View,
   ScrollView,
-  StyleSheet,
   RefreshControl,
   Text,
   Image,
@@ -9,7 +8,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { postapproved } from "../../SuggestPost/PostApproved/PostApprovedStyle";
 import { useDispatch, useSelector } from "react-redux";
-import Api, { authApi, endpoint } from "../../../Services/Config/Api";
+import  { authApi, endpoint } from "../../../Services/Config/Api";
 const PostUser = () => {
   const [postIsApproved, setPostApproved] = useState([]);
   const auth = useSelector((state) => state?.auth?.currentUser);

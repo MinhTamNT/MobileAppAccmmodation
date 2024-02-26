@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Text, View, Image} from "react-native";
+import { Text, View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styleProfile } from "./StyleProfile";
 import { useSelector } from "react-redux";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
-import { ArrowLeft2, Edit2 } from "iconsax-react-native";
+import { ArrowLeft2, Edit2, User } from "iconsax-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -89,12 +89,14 @@ const UserDetail = () => {
             {user.last_name} {user.first_name}
           </Text>
           <Text style={styleProfile.headerText}>Role : {user.role}</Text>
-          <View>
+          <View style={StyleDefault.flexBoxRow}>
+          <User size="15" color="#697689"/>
             <Text style={styleProfile.headerText}>
               Followers : {user.followers}
             </Text>
           </View>
-          <View>
+          <View style={StyleDefault.flexBoxRow}>
+          <User size="15" color="#697689"/>
             <Text style={styleProfile.headerText}>
               Following : {user.following}
             </Text>

@@ -221,3 +221,13 @@ export const deletedComment = async (token, dispatch, commetId) => {
     dispatch(deleteCommentFailed());
   }
 };
+export const deletedCommentAccomodation = async (token, dispatch, commetId) => {
+  dispatch(deleteCommentStart());
+  try {
+    await authApi(token).delete(endpoint.deleted_commentAccommodation(commetId));
+    dispatch(deleteCommentSuccess());
+  } catch (error) {
+    console.log(error);
+    dispatch(deleteCommentFailed());
+  }
+};
