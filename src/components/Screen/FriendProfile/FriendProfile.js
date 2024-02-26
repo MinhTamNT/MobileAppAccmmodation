@@ -1,5 +1,5 @@
 import { View, Text, Image, Linking, Platform } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
@@ -10,12 +10,14 @@ import { COLOR } from "../../../contants";
 import { Message } from "iconsax-react-native";
 import { followUser } from "../../../Redux/apiRequest";
 import { useDispatch, useSelector } from "react-redux";
+import { authApi, endpoint } from "../../../Services/Config/Api";
 const FriendProfile = ({ route }) => {
-  const { userId } = route?.params;
-  const auth = useSelector((state) => state?.auth?.currentUser);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [following, setFollowing] = useState(false);
   const [isFollow, setFollow] = useState(false);
+  const { userId } = route?.params;
+  const auth = useSelector((state) => state?.auth?.currentUser);
   const handlerFollowUser = async () => {
     await followUser(auth?.access_token, userId.username, dispatch);
     Platform.OS === "ios";
@@ -27,7 +29,21 @@ const FriendProfile = ({ route }) => {
       Linking.openURL(phoneNumber);
     }
   };
-
+  useEffect(() => {
+    const getFollowingUser = async () => {
+      try {
+        const res = await authApi(auth?.access_token).get(
+          endpoint["following"]
+        );
+        setFollowing(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getFollowingUser();
+  }, []);
+  const fileter = following.following.includes(userId.id);
+  console.log(fileter);
   return (
     <View style={friendStyle.wrapper}>
       <View style={friendStyle.upper}>
@@ -58,15 +74,13 @@ const FriendProfile = ({ route }) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={
-                isFollow ? friendStyle.btnFollowing : friendStyle.btnFollow
+                fileter ? friendStyle.btnFollowing : friendStyle.btnFollow
               }
               onPress={handlerFollowUser}
             >
-              {isFollow ? (
-                <Text style={{ color: "white" }}>Following</Text>
-              ) : (
-                <Text style={{ color: "white" }}>Follow</Text>
-              )}
+              <Text style={{ color: "white" }}>
+                {fileter ? "Following" : "Follow"}
+              </Text>
             </TouchableOpacity>
           </View>
           <View>

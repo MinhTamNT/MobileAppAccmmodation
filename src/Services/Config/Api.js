@@ -7,6 +7,7 @@ export const endpoint = {
   update_user: (userID) => `/users/${userID}/update/`,
   create_accomommdation: "/accommodation/create/",
   creare_post: "/post/create/",
+  following: "/users/following/",
   all_accommodation: (pageNumber, limit) =>
     `/accommodation/?page=${pageNumber}&limit=${limit}`,
   current_accommodation: (pageNumber, latitude, longitude) =>

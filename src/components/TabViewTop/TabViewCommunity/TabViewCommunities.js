@@ -32,6 +32,7 @@ const TabViewCommunities = () => {
   const [comments, setComments] = useState([]);
   const [commentPosts, setCommentsPosts] = useState([]);
   const [isComment, setIsComent] = useState(false);
+  const [openCommentPostId, setOpenCommentPostId] = useState(null);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state?.auth?.currentUser);
   const user = useSelector((state) => state?.user?.currentUser);
@@ -46,6 +47,10 @@ const TabViewCommunities = () => {
       setIsLoadingMore(true);
       setCurrentPage((prevPage) => prevPage + 1);
     }
+  };
+  const openComment = (postId) => {
+    setIsComent(true)
+    setOpenCommentPostId(postId);
   };
 
   const handlerComment = async (postId) => {
@@ -181,7 +186,7 @@ const TabViewCommunities = () => {
                     />
                   ))}
                 </View>
-                {isComment ? (
+                {isComment && openCommentPostId === item.id ? (
                   <View style={styleTab.addCommentContainer}>
                     <TouchableOpacity
                       style={styleTab.btnCloseActionComment}
@@ -212,13 +217,13 @@ const TabViewCommunities = () => {
                 ) : (
                   <TouchableOpacity
                     style={styleTab.actionComment}
-                    onPress={() => setIsComent(!isComment)}
+                    onPress={() => openComment(item.id)}
                   >
                     <Text style={{ color: "white" }}>Comment Post</Text>
                   </TouchableOpacity>
                 )}
               </View>
-              {isComment ? (
+              {openCommentPostId === item.id  ? (
                 <CommentPosts
                   comment={commentPosts[item.id]}
                   setComments={setComments}
