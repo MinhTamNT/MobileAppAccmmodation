@@ -15,7 +15,6 @@ const Notification = ({ route }) => {
   const auth = useSelector((state) => state?.auth?.currentUser);
   const [notifications, setNotifications] = useState([]);
 
-  // Count unread messages
   const unreadMessagesCount = notifications.filter(
     (notification) => !notification.is_read
   ).length;
@@ -24,7 +23,7 @@ const Notification = ({ route }) => {
     const fetchNotifications = async () => {
       try {
         const res = await authApi(auth?.access_token).get(
-          endpoint["notifcation_uer"]
+          endpoint["notifcation_user"]
         );
         const filerNoti = res.data.filter((noti) => noti.is_read === false);
         setNotifications(filerNoti);

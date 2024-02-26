@@ -53,7 +53,9 @@ export const styleComment = StyleSheet.create({
     marginTop: 5,
   },
   replyButton: {
-    color: COLOR.primary_color,
+    backgroundColor: COLOR.PRIMARY,
+    padding: 10,
+    borderRadius: 10,
     marginLeft: 10,
   },
 });

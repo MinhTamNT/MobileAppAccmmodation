@@ -36,8 +36,6 @@ import {
   editPostStart,
   editPostSuccess,
 } from "./postSlices";
-import { FIREBASE_AUTH } from "../Services/firebaseConfig";
-import { v4 as uuidv4 } from "uuid";
 import {
   addCommentFail,
   addCommentSucess,
@@ -49,7 +47,6 @@ import {
   relyCommentStart,
   relyCommentSuccess,
 } from "./commentSlice";
-import Toast from "react-native-toast-message";
 
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
@@ -224,10 +221,31 @@ export const deletedComment = async (token, dispatch, commetId) => {
 export const deletedCommentAccomodation = async (token, dispatch, commetId) => {
   dispatch(deleteCommentStart());
   try {
-    await authApi(token).delete(endpoint.deleted_commentAccommodation(commetId));
+    await authApi(token).delete(
+      endpoint.deleted_commentAccommodation(commetId)
+    );
     dispatch(deleteCommentSuccess());
   } catch (error) {
     console.log(error);
     dispatch(deleteCommentFailed());
+  }
+};
+
+export const relyCommentPrevAcco = async (
+  token,
+  comentRely,
+  dispatch,
+  commentId
+) => {
+  dispatch(relyCommentStart());
+  try {
+    await authApi(token).post(
+      endpoint.rely_commentAccommodationn(commentId),
+      comentRely
+    );
+    dispatch(relyCommentSuccess());
+  } catch (error) {
+    console.log(error);
+    dispatch(relyCommentFail());
   }
 };

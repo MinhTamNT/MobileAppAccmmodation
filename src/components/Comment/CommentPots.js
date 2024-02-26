@@ -11,11 +11,10 @@ import Toast from "react-native-toast-message";
 const CommentPosts = ({ comment, setComments, currentUserId }) => {
   const [replyText, setReplyText] = useState("");
   const auth = useSelector((state) => state?.auth?.currentUser);
-  console.log(currentUserId);
   const dispatch = useDispatch();
   const [isReplying, setIsReplying] = useState(null);
 
-  const handleSendReply = async (commentId) => {
+  const handleSendReply = async (commentId, replyId) => {
     const form = new FormData();
     const relyComment = {
       text: replyText,
@@ -25,13 +24,12 @@ const CommentPosts = ({ comment, setComments, currentUserId }) => {
     try {
       await relyCommentPrev(auth?.access_token, form, dispatch, commentId);
       setReplyText("");
-      setIsReplying(false);
+      setIsReplying(null);
     } catch (error) {
       console.error("Error replying to comment:", error);
     }
   };
 
-  useEffect(() => {}, [comment]);
   const handleDeleteComment = async (commentID) => {
     await deletedComment(auth?.access_token, dispatch, commentID);
     Toast.show({
@@ -40,7 +38,8 @@ const CommentPosts = ({ comment, setComments, currentUserId }) => {
       position: "top",
     });
   };
-  const renderReplyComments = (replyComments, parentCommentId) => {
+
+  const renderReplyComments = (replyComments) => {
     return replyComments.map((reply, index) => (
       <View
         key={reply.id}
@@ -91,10 +90,15 @@ const CommentPosts = ({ comment, setComments, currentUserId }) => {
               placeholderTextColor={"#333"}
             />
             <TouchableOpacity
-              onPress={() => handleSendReply(parentCommentId, reply.id)}
+              onPress={() => handleSendReply(reply.id, reply.id)}
             >
               <Text style={styleComment.sendReplyButton}>Send</Text>
             </TouchableOpacity>
+          </View>
+        )}
+        {reply.reply_comment.length > 0 && (
+          <View style={styleComment.replySection}>
+            {renderReplyComments(reply.reply_comment)}
           </View>
         )}
       </View>
@@ -136,7 +140,7 @@ const CommentPosts = ({ comment, setComments, currentUserId }) => {
               />
               <TouchableOpacity
                 style={styleComment.btnAction}
-                onPress={() => handleSendReply(commentItem.id)}
+                onPress={() => handleSendReply(commentItem.id, commentItem.id)}
               >
                 <Text style={styleComment.sendReplyButton}>Send</Text>
               </TouchableOpacity>

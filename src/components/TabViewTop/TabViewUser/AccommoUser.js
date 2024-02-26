@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
 import { authApi, endpoint } from "../../../Services/Config/Api";
 import { Location } from "iconsax-react-native";
@@ -46,37 +40,43 @@ const AccommoUser = () => {
   }, []);
 
   return (
-    <View style={styles.wrapper}>
-      {currentAcco.map((accommodation) => (
-        <View key={accommodation.id} style={styles.wrapperContent}>
-          <OwnerInfo owner={accommodation?.owner} />
-          <AddressInfo accommodation={accommodation} />
-          <View style={styles.coordinateInfo}>
-            <MaterialCommunityIcons
-              name="longitude"
-              size={24}
-              color="#697689"
-            />
-            <Text>{accommodation?.longitude}</Text>
-          </View>
-          <View style={styles.coordinateInfo}>
-            <MaterialCommunityIcons name="latitude" size={24} color="#697689" />
-            <Text>{accommodation?.latitude}</Text>
-          </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {accommodation.image.map((image, index) => (
-              <Image
-                key={index}
-                source={{ uri: image.image }}
-                style={styles.accommodaPost}
-                resizeMode="cover"
+    <ScrollView>
+      <View style={styles.wrapper}>
+        {currentAcco.map((accommodation) => (
+          <View key={accommodation.id} style={styles.wrapperContent}>
+            <OwnerInfo owner={accommodation?.owner} />
+            <AddressInfo accommodation={accommodation} />
+            <View style={styles.coordinateInfo}>
+              <MaterialCommunityIcons
+                name="longitude"
+                size={24}
+                color="#697689"
               />
-            ))}
-          </ScrollView>
-          <Text style={styles.description}>{accommodation?.description}</Text>
-        </View>
-      ))}
-    </View>
+              <Text>{accommodation?.longitude}</Text>
+            </View>
+            <View style={styles.coordinateInfo}>
+              <MaterialCommunityIcons
+                name="latitude"
+                size={24}
+                color="#697689"
+              />
+              <Text>{accommodation?.latitude}</Text>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {accommodation.image.map((image, index) => (
+                <Image
+                  key={index}
+                  source={{ uri: image.image }}
+                  style={styles.accommodaPost}
+                  resizeMode="cover"
+                />
+              ))}
+            </ScrollView>
+            <Text style={styles.description}>{accommodation?.description}</Text>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    marginBottom: 10,
   },
   owner: {
     flexDirection: "row",

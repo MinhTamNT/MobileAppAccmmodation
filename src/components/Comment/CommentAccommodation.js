@@ -1,45 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
 import { styleComment } from "./CommentStyle";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
 import { COLOR } from "../../contants";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import Toast from "react-native-toast-message";
+import { relyCommentPrevAcco } from "../../Redux/apiRequest";
 
-const Comment = ({ comment, currentUserId, onDeleteComment, onSendReply }) => {
+const CommentAccommdation = ({ comment, currentUserId }) => {
   const [replyText, setReplyText] = useState("");
+  const auth = useSelector((state) => state?.auth?.currentUser);
   const dispatch = useDispatch();
   const [isReplying, setIsReplying] = useState(null);
-  console.log("Componets comment", comment);
-  const handleSendReply = async (commentId, replyId) => {
+
+  const handleSendReply = async (commentId) => {
     const form = new FormData();
     const relyComment = {
       text: replyText,
     };
     form.append("text", relyComment.text);
-
     try {
-      await onSendReply(commentId, replyId, form);
-      setReplyText("");
-      setIsReplying(false);
+      await relyCommentPrevAcco(auth?.access_token, form, dispatch, commentId);
     } catch (error) {
       console.error("Error replying to comment:", error);
     }
   };
 
-  useEffect(() => {}, [comment]);
-
-  const handleDeleteComment = async (commentID) => {
-    await onDeleteComment(commentID);
-    Toast.show({
-      type: "success",
-      text1: "Success Comment",
-      position: "top",
-    });
-  };
-
-  const renderReplyComments = (replyComments, parentCommentId) => {
+  const renderReplyComments = (replyComments) => {
     return replyComments.map((reply, index) => (
       <View
         key={reply.id}
@@ -70,7 +57,7 @@ const Comment = ({ comment, currentUserId, onDeleteComment, onSendReply }) => {
                 </TouchableOpacity>
               </View>
             </View>
-            {currentUserId === reply.user_comment.id  && (
+            {currentUserId === reply.user_comment.id && (
               <TouchableOpacity
                 style={{ position: "absolute", right: -160 }}
                 onPress={() => handleDeleteComment(reply.id)}
@@ -90,10 +77,16 @@ const Comment = ({ comment, currentUserId, onDeleteComment, onSendReply }) => {
               placeholderTextColor={"#333"}
             />
             <TouchableOpacity
-              onPress={() => handleSendReply(parentCommentId, reply.id)}
+              onPress={() => handleSendReply(reply.id, reply.id)}
+              style={styleComment.replyButton}
             >
-              <Text style={styleComment.sendReplyButton}>Send</Text>
+              <Text style={{ color: "white" }}>Send</Text>
             </TouchableOpacity>
+          </View>
+        )}
+        {reply.reply_comment.length > 0 && (
+          <View style={styleComment.replySection}>
+            {renderReplyComments(reply.reply_comment)}
           </View>
         )}
       </View>
@@ -135,7 +128,7 @@ const Comment = ({ comment, currentUserId, onDeleteComment, onSendReply }) => {
               />
               <TouchableOpacity
                 style={styleComment.btnAction}
-                onPress={() => handleSendReply(commentItem.id)}
+                onPress={() => handleSendReply(commentItem.id, commentItem.id)}
               >
                 <Text style={styleComment.sendReplyButton}>Send</Text>
               </TouchableOpacity>
@@ -143,7 +136,7 @@ const Comment = ({ comment, currentUserId, onDeleteComment, onSendReply }) => {
           )}
           {commentItem.reply_comment.length > 0 && (
             <View style={styleComment.replySection}>
-              {renderReplyComments(commentItem.reply_comment, commentItem.id)}
+              {renderReplyComments(commentItem.reply_comment)}
             </View>
           )}
         </View>
@@ -152,4 +145,4 @@ const Comment = ({ comment, currentUserId, onDeleteComment, onSendReply }) => {
   );
 };
 
-export default Comment;
+export default CommentAccommdation;

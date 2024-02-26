@@ -26,15 +26,11 @@ import {
 import { COLOR, SHADOWS } from "../../contants";
 import InputField from "../InputFields/InputField";
 import { styleFields } from "../InputFields/InputFieldStyle";
-import CommentPosts from "../Comment/CommentPots";
-import {
-  commentAccommodation,
-  deletedCommentAccomodation,
-} from "../../Redux/apiRequest";
+
 import { useDispatch, useSelector } from "react-redux";
 import { authApi, endpoint } from "../../Services/Config/Api";
-import Comment from "../Comment/Comment";
-import Toast from "react-native-toast-message";
+import CommentAccommdation from "../Comment/CommentAccommodation";
+import { commentAccommodation } from "../../Redux/apiRequest";
 const PostDetail = ({ route }) => {
   const auth = useSelector((state) => state?.auth?.currentUser);
   const { item } = route.params;
@@ -42,7 +38,6 @@ const PostDetail = ({ route }) => {
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [showFullDescription, setShowFullDescription] = useState(false);
-  const [isloading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const formatToVND = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -66,14 +61,6 @@ const PostDetail = ({ route }) => {
       commentAccommodationId
     );
     setCommentText("");
-  };
-  const handlerDeleted = async (commentID) => {
-    await deletedCommentAccomodation(auth?.access_token, dispatch, commentID);
-    Toast.show({
-      type: "success",
-      text1: "Success Comment",
-      position: "top",
-    });
   };
   const makePhoneCall = () => {
     const phoneNumber = item.owner.phone;
@@ -178,9 +165,9 @@ const PostDetail = ({ route }) => {
                   onChangeText={(text) => setCommentText(text)}
                   OnPressIncon={() => hanlerComment(item.id)}
                 />
-                <Comment
+                <CommentAccommdation
                   comment={comments}
-                  currentUserId={comments?.user_comment?.id}
+                  currentUserId={auth?.id}
                 />
               </View>
               <View>

@@ -26,12 +26,13 @@ const TabViewCommunities = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postPresent, setPostPresent] = useState([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [comments, setComments] = useState({});
   const [commentPosts, setCommentsPosts] = useState({});
+  const [refreshing, setRefreshing] = useState(false);
   const [isComment, setIsComment] = useState(false);
   const [openCommentPostId, setOpenCommentPostId] = useState(null);
+  const [isloading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state?.auth?.currentUser);
   const user = useSelector((state) => state?.user?.currentUser);
@@ -62,9 +63,15 @@ const TabViewCommunities = () => {
     await commentPost(auth?.access_token, form, dispatch, postId);
     setComments((prevComments) => {
       const updatedComments = { ...prevComments };
-      updatedComments[postId] = ""; // Clear the comment for the current post
+      updatedComments[postId] = ""; 
       return updatedComments;
     });
+  };
+
+  const handleEndReached = () => {
+    if (!isLoadingMore && hasNextPage) {
+      loadMorePosts();
+    }
   };
 
   const onRefresh = useCallback(async () => {
@@ -72,14 +79,12 @@ const TabViewCommunities = () => {
     try {
       setCurrentPage(1);
 
-      // Fetch posts
       const res = await Api.get(endpoint.all_post(1));
       const newPosts = res.data.results.filter(
         (post) => post.is_approved === true
       );
       setPostPresent(newPosts);
 
-      // Fetch comments for each post
       const commentPromise = newPosts.map(async (post) => {
         const commentRes = await Api.get(endpoint.comment_of_post(post.id));
         return commentRes.data;
@@ -153,6 +158,7 @@ const TabViewCommunities = () => {
         console.error("Error fetching posts:", error);
       } finally {
         setIsLoadingMore(false);
+        setLoading(false);
       }
     };
 
@@ -252,7 +258,14 @@ const TabViewCommunities = () => {
                     style={styleTab.actionComment}
                     onPress={() => openComment(item.id)}
                   >
-                    <Text style={{ color: "white" }}>Comment Post</Text>
+                    <Text
+                      style={{
+                        color: "white",
+                        alignItems: "center",
+                      }}
+                    >
+                      Comment Post
+                    </Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -268,7 +281,7 @@ const TabViewCommunities = () => {
             </View>
           </View>
         )}
-        onEndReached={loadMorePosts}
+        onEndReached={handleEndReached} // Use this callback for automatic loading more posts
         onEndReachedThreshold={0.1}
         ListFooterComponent={() =>
           isLoadingMore && hasNextPage ? (
