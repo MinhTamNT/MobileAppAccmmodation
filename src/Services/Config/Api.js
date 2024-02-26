@@ -11,6 +11,7 @@ export const endpoint = {
     `/accommodation/?page=${pageNumber}&limit=${limit}`,
   current_accommodation: (pageNumber, latitude, longitude) =>
     `accommodation/?latitude=${latitude}&longitude=${longitude}&page=${pageNumber}&limit=3`,
+  accomdationUser: "/accommodation/accommodation_user/",
   all_post: (pageNumber) => `/post/?page=${pageNumber}&limit=3`,
   user_accommodation: "/accommodation/accmmodation_user/",
   follow_user: (username) => `/users/follow/?username=${username}`,

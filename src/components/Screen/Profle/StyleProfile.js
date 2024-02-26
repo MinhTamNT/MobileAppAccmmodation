@@ -2,6 +2,10 @@ import { StyleSheet } from "react-native";
 import { COLOR } from "../../../contants";
 
 export const styleProfile = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor:COLOR.gray_100
+  },
   wrapper: {
     paddingHorizontal: 10,
     paddingVertical: 16,
@@ -54,5 +58,25 @@ export const styleProfile = StyleSheet.create({
     marginTop: 30,
     padding: 5,
     borderRadius: 10,
+  },
+  dropDownContainer: {
+    height: 40,
+    marginVertical: 10,
+  },
+  dropDownStyle: {
+    backgroundColor: "#fafafa",
+    borderColor: "#ddd",
+    borderWidth: 1,
+  },
+  dropDownLabel: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#333",
+  },
+  selectedItemContainer: {
+    backgroundColor: "#e0e0e0",
+  },
+  arrowIcon: {
+    color: "#555",
   },
 });

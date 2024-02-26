@@ -8,9 +8,16 @@ export const postapproved = StyleSheet.create({
   postContainer: {
     marginBottom: 20,
     padding: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
     borderRadius: 8,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   imageUser: {
     width: 50,
@@ -20,8 +27,8 @@ export const postapproved = StyleSheet.create({
     marginBottom: 10,
   },
   postImage: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     borderRadius: 8,
     marginRight: 10,
   },

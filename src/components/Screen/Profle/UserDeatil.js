@@ -1,5 +1,5 @@
-import { Text, View, Image } from "react-native";
 import React, { useState } from "react";
+import { Text, View, Image} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styleProfile } from "./StyleProfile";
 import { useSelector } from "react-redux";
@@ -7,24 +7,39 @@ import { StyleDefault } from "../../StyleDeafult/StyleDeafult";
 import { ArrowLeft2, Edit2 } from "iconsax-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import ModalEdit from "../../Modal/ModalEdit";
 import DropDownPicker from "react-native-dropdown-picker";
 import PostUser from "../../TabViewTop/TabViewUser/PostUser";
-const UserDeatil = () => {
+import ModalEdit from "../../Modal/ModalEdit";
+import AccommoUser from "../../TabViewTop/TabViewUser/AccommoUser";
+
+const UserDetail = () => {
   const navigation = useNavigation();
   const user = useSelector((state) => state?.user.currentUser);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState("Post");
   const [items, setItems] = useState([
     { label: "Your Post", value: "Post" },
     { label: "Your Accommodation", value: "Accommodation" },
   ]);
   const [isVissable, setVissable] = useState(false);
+
   const handlerEdit = () => {
     setVissable(!isVissable);
   };
+
+  const renderContent = () => {
+    switch (value) {
+      case "Post":
+        return <PostUser />;
+      case "Accommodation":
+        return <AccommoUser />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <SafeAreaView style={StyleDefault.container}>
+    <SafeAreaView style={styleProfile.container}>
       <View style={styleProfile.HeaderDeatil}>
         <View
           style={[StyleDefault.flexBoxRow, { justifyContent: "space-between" }]}
@@ -104,13 +119,18 @@ const UserDeatil = () => {
             setValue={setValue}
             setItems={setItems}
             placeholder={"Your Data"}
+            containerStyle={styleProfile.dropDownContainer}
+            style={styleProfile.dropDownStyle}
+            labelStyle={styleProfile.dropDownLabel}
+            selectedItemContainerStyle={styleProfile.selectedItemContainer}
+            arrowIconStyle={styleProfile.arrowIcon}
           />
         </View>
-        <PostUser />
+        {renderContent()}
       </View>
       {isVissable && <ModalEdit setVissable={setVissable} />}
     </SafeAreaView>
   );
 };
 
-export default UserDeatil;
+export default UserDetail;

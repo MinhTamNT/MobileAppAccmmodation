@@ -84,5 +84,4 @@ const PostUser = () => {
     </ScrollView>
   );
 };
-const style = StyleSheet.create({});
 export default PostUser;

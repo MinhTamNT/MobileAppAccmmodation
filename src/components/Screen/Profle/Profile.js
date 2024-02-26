@@ -25,13 +25,7 @@ const Profile = ({ navigation }) => {
   const token = auth?.access_token;
   const dispatch = useDispatch();
   const handlerLogout = async () => {
-    try {
-      await AsyncStorage.removeItem("access-token");
-      dispatch(logout());
-      navigation.navigate("Login");
-    } catch (error) {
-      console.error("Error clearing access token:", error);
-    }
+    dispatch(logout());
   };
   const handlerNavigate = () => {
     navigation.navigate("UserDeatil");
