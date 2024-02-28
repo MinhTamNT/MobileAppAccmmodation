@@ -10,6 +10,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Carousel, { ParallaxImage } from "react-native-snap-carousel";
 import { COLOR } from "../../../contants";
 import { useNavigation } from "@react-navigation/native";
+import accommodation from "../../../Redux/accommodation";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -17,13 +18,15 @@ const HomeCards = ({ allAccommodation }) => {
   const [entries, setEntries] = useState([]);
   const CarouselRef = useRef(null);
   const navigation = useNavigation();
-
+  
   useEffect(() => {
     setEntries(allAccommodation);
   }, []);
-
-  const handlerDeatilAccommodation = (accommodationId) => {
-    navigation.navigate("")
+  console.log(entries);
+  const handlerDetailAccommodation = (accommodationId) => {
+    const selectedAccommodation = entries.find((item) => item.accommodationId === accommodationId);
+    console.log("Selected Accommodation:", selectedAccommodation);
+    navigation.navigate("PostDeatil", { accommodationId });
   };
   const renderItem = ({ item, index }, parallaxProps) => {
     return (
@@ -37,7 +40,9 @@ const HomeCards = ({ allAccommodation }) => {
             {...parallaxProps}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handlerDetailAccommodation(item.accommodationId)}
+        >
           <View style={style.text_container}>
             <Text style={style.title}>{item.address}</Text>
             <Text style={style.title}>

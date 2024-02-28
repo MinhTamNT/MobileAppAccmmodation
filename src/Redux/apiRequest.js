@@ -47,6 +47,7 @@ import {
   relyCommentStart,
   relyCommentSuccess,
 } from "./commentSlice";
+import Toast from "react-native-toast-message";
 
 export const registerUser = async (form, dispatch, navigation) => {
   dispatch(registerStart());
@@ -168,9 +169,17 @@ export const followUser = async (token, username, dispatch) => {
   try {
     const res = await authApi(token).post(endpoint.follow_user(username));
     dispatch(followUserSuccess(res.data));
+    Toast.show({
+      type: "success",
+      text1: "Follower Success",
+    });
   } catch (error) {
     console.log(error);
     dispatch(followUserFailed());
+    Toast.show({
+      type: "error",
+      text1: "Follower Success",
+    });
   }
 };
 export const commentPost = async (token, newComment, dispatch, postId) => {
@@ -178,9 +187,17 @@ export const commentPost = async (token, newComment, dispatch, postId) => {
   try {
     await authApi(token).post(endpoint.comment_post(postId), newComment);
     dispatch(addCommentSucess());
+    Toast.show({
+      type: "success",
+      text1: "Comment Success",
+    });
   } catch (error) {
     console.error("Axios Error:", error);
     dispatch(addCommentFail());
+    Toast.show({
+      type: "error",
+      text1: "Comment Success",
+    });
   }
 };
 export const verifyPost = async (token, dispatch, postId) => {

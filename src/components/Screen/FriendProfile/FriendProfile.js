@@ -41,7 +41,8 @@ const FriendProfile = ({ route }) => {
     };
     getFollowingUser();
   }, []);
-  const fileter = following.following.includes(userId.id);
+  const fileter =
+    following?.following && following?.following.includes(userId.id);
   console.log(fileter);
   return (
     <View style={friendStyle.wrapper}>
@@ -72,9 +73,7 @@ const FriendProfile = ({ route }) => {
               <Text style={{ color: "white" }}>Message</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={
-                fileter ? friendStyle.btnFollowing : friendStyle.btnFollow
-              }
+              style={fileter ? friendStyle.btnFollowing : friendStyle.btnFollow}
               onPress={handlerFollowUser}
             >
               <Text style={{ color: "white" }}>

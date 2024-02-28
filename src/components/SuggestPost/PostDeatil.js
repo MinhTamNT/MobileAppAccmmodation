@@ -97,7 +97,7 @@ const PostDetail = ({ route }) => {
           </TouchableOpacity>
         </View>
         <ScrollView>
-          {item.image && item.image.length > 0 ? (
+          {item?.image && item?.image.length > 0 ? (
             <SliderBox
               images={item.image.map((img) => img.image)}
               ImageComponentStyle={{

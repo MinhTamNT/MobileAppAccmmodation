@@ -169,6 +169,8 @@ const HomeScreen = ({ route }) => {
 
   if (isLoading) {
     return <LoadingPage />;
+
+    
   }
 
   return (

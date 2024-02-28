@@ -62,7 +62,9 @@ export const ModalStyle = StyleSheet.create({
       },
     }),
   },
-
+  headerProvince: {
+    marginTop: 50,
+  },
   //ModalEdit
   headerEdit: {
     alignItems: "center",

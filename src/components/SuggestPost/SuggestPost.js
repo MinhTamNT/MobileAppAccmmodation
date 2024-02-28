@@ -84,6 +84,7 @@ const SuggestPost = ({ selectedDistrict, searchInput }) => {
       filteredData = filteredData.filter((item) => {
         const rentCost =
           typeof item.rent_cost === "number" ? item.rent_cost : 0;
+
         return (
           rentCost >= selectedPriceRange.min &&
           rentCost <= selectedPriceRange.max

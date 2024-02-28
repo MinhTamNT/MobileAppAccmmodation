@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,9 +9,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   FlatList,
+  ActivityIndicator,
   ToastAndroid,
 } from "react-native";
-import React, { useEffect, useState } from "react";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { StyleDefault } from "../StyleDeafult/StyleDeafult";
@@ -25,20 +26,22 @@ import * as FileSystem from "expo-file-system";
 const ModalPost = ({ setModalPost, setCurrentPage }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [descreiption, setDescription] = useState("");
+  const [description, setDescription] = useState("");
   const [imagePost, setImagePost] = useState([]);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state?.auth?.currentUser);
   const token = auth?.access_token;
+
   useEffect(() => {
     (async () => {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
         alert("Chúng tôi cần quyền truy cập thư viện ảnh để chọn hình ảnh.");
       }
     })();
   }, []);
+
   const pickerImage = async () => {
     let res = await ImagePicker.launchImageLibraryAsync({
       allowsMultipleSelection: true,
@@ -52,31 +55,42 @@ const ModalPost = ({ setModalPost, setCurrentPage }) => {
       );
     }
   };
+
   const renderSelectedImages = ({ item }) => (
     <Image source={{ uri: item.uri }} style={style.selectedImage} />
   );
-  const handlerSumbitPost = async () => {
-    const formData = new FormData();
-    formData.append("content", content);
-    formData.append("caption", title);
-    formData.append("description", descreiption);
 
-    imagePost.forEach((item, index) => {
-      formData.append("image", {
-        uri: item.uri,
-        type: "image/jpeg",
-        name: `image${index}.jpg`,
-      });
-    });
+  const handlerSubmitPost = async () => {
     try {
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("content", content);
+      formData.append("caption", title);
+      formData.append("description", description);
+
+      imagePost.forEach((item, index) => {
+        formData.append("image", {
+          uri: item.uri,
+          type: "image/jpeg",
+          name: `image${index}.jpg`,
+        });
+      });
+
       await createPost(dispatch, formData, token);
       setCurrentPage(1);
-    } catch (e) {}
-    setModalPost(false);
-    Platform.OS == "ios"
-      ? alert("Create Post Success")
-      : ToastAndroid.show("create the post success");
+      setModalPost(false);
+
+      Platform.OS === "ios"
+        ? alert("Create Post Success")
+        : ToastAndroid.show("create the post success", ToastAndroid.SHORT);
+    } catch (error) {
+      console.error("Error creating post:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <Modal animationType="slide">
       <KeyboardAvoidingView
@@ -84,7 +98,7 @@ const ModalPost = ({ setModalPost, setCurrentPage }) => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={160}
       >
-        <View style={style.conatiner}>
+        <View style={style.container}>
           <View
             style={[
               StyleDefault.flexBoxRow,
@@ -98,7 +112,8 @@ const ModalPost = ({ setModalPost, setCurrentPage }) => {
               <AntDesign name="ellipsis1" size={32} color="black" />
               <TouchableOpacity
                 style={style.actionPost}
-                onPress={handlerSumbitPost}
+                onPress={handlerSubmitPost}
+                disabled={loading} 
               >
                 <Text style={{ color: "white" }}>Post</Text>
               </TouchableOpacity>
@@ -132,8 +147,8 @@ const ModalPost = ({ setModalPost, setCurrentPage }) => {
                 style={style.textArea}
                 underlineColorAndroid="transparent"
                 placeholder="Body Text (optional)"
-                value={descreiption}
-                onChangeText={(descreiption) => setDescription(descreiption)}
+                value={description}
+                onChangeText={(description) => setDescription(description)}
                 placeholderTextColor={COLOR.text_weak_color}
                 numberOfLines={10}
                 multiline={true}
@@ -151,12 +166,18 @@ const ModalPost = ({ setModalPost, setCurrentPage }) => {
             </TouchableOpacity>
           </View>
         </View>
+        {loading && (
+          <View style={style.loadingOverlay}>
+            <ActivityIndicator size="large" color={COLOR.bg_color_blue_200} />
+          </View>
+        )}
       </KeyboardAvoidingView>
     </Modal>
   );
 };
+
 const style = StyleSheet.create({
-  conatiner: {
+  container: {
     marginTop: 50,
     marginHorizontal: 16,
   },
@@ -165,9 +186,6 @@ const style = StyleSheet.create({
     marginRight: 12,
     padding: 12,
     borderRadius: 20,
-  },
-  titleCaption: {
-    backgroundColor: COLOR.bg_color_blue_200,
   },
   textAreaContainer: {
     marginTop: 12,
@@ -195,5 +213,12 @@ const style = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
   },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
+
 export default ModalPost;
